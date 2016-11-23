@@ -134,6 +134,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="Telerik.JustMock">
+      <HintPath>../JustMock/Telerik.JustMock.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -151,6 +154,9 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Diagnostics\TraceSourceTest.cs" />
+    <Compile Include="Diagnostics\LoggerTest.cs" />
+    <Compile Include="Diagnostics\TraceListenerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeContractsTest.cs" />
   </ItemGroup>
