@@ -186,15 +186,15 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
         {
             var name = Guid.NewGuid().ToString();
 
-            var myTraceListener = new MyTraceListener();
-            var currentListener = Logger.SetTraceListener(myTraceListener);
+            var testedTraceListener = new MyTraceListener();
+            var currentListener = Logger.SetTraceListener(testedTraceListener);
 
             var result = Logger.Get(name);
             
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Listeners);
             Assert.AreEqual(1, result.Listeners.Count);
-            Assert.IsInstanceOfType(result.Listeners[0], myTraceListener.GetType());
+            Assert.IsInstanceOfType(result.Listeners[0], testedTraceListener.GetType());
 
             Logger.SetTraceListener(currentListener);
         }
