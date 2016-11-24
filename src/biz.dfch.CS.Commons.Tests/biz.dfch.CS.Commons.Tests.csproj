@@ -133,6 +133,7 @@
       <HintPath>..\packages\biz.dfch.CS.Testing.1.3.0\lib\biz.dfch.CS.Testing.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="Telerik.JustMock">
       <HintPath>../JustMock/Telerik.JustMock.dll</HintPath>
@@ -155,6 +156,7 @@
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="Diagnostics\DefaultTraceListenerMock.cs" />
+    <Compile Include="Diagnostics\Log4NetTraceListenerTest.cs" />
     <Compile Include="Diagnostics\TraceSourceTest.cs" />
     <Compile Include="Diagnostics\LoggerTest.cs" />
     <Compile Include="Diagnostics\TraceListenerMock.cs" />

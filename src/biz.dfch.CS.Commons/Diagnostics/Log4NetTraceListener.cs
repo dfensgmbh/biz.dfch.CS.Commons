@@ -19,16 +19,49 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using biz.dfch.CS.Commons.Diagnostics.Log4Net;
 
 namespace biz.dfch.CS.Commons.Diagnostics
 {
     public class Log4NetTraceListener : TraceListener
     {
         private const char DELIMITER = '|';
-        private static readonly object[] _emptyArgs = { };
+        private static readonly object[] _emptyArgs = {};
+
+        private const string CLASS_NAME_LOG_MANAGER = "LogManager";
+        private const string METHOD_NAME_GET_LOGGER = "GetLogger";
+
+        private static readonly Lazy<Assembly> _assembly = new Lazy<Assembly>(() =>
+        {
+            try
+            {
+                //var assembly = typeof(Log4NetTraceListener).Assembly;
+                //var location = assembly.Location;
+                //Contract.Assert(null != location);
+
+                //var directoryName = System.IO.Path.GetDirectoryName(location);
+                //Contract.Assert(null != directoryName);
+
+                //var log4NetLocation = System.IO.Path.Combine(directoryName, "log4net.dll");
+                //Contract.Assert(System.IO.File.Exists(log4NetLocation), log4NetLocation);
+                var log4NetLocation = "log4net.dll";
+
+                var log4Net = Assembly.LoadFrom(log4NetLocation);
+                Contract.Assert(null != log4Net);
+
+                return log4Net;
+            }
+            catch (Exception)
+            {
+                // N/A
+                return default(Assembly);
+            }
+        });
 
         public Log4NetTraceListener()
             : base()
@@ -42,6 +75,28 @@ namespace biz.dfch.CS.Commons.Diagnostics
             // N/A
         }
             
+        public static Assembly Assembly
+        {
+            get { return _assembly.Value; }
+        }
+
+        public static ILog GetLogger(string name)
+        {
+            Contract.Requires(!string.IsNullOrEmpty(name));
+            Contract.Ensures(null != Contract.Result<ILog>());
+
+            var logManager = Assembly.DefinedTypes.FirstOrDefault(e => e.Name == CLASS_NAME_LOG_MANAGER);
+            Contract.Assert(null != logManager, CLASS_NAME_LOG_MANAGER);
+
+            var methodInfo = logManager.GetMethod(METHOD_NAME_GET_LOGGER, BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
+            Contract.Assert(null != methodInfo, METHOD_NAME_GET_LOGGER);
+
+            var loggerInstance = methodInfo.Invoke(null, new object[] { name });
+            Contract.Assert(null != loggerInstance);
+
+            return new Log4Net.Log4Net(loggerInstance);
+        }
+
         public override void Write(string message)
         {
             TraceImpl(message, false);

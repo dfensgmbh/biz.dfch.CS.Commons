@@ -136,6 +136,8 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Diagnostics\Log4Net\Log4Net.cs" />
+    <Compile Include="Diagnostics\Log4Net\ILog.cs" />
     <Compile Include="Diagnostics\Log4NetTraceListener.cs" />
     <Compile Include="Diagnostics\TraceSource.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
@@ -145,6 +147,7 @@
   <ItemGroup>
     <None Include="dfch.pfx" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
