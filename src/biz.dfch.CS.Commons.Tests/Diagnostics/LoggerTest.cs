@@ -289,6 +289,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
         }
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+arbitrary-message")]
         public void SystemDiagnosticsDebugLogsToTraceListenerFromAppConfig()
         {
