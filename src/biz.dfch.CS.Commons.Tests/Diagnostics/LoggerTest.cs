@@ -186,18 +186,113 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
         {
             var name = Guid.NewGuid().ToString();
 
-            var testedTraceListener = new MyTraceListener();
-            var currentListener = Logger.SetTraceListener(testedTraceListener);
+            var defaultTraceListenerMock = new DefaultTraceListenerMock();
+            var currentListener = Logger.SetTraceListener(defaultTraceListenerMock);
 
             var result = Logger.Get(name);
             
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Listeners);
             Assert.AreEqual(1, result.Listeners.Count);
-            Assert.IsInstanceOfType(result.Listeners[0], testedTraceListener.GetType());
+            Assert.IsInstanceOfType(result.Listeners[0], defaultTraceListenerMock.GetType());
 
             Logger.SetTraceListener(currentListener);
         }
 
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+traceSource")]
+        public void TraceWithTraceListener()
+        {
+            var name = string.Format("traceSource-{0}", Guid.NewGuid());
+
+            var defaultTraceListenerMock = new DefaultTraceListenerMock();
+            var currentListener = Logger.SetTraceListener(defaultTraceListenerMock);
+
+            var result = Logger.Get(name);
+            
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Listeners);
+            Assert.AreEqual(1, result.Listeners.Count);
+            Assert.IsInstanceOfType(result.Listeners[0], defaultTraceListenerMock.GetType());
+
+            var ex = new ArgumentException("arbitrayExceptionMessage")
+            {
+                Source = "arbitrarySource",
+            };
+            result.TraceException(ex, "arbitraryMessage");
+
+            Logger.SetTraceListener(currentListener);
+        }
+
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+TraceSourceWithOtherListener")]
+        public void TraceWithTraceListenerReadsFromAppConfig()
+        {
+            var name = "TraceSourceWithOtherListener";
+
+            var defaultTraceListenerMock = new DefaultTraceListenerMock();
+            var currentListener = Logger.SetTraceListener(defaultTraceListenerMock);
+
+            var result = Logger.Get(name);
+            
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Listeners);
+            Assert.AreEqual(1, result.Listeners.Count);
+            Assert.IsInstanceOfType(result.Listeners[0], typeof(TraceListenerMock));
+
+            // SourceLevel is set to error which is taken from the app.config, 
+            // even though the traceSource was created in code with SourceLevels.All
+            Assert.AreEqual(SourceLevels.Error, result.Switch.Level);
+
+            var ex = new ArgumentException("arbitrayExceptionMessage")
+            {
+                Source = "arbitrarySource",
+            };
+            result.TraceException(ex, "arbitraryMessage");
+
+            Logger.SetTraceListener(currentListener);
+        }
+
+
+        [TestMethod]
+        public void TraceWithTraceListenerReadsFromAppConfigAndReplacesDefaultListener()
+        {
+            var name = "TraceSourceWithDefaultListenerAndOtherListener";
+
+            var defaultTraceListenerMock = new DefaultTraceListenerMock();
+            var currentListener = Logger.SetTraceListener(defaultTraceListenerMock);
+
+            var result = Logger.Get(name);
+            
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Listeners);
+            Assert.AreEqual(2, result.Listeners.Count);
+            Assert.IsTrue
+            (
+                result.Listeners[0].GetType() == defaultTraceListenerMock.GetType() && result.Listeners[1].GetType() == typeof(TraceListenerMock) 
+                ||
+                result.Listeners[1].GetType() == defaultTraceListenerMock.GetType() && result.Listeners[0].GetType() == typeof(TraceListenerMock) 
+            );
+
+            // SourceLevel is set to error which is taken from the app.config, 
+            // even though the traceSource was created in code with SourceLevels.All
+            Assert.AreEqual(SourceLevels.Error, result.Switch.Level);
+
+            Logger.SetTraceListener(currentListener);
+        }
+
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+arbitrary-message")]
+        public void SystemDiagnosticsTraceLogsToTraceListenerFromAppConfig()
+        {
+            System.Diagnostics.Trace.Write("arbitrary-message");
+        }
+
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+arbitrary-message")]
+        public void SystemDiagnosticsDebugLogsToTraceListenerFromAppConfig()
+        {
+            System.Diagnostics.Debug.Write("arbitrary-message");
+        }
     }
 }

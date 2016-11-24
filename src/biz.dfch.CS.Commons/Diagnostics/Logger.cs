@@ -42,17 +42,11 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
                 var traceSource = _traceSources.GetOrAdd(DEFAULT_TRACESOURCE_NAME, key =>
                 {
-                    var result = (OriginalTraceSource) new TraceSource(key);
-                    lock (_lock)
-                    {
-                        result.Listeners.Clear();
-                    
-                        if (null != _traceListener)
-                        {
-                            result.Listeners.Add(_traceListener);
-                        }
-                        return result;
-                    }
+                    var result = (OriginalTraceSource) new TraceSource(key, SourceLevels.All);
+
+                    ApplyListeners(result);
+
+                    return result;
                 });
 
                 return traceSource as TraceSource;
@@ -66,16 +60,10 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var traceSource = _traceSources.GetOrAdd(name, key =>
             {
-                var result = (OriginalTraceSource) new TraceSource(key);
-                lock (_lock)
-                {
-                    result.Listeners.Clear();
-                    
-                    if (null != _traceListener)
-                    {
-                        result.Listeners.Add(_traceListener);
-                    }
-                }
+                var result = (OriginalTraceSource) new TraceSource(key, SourceLevels.All);
+
+                ApplyListeners(result);
+
                 return result;
             });
 
@@ -89,16 +77,10 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var traceSource = _traceSources.GetOrAdd(traceSourceBase, key =>
             {
-                var result = new OriginalTraceSource(key);
-                lock (_lock)
-                {
-                    result.Listeners.Clear();
-                    
-                    if (null != _traceListener)
-                    {
-                        result.Listeners.Add(_traceListener);
-                    }
-                }
+                var result = new OriginalTraceSource(key, SourceLevels.All);
+
+                ApplyListeners(result);
+
                 return result;
             });
 
@@ -153,6 +135,37 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 }
                 
                 return previousTraceListener;
+            }
+        }
+
+        private static void ApplyListeners(OriginalTraceSource traceSource)
+        {
+            lock (_lock)
+            {
+                var defaultListenerMustBeAdded = false;
+
+                for (var c = traceSource.Listeners.Count -1; c >= 0; c--)
+                {
+                    var traceSourceListener = traceSource.Listeners[c];
+
+                    var defaultTraceListener = traceSourceListener as DefaultTraceListener;
+                    if (null == defaultTraceListener || typeof(DefaultTraceListener) != defaultTraceListener.GetType())
+                    {
+                        continue;
+                    }
+
+                    traceSource.Listeners.RemoveAt(c);
+
+                    defaultListenerMustBeAdded = true;
+
+                }
+                if (defaultListenerMustBeAdded)
+                {
+                    if (null != _traceListener)
+                    {
+                        traceSource.Listeners.Add(_traceListener);
+                    }
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2016 d-fens GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,17 +20,17 @@ using System.Diagnostics.Contracts;
 
 namespace biz.dfch.CS.Commons.Tests.Diagnostics
 {
-    public class TraceListenerMock : TraceListener
+    public class DefaultTraceListenerMock : TraceListener
     {
         private string initializeData;
 
-        public TraceListenerMock()
+        public DefaultTraceListenerMock()
             : base()
         {
             // N/A
         }
 
-        public TraceListenerMock(string initializeData)
+        public DefaultTraceListenerMock(string initializeData)
             : base(initializeData)
         {
             this.initializeData = initializeData;

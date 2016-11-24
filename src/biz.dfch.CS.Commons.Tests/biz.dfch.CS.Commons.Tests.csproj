@@ -154,6 +154,7 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Diagnostics\DefaultTraceListenerMock.cs" />
     <Compile Include="Diagnostics\TraceSourceTest.cs" />
     <Compile Include="Diagnostics\LoggerTest.cs" />
     <Compile Include="Diagnostics\TraceListenerMock.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="CodeContractsTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="dfch.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
