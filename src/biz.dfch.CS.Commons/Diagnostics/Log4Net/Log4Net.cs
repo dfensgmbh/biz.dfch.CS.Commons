@@ -39,12 +39,25 @@ namespace biz.dfch.CS.Commons.Diagnostics.Log4Net
         private const string METHOD_NAME_FATAL_FORMAT = "FatalFormat";
         private const string METHOD_NAME_INFO = "Info";
         private const string METHOD_NAME_INFO_FORMAT = "InfoFormat";
+        private const string METHOD_NAME_WARN = "Warn";
+        private const string METHOD_NAME_WARN_FORMAT = "WarnFormat";
 
-        public bool IsDebugEnabled { get; private set; }
-        public bool IsErrorEnabled { get; private set; }
-        public bool IsFatalEnabled { get; private set; }
-        public bool IsInfoEnabled { get; private set; }
-        public bool IsWarnEnabled { get; private set; }
+        private const string PROPERTY_NAME_IS_DEBUG_ENABLED = "isDebugEnabled";
+        private const string PROPERTY_NAME_IS_ERROR_ENABLED = "isErrorEnabled";
+        private const string PROPERTY_NAME_IS_FATAL_ENABLED = "isFatalEnabled";
+        private const string PROPERTY_NAME_IS_INFO_ENABLED  = "isInfoEnabled";
+        private const string PROPERTY_NAME_IS_WARN_ENABLED  = "isWarnEnabled";
+
+        private readonly PropertyInfo isDebugEnabledPropertyInfo;
+        public bool IsDebugEnabled { get { return (bool) isDebugEnabledPropertyInfo.GetValue(logger); } }
+        private readonly PropertyInfo isErrorEnabledPropertyInfo;
+        public bool IsErrorEnabled { get { return (bool) isErrorEnabledPropertyInfo.GetValue(logger); } }
+        private readonly PropertyInfo isFatalEnabledPropertyInfo;
+        public bool IsFatalEnabled { get { return (bool) isFatalEnabledPropertyInfo.GetValue(logger); } }
+        private readonly PropertyInfo isInfoEnabledPropertyInfo;
+        public bool IsInfoEnabled { get { return (bool) isInfoEnabledPropertyInfo.GetValue(logger); } }
+        private readonly PropertyInfo isWarnEnabledPropertyInfo;
+        public bool IsWarnEnabled { get { return (bool) isWarnEnabledPropertyInfo.GetValue(logger); } }
 
         public Log4Net(object logger)
         {
@@ -52,6 +65,26 @@ namespace biz.dfch.CS.Commons.Diagnostics.Log4Net
 
             this.logger = logger;
 
+            #region ========== PROPERTIES ==========
+
+            isDebugEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_DEBUG_ENABLED, BINDING_FLAGS, null, typeof(bool), new Type[0], null);
+            Contract.Assert(null != isDebugEnabledPropertyInfo);
+
+            isErrorEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_ERROR_ENABLED, BINDING_FLAGS, null, typeof(bool), new Type[0], null);
+            Contract.Assert(null != isErrorEnabledPropertyInfo);
+
+            isFatalEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_FATAL_ENABLED, BINDING_FLAGS, null, typeof(bool), new Type[0], null);
+            Contract.Assert(null != isFatalEnabledPropertyInfo);
+
+            isInfoEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_INFO_ENABLED, BINDING_FLAGS, null, typeof(bool), new Type[0], null);
+            Contract.Assert(null != isInfoEnabledPropertyInfo);
+
+            isWarnEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_WARN_ENABLED, BINDING_FLAGS, null, typeof(bool), new Type[0], null);
+            Contract.Assert(null != isWarnEnabledPropertyInfo);
+
+            #endregion
+
+            #region ========== DEBUG ==========
             debugObject = this.logger.GetType().GetMethod(METHOD_NAME_DEBUG, BINDING_FLAGS, null, new Type[] { typeof(object) }, null);
             Contract.Assert(null != debugObject);
 
@@ -72,6 +105,10 @@ namespace biz.dfch.CS.Commons.Diagnostics.Log4Net
 
             debugFormatStringObjectObjectObject = this.logger.GetType().GetMethod(METHOD_NAME_DEBUG_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(string), typeof(object[]), typeof(object[]), typeof(object[]) }, null);
             Contract.Assert(null != debugFormatStringObjectObjectObject);
+
+            #endregion
+
+            #region ========== ERROR ==========
 
             errorObject = this.logger.GetType().GetMethod(METHOD_NAME_ERROR, BINDING_FLAGS, null, new Type[] { typeof(object) }, null);
             Contract.Assert(null != errorObject);
@@ -94,6 +131,10 @@ namespace biz.dfch.CS.Commons.Diagnostics.Log4Net
             errorFormatStringObjectObjectObject = this.logger.GetType().GetMethod(METHOD_NAME_ERROR_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(string), typeof(object[]), typeof(object[]), typeof(object[]) }, null);
             Contract.Assert(null != errorFormatStringObjectObjectObject);
 
+            #endregion
+
+            #region ========== FATAL ==========
+
             fatalObject = this.logger.GetType().GetMethod(METHOD_NAME_FATAL, BINDING_FLAGS, null, new Type[] { typeof(object) }, null);
             Contract.Assert(null != fatalObject);
 
@@ -115,6 +156,10 @@ namespace biz.dfch.CS.Commons.Diagnostics.Log4Net
             fatalFormatStringObjectObjectObject = this.logger.GetType().GetMethod(METHOD_NAME_FATAL_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(string), typeof(object[]), typeof(object[]), typeof(object[]) }, null);
             Contract.Assert(null != fatalFormatStringObjectObjectObject);
 
+            #endregion
+
+            #region ========== INFO  ==========
+
             infoObject = this.logger.GetType().GetMethod(METHOD_NAME_INFO, BINDING_FLAGS, null, new Type[] { typeof(object) }, null);
             Contract.Assert(null != infoObject);
 
@@ -135,209 +180,298 @@ namespace biz.dfch.CS.Commons.Diagnostics.Log4Net
 
             infoFormatStringObjectObjectObject = this.logger.GetType().GetMethod(METHOD_NAME_INFO_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(string), typeof(object[]), typeof(object[]), typeof(object[]) }, null);
             Contract.Assert(null != infoFormatStringObjectObjectObject);
+
+            #endregion
+
+            #region ========== WARN  ==========
+
+            warnObject = this.logger.GetType().GetMethod(METHOD_NAME_WARN, BINDING_FLAGS, null, new Type[] { typeof(object) }, null);
+            Contract.Assert(null != warnObject);
+
+            warnObjectException = this.logger.GetType().GetMethod(METHOD_NAME_WARN, BINDING_FLAGS, null, new Type[] { typeof(object), typeof(Exception) }, null);
+            Contract.Assert(null != warnObjectException);
+
+            warnFormatStringObject = this.logger.GetType().GetMethod(METHOD_NAME_WARN_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(string), typeof(object) }, null);
+            Contract.Assert(null != warnFormatStringObject);
+
+            warnFormatStringObjectArray = this.logger.GetType().GetMethod(METHOD_NAME_WARN_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(string), typeof(object[]) }, null);
+            Contract.Assert(null != warnFormatStringObjectArray);
+
+            warnFormatIFormatProviderStringObjectArray = this.logger.GetType().GetMethod(METHOD_NAME_WARN_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(IFormatProvider), typeof(string), typeof(object[]) }, null);
+            Contract.Assert(null != warnFormatIFormatProviderStringObjectArray);
+
+            warnFormatStringObjectObject = this.logger.GetType().GetMethod(METHOD_NAME_WARN_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(string), typeof(object), typeof(object) }, null);
+            Contract.Assert(null != warnFormatStringObjectObject);
+
+            warnFormatStringObjectObjectObject = this.logger.GetType().GetMethod(METHOD_NAME_WARN_FORMAT, BINDING_FLAGS, null, new Type[] { typeof(string), typeof(object[]), typeof(object[]), typeof(object[]) }, null);
+            Contract.Assert(null != warnFormatStringObjectObjectObject);
+
+            #endregion
         }
-            
+
+        # region ========== DEBUG ==========
+
         private readonly MethodInfo debugObject;
         public void Debug(object message)
         {
+            if (!IsDebugEnabled) { return; }
             debugObject.Invoke(logger, new object[] { message });
         }
 
         private readonly MethodInfo debugObjectException;
         public void Debug(object message, Exception exception)
         {
+            if (!IsDebugEnabled) { return; }
             debugObjectException.Invoke(logger, new object[] { message, exception });
         }
 
         private readonly MethodInfo debugFormatStringObject;
         public void DebugFormat(string format, object arg0)
         {
+            if (!IsDebugEnabled) { return; }
             debugFormatStringObject.Invoke(logger, new object[] { format, arg0 });
         }
 
         private readonly MethodInfo debugFormatStringObjectArray;
         public void DebugFormat(string format, params object[] args)
         {
+            if (!IsDebugEnabled) { return; }
             debugFormatStringObjectArray.Invoke(logger, new object[] { format, args });
         }
 
         private readonly MethodInfo debugFormatIFormatProviderStringObjectArray;
         public void DebugFormat(IFormatProvider provider, string format, params object[] args)
         {
+            if (!IsDebugEnabled) { return; }
             debugFormatIFormatProviderStringObjectArray.Invoke(logger, new object[] { provider, format, args });
         }
 
         private readonly MethodInfo debugFormatStringObjectObject;
         public void DebugFormat(string format, object arg0, object arg1)
         {
+            if (!IsDebugEnabled) { return; }
             debugFormatStringObjectObject.Invoke(logger, new object[] { format, arg0, arg1 });
         }
 
         private readonly MethodInfo debugFormatStringObjectObjectObject;
         public void DebugFormat(string format, object arg0, object arg1, object arg2)
         {
+            if (!IsDebugEnabled) { return; }
             debugFormatStringObjectObjectObject.Invoke(logger, new object[] { format, arg0, arg1, arg2 });
         }
+
+        #endregion
+
+        # region ========== ERROR ==========
 
         private readonly MethodInfo errorObject;
         public void Error(object message)
         {
+            if (!IsErrorEnabled) { return; }
             errorObject.Invoke(logger, new object[] { message });
         }
 
         private readonly MethodInfo errorObjectException;
         public void Error(object message, Exception exception)
         {
+            if (!IsErrorEnabled) { return; }
             errorObjectException.Invoke(logger, new object[] { message, exception });
         }
 
         private readonly MethodInfo errorFormatStringObject;
         public void ErrorFormat(string format, object arg0)
         {
+            if (!IsErrorEnabled) { return; }
             errorFormatStringObject.Invoke(logger, new object[] { format, arg0 });
         }
 
         private readonly MethodInfo errorFormatStringObjectArray;
         public void ErrorFormat(string format, params object[] args)
         {
+            if (!IsErrorEnabled) { return; }
             errorFormatStringObjectArray.Invoke(logger, new object[] { format, args });
         }
 
         private readonly MethodInfo errorFormatIFormatProviderStringObjectArray;
         public void ErrorFormat(IFormatProvider provider, string format, params object[] args)
         {
+            if (!IsErrorEnabled) { return; }
             errorFormatIFormatProviderStringObjectArray.Invoke(logger, new object[] { provider, format, args });
         }
 
         private readonly MethodInfo errorFormatStringObjectObject;
         public void ErrorFormat(string format, object arg0, object arg1)
         {
+            if (!IsErrorEnabled) { return; }
             errorFormatStringObjectObject.Invoke(logger, new object[] { format, arg0, arg1 });
         }
 
         private readonly MethodInfo errorFormatStringObjectObjectObject;
         public void ErrorFormat(string format, object arg0, object arg1, object arg2)
         {
+            if (!IsErrorEnabled) { return; }
             errorFormatStringObjectObjectObject.Invoke(logger, new object[] { format, arg0, arg1, arg2 });
         }
+
+        #endregion
+
+        # region ========== FATAL ==========
 
         private readonly MethodInfo fatalObject;
         public void Fatal(object message)
         {
+            if (!IsFatalEnabled) { return; }
             fatalObject.Invoke(logger, new object[] { message });
         }
 
         private readonly MethodInfo fatalObjectException;
         public void Fatal(object message, Exception exception)
         {
+            if (!IsFatalEnabled) { return; }
             fatalObjectException.Invoke(logger, new object[] { message, exception });
         }
 
         private readonly MethodInfo fatalFormatStringObject;
         public void FatalFormat(string format, object arg0)
         {
+            if (!IsFatalEnabled) { return; }
             fatalFormatStringObject.Invoke(logger, new object[] { format, arg0 });
         }
 
         private readonly MethodInfo fatalFormatStringObjectArray;
         public void FatalFormat(string format, params object[] args)
         {
+            if (!IsFatalEnabled) { return; }
             fatalFormatStringObjectArray.Invoke(logger, new object[] { format, args });
         }
 
         private readonly MethodInfo fatalFormatIFormatProviderStringObjectArray;
         public void FatalFormat(IFormatProvider provider, string format, params object[] args)
         {
+            if (!IsFatalEnabled) { return; }
             fatalFormatIFormatProviderStringObjectArray.Invoke(logger, new object[] { provider, format, args });
         }
 
         private readonly MethodInfo fatalFormatStringObjectObject;
         public void FatalFormat(string format, object arg0, object arg1)
         {
+            if (!IsFatalEnabled) { return; }
             fatalFormatStringObjectObject.Invoke(logger, new object[] { format, arg0, arg1 });
         }
 
         private readonly MethodInfo fatalFormatStringObjectObjectObject;
         public void FatalFormat(string format, object arg0, object arg1, object arg2)
         {
+            if (!IsFatalEnabled) { return; }
             fatalFormatStringObjectObject.Invoke(logger, new object[] { format, arg0, arg1, arg2 });
         }
+
+        #endregion
+
+        # region ========== INFO  ==========
 
         private readonly MethodInfo infoObject;
         public void Info(object message)
         {
+            if (!IsInfoEnabled) { return; }
             infoObject.Invoke(logger, new object[] { message });
         }
 
         private readonly MethodInfo infoObjectException;
         public void Info(object message, Exception exception)
         {
+            if (!IsInfoEnabled) { return; }
             infoObjectException.Invoke(logger, new object[] { message, exception });
         }
 
         private readonly MethodInfo infoFormatStringObject;
         public void InfoFormat(string format, object arg0)
         {
+            if (!IsInfoEnabled) { return; }
             infoFormatStringObject.Invoke(logger, new object[] { format, arg0 });
         }
 
         private readonly MethodInfo infoFormatStringObjectArray;
         public void InfoFormat(string format, params object[] args)
         {
+            if (!IsInfoEnabled) { return; }
             infoFormatStringObjectArray.Invoke(logger, new object[] { format, args });
         }
 
         private readonly MethodInfo infoFormatIFormatProviderStringObjectArray;
         public void InfoFormat(IFormatProvider provider, string format, params object[] args)
         {
+            if (!IsInfoEnabled) { return; }
             infoFormatIFormatProviderStringObjectArray.Invoke(logger, new object[] { provider, format, args });
         }
 
         private readonly MethodInfo infoFormatStringObjectObject;
         public void InfoFormat(string format, object arg0, object arg1)
         {
+            if (!IsInfoEnabled) { return; }
             infoFormatStringObjectObject.Invoke(logger, new object[] { format, arg0, arg1 });
         }
 
         private readonly MethodInfo infoFormatStringObjectObjectObject;
         public void InfoFormat(string format, object arg0, object arg1, object arg2)
         {
+            if (!IsInfoEnabled) { return; }
             infoFormatStringObjectObjectObject.Invoke(logger, new object[] { format, arg0, arg1, arg2 });
         }
 
+        #endregion
+
+        # region ========== WARN  ==========
+
+        private readonly MethodInfo warnObject;
         public void Warn(object message)
         {
-            throw new NotImplementedException();
+            if (!IsWarnEnabled) { return; }
+            warnObject.Invoke(logger, new object[] { message });
         }
 
+        private readonly MethodInfo warnObjectException;
         public void Warn(object message, Exception exception)
         {
-            throw new NotImplementedException();
+            if (!IsWarnEnabled) { return; }
+            warnObjectException.Invoke(logger, new object[] { message, exception });
         }
 
+        private readonly MethodInfo warnFormatStringObject;
         public void WarnFormat(string format, object arg0)
         {
-            throw new NotImplementedException();
+            if (!IsWarnEnabled) { return; }
+            warnFormatStringObject.Invoke(logger, new object[] { format, arg0 });
         }
 
+        private readonly MethodInfo warnFormatStringObjectArray;
         public void WarnFormat(string format, params object[] args)
         {
-            throw new NotImplementedException();
+            if (!IsWarnEnabled) { return; }
+            warnFormatStringObjectArray.Invoke(logger, new object[] { format, args });
         }
 
+        private readonly MethodInfo warnFormatIFormatProviderStringObjectArray;
         public void WarnFormat(IFormatProvider provider, string format, params object[] args)
         {
-            throw new NotImplementedException();
+            if (!IsWarnEnabled) { return; }
+            warnFormatIFormatProviderStringObjectArray.Invoke(logger, new object[] { provider, format, args });
         }
 
+        private readonly MethodInfo warnFormatStringObjectObject;
         public void WarnFormat(string format, object arg0, object arg1)
         {
-            throw new NotImplementedException();
+            if (!IsWarnEnabled) { return; }
+            warnFormatStringObjectObject.Invoke(logger, new object[] { format, arg0, arg1 });
         }
 
+        private readonly MethodInfo warnFormatStringObjectObjectObject;
         public void WarnFormat(string format, object arg0, object arg1, object arg2)
         {
-            throw new NotImplementedException();
+            if (!IsWarnEnabled) { return; }
+            warnFormatStringObjectObjectObject.Invoke(logger, new object[] { format, arg0, arg1, arg2 });
         }
+
+        #endregion
     }
 }
