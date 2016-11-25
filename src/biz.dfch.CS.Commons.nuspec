@@ -24,16 +24,28 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 * See [Releases](https://github.com/dfensgmbh/biz.dfch.CS.Commons/releases) and [Tags](https://github.com/dfensgmbh/biz.dfch.CS.Commons/tags) on [GitHub](https://github.com/dfensgmbh/biz.dfch.CS.Commons)
 		</description>
         <summary>Common C#/.NET classes</summary>
-        <releaseNotes>20161121
-Initial release
+        <releaseNotes>20161125
+# FEATURES
+
+Log4Net TraceListener
+
+* added TraceListener that supports log4net as target
+
+Logger
+
+* added Logger class that wraps TraceSource instances
         </releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>
         <dependencies>
-			<dependency id="biz.dfch.CS.System.Utilities" version="2.0.1" />
 		</dependencies>
     </metadata>
 	<files>
 		<file src="biz.dfch.CS.Commons\bin\Release\biz.dfch.CS.Commons.dll" target="lib\" />
+		<file src="biz.dfch.CS.Commons\bin\Release\biz.dfch.CS.Commons.dll.config" target="lib\" />
+		<file src="biz.dfch.CS.Commons\bin\Release\CodeContracts\biz.dfch.CS.Commons.Contracts.dll" target="lib\CodeContracts\" />
+		<file src="biz.dfch.CS.Commons\bin\Release\log4net.xml" target="lib\" />
+		<file src="biz.dfch.CS.Commons\bin\Release\log4net.config" target="lib\" />
+		<file src="biz.dfch.CS.Commons\bin\Release\log4net.dll" target="lib\" />
 	</files>
 </package>
