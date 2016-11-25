@@ -15,14 +15,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using biz.dfch.CS.Commons.Diagnostics;
+using biz.dfch.CS.Testing.Attributes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 
@@ -63,5 +58,53 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             result.DebugFormat("format '{0}', '{1}', '{2}', '{3}'", "arg0", "arg1", "arg2", "arg3");
         }
 
+        [TestMethod]
+        public void ConfigureWithExistingConfigurationFileSucceeds()
+        {
+            var traceAssert = Mock.Create<DebugAndTraceListenerAssert>();
+            Mock.Arrange(() => traceAssert.WriteLine())
+                .IgnoreInstance()
+                .MustBeCalled();
+
+            var configFile = new FileInfo(@".\log4net.config");
+            Log4NetTraceListener.Configure(configFile);
+
+            var name = Guid.NewGuid().ToString();
+            var result = Log4NetTraceListener.GetLogger(name);
+            Assert.IsNotNull(result);
+
+            Assert.IsTrue(result.IsDebugEnabled);
+            Assert.IsTrue(result.IsErrorEnabled);
+            Assert.IsTrue(result.IsFatalEnabled);
+            Assert.IsTrue(result.IsInfoEnabled);
+            Assert.IsTrue(result.IsWarnEnabled);
+
+            result.DebugFormat("format '{0}', '{1}', '{2}', '{3}'", "arg0", "arg1", "arg2", "arg3");
+
+            Mock.Assert(traceAssert);
+        }
+
+        [TestMethod]
+        public void ConfigureWithoutParametersTriesToLoadFromConfigurationSection()
+        {
+            var traceAssert = Mock.Create<DebugAndTraceListenerAssert>();
+            Mock.Arrange(() => traceAssert.WriteLine())
+                .IgnoreInstance()
+                .MustBeCalled();
+
+            Log4NetTraceListener.Configure();
+
+            var name = Guid.NewGuid().ToString();
+            var result = Log4NetTraceListener.GetLogger(name);
+            Assert.IsNotNull(result);
+
+            Assert.IsTrue(result.IsDebugEnabled);
+            Assert.IsTrue(result.IsErrorEnabled);
+            Assert.IsTrue(result.IsFatalEnabled);
+            Assert.IsTrue(result.IsInfoEnabled);
+            Assert.IsTrue(result.IsWarnEnabled);
+
+            Mock.Assert(traceAssert);
+        }
     }
 }

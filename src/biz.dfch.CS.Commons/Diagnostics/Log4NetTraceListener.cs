@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -35,6 +36,9 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         private const string CLASS_NAME_LOG_MANAGER = "LogManager";
         private const string METHOD_NAME_GET_LOGGER = "GetLogger";
+        
+        private const string CLASS_NAME_XML_CONFIGURATOR = "XmlConfigurator";
+        private const string METHOD_NAME_XML_CONFIGURATOR = "Configure";
 
         private static readonly Lazy<Assembly> _assembly = new Lazy<Assembly>(() =>
         {
@@ -95,6 +99,40 @@ namespace biz.dfch.CS.Commons.Diagnostics
             Contract.Assert(null != loggerInstance);
 
             return new Log4Net.Log4Net(loggerInstance);
+        }
+
+        public static void Configure()
+        {
+            var xmlConfigurator = Assembly.DefinedTypes.FirstOrDefault(e => e.Name == CLASS_NAME_XML_CONFIGURATOR);
+            Contract.Assert(null != xmlConfigurator, CLASS_NAME_XML_CONFIGURATOR);
+
+            var methodInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BindingFlags.Static | BindingFlags.Public, null, new Type[] { }, null);
+            Contract.Assert(null != methodInfo, METHOD_NAME_XML_CONFIGURATOR);
+
+            methodInfo.Invoke(null, new object[] { });
+        }
+
+        public static void Configure(FileInfo configFile)
+        {
+            Contract.Requires(null != configFile);
+
+            var xmlConfigurator = Assembly.DefinedTypes.FirstOrDefault(e => e.Name == CLASS_NAME_XML_CONFIGURATOR);
+            Contract.Assert(null != xmlConfigurator, CLASS_NAME_XML_CONFIGURATOR);
+
+            if (File.Exists(configFile.FullName))
+            {
+                var methodInfoFileInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(FileInfo) }, null);
+                Contract.Assert(null != methodInfoFileInfo, METHOD_NAME_XML_CONFIGURATOR);
+
+                methodInfoFileInfo.Invoke(null, new object[] { configFile });
+            }
+            else
+            {
+                var methodInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BindingFlags.Static | BindingFlags.Public, null, new Type[] { }, null);
+                Contract.Assert(null != methodInfo, METHOD_NAME_XML_CONFIGURATOR);
+
+                methodInfo.Invoke(null, new object[] { });
+            }
         }
 
         public override void Write(string message)

@@ -155,6 +155,12 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <Compile Include="Diagnostics\DebugAndTraceListenerAssert.cs" />
+    <Compile Include="Diagnostics\DebugAndTraceListenerMock.cs" />
     <Compile Include="Diagnostics\DefaultTraceListenerMock.cs" />
     <Compile Include="Diagnostics\Log4NetTraceListenerTest.cs" />
     <Compile Include="Diagnostics\TraceSourceTest.cs" />

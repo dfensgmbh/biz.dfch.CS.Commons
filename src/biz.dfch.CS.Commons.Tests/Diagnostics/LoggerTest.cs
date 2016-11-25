@@ -19,6 +19,7 @@ using System.Diagnostics;
 using biz.dfch.CS.Commons.Diagnostics;
 using biz.dfch.CS.Testing.Attributes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Telerik.JustMock;
 using TraceSource = biz.dfch.CS.Commons.Diagnostics.TraceSource;
 
 namespace biz.dfch.CS.Commons.Tests.Diagnostics
@@ -282,18 +283,30 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
         }
 
         [TestMethod]
-        [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+arbitrary-message")]
         public void SystemDiagnosticsTraceLogsToTraceListenerFromAppConfig()
         {
+            var traceAssert = Mock.Create<DebugAndTraceListenerAssert>();
+            Mock.Arrange(() => traceAssert.WriteLine())
+                .IgnoreInstance()
+                .MustBeCalled();
+
             System.Diagnostics.Trace.Write("arbitrary-message");
+
+            Mock.Assert(traceAssert);
         }
 
         [TestMethod]
         [TestCategory("SkipOnTeamCity")]
-        [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+arbitrary-message")]
         public void SystemDiagnosticsDebugLogsToTraceListenerFromAppConfig()
         {
-            System.Diagnostics.Debug.Write("arbitrary-message");
+            var traceAssert = Mock.Create<DebugAndTraceListenerAssert>();
+            Mock.Arrange(() => traceAssert.WriteLine())
+                .IgnoreInstance()
+                .MustBeCalled();
+
+            System.Diagnostics.Debug.WriteLine("arbitrary-message");
+
+            Mock.Assert(traceAssert);
         }
     }
 }
