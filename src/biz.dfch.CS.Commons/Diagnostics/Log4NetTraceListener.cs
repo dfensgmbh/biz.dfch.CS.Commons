@@ -34,6 +34,10 @@ namespace biz.dfch.CS.Commons.Diagnostics
         private const char DELIMITER = '|';
         private static readonly object[] _emptyArgs = {};
 
+        private const BindingFlags BINDING_FLAGS = BindingFlags.Static | BindingFlags.Public;
+
+        private const string ASSEMBLY_NAME = "log4net.dll";
+
         private const string CLASS_NAME_LOG_MANAGER = "LogManager";
         private const string METHOD_NAME_GET_LOGGER = "GetLogger";
         
@@ -44,25 +48,13 @@ namespace biz.dfch.CS.Commons.Diagnostics
         {
             try
             {
-                //var assembly = typeof(Log4NetTraceListener).Assembly;
-                //var location = assembly.Location;
-                //Contract.Assert(null != location);
-
-                //var directoryName = System.IO.Path.GetDirectoryName(location);
-                //Contract.Assert(null != directoryName);
-
-                //var log4NetLocation = System.IO.Path.Combine(directoryName, "log4net.dll");
-                //Contract.Assert(System.IO.File.Exists(log4NetLocation), log4NetLocation);
-                var log4NetLocation = "log4net.dll";
-
-                var log4Net = Assembly.LoadFrom(log4NetLocation);
+                var log4Net = Assembly.LoadFrom(ASSEMBLY_NAME);
                 Contract.Assert(null != log4Net);
 
                 return log4Net;
             }
             catch (Exception)
             {
-                // N/A
                 return default(Assembly);
             }
         });
@@ -92,7 +84,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             var logManager = Assembly.DefinedTypes.FirstOrDefault(e => e.Name == CLASS_NAME_LOG_MANAGER);
             Contract.Assert(null != logManager, CLASS_NAME_LOG_MANAGER);
 
-            var methodInfo = logManager.GetMethod(METHOD_NAME_GET_LOGGER, BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
+            var methodInfo = logManager.GetMethod(METHOD_NAME_GET_LOGGER, BINDING_FLAGS, null, new Type[] { typeof(string) }, null);
             Contract.Assert(null != methodInfo, METHOD_NAME_GET_LOGGER);
 
             var loggerInstance = methodInfo.Invoke(null, new object[] { name });
@@ -106,7 +98,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             var xmlConfigurator = Assembly.DefinedTypes.FirstOrDefault(e => e.Name == CLASS_NAME_XML_CONFIGURATOR);
             Contract.Assert(null != xmlConfigurator, CLASS_NAME_XML_CONFIGURATOR);
 
-            var methodInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BindingFlags.Static | BindingFlags.Public, null, new Type[] { }, null);
+            var methodInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BINDING_FLAGS, null, new Type[] { }, null);
             Contract.Assert(null != methodInfo, METHOD_NAME_XML_CONFIGURATOR);
 
             methodInfo.Invoke(null, new object[] { });
@@ -121,14 +113,14 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             if (File.Exists(configFile.FullName))
             {
-                var methodInfoFileInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(FileInfo) }, null);
+                var methodInfoFileInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BINDING_FLAGS, null, new Type[] { typeof(FileInfo) }, null);
                 Contract.Assert(null != methodInfoFileInfo, METHOD_NAME_XML_CONFIGURATOR);
 
                 methodInfoFileInfo.Invoke(null, new object[] { configFile });
             }
             else
             {
-                var methodInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BindingFlags.Static | BindingFlags.Public, null, new Type[] { }, null);
+                var methodInfo = xmlConfigurator.GetMethod(METHOD_NAME_XML_CONFIGURATOR, BINDING_FLAGS, null, new Type[] { }, null);
                 Contract.Assert(null != methodInfo, METHOD_NAME_XML_CONFIGURATOR);
 
                 methodInfo.Invoke(null, new object[] { });
