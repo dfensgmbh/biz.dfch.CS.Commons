@@ -17,7 +17,6 @@
 using System;
 using System.IO;
 using biz.dfch.CS.Commons.Diagnostics;
-using biz.dfch.CS.Testing.Attributes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 
@@ -84,6 +83,30 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Mock.Assert(traceAssert);
         }
 
+        [TestMethod]
+        public void ConfigureWithInexistingConfigurationFileSucceeds()
+        {
+            var traceAssert = Mock.Create<DebugAndTraceListenerAssert>();
+            Mock.Arrange(() => traceAssert.WriteLine())
+                .IgnoreInstance()
+                .MustBeCalled();
+
+            var configFile = new FileInfo(@".\invalid.config");
+            Log4NetTraceListener.Configure(configFile);
+
+            var name = Guid.NewGuid().ToString();
+            var result = Log4NetTraceListener.GetLogger(name);
+            Assert.IsNotNull(result);
+
+            Assert.IsTrue(result.IsDebugEnabled);
+            Assert.IsTrue(result.IsErrorEnabled);
+            Assert.IsTrue(result.IsFatalEnabled);
+            Assert.IsTrue(result.IsInfoEnabled);
+            Assert.IsTrue(result.IsWarnEnabled);
+
+            Mock.Assert(traceAssert);
+        }
+        
         [TestMethod]
         public void ConfigureWithoutParametersTriesToLoadFromConfigurationSection()
         {
