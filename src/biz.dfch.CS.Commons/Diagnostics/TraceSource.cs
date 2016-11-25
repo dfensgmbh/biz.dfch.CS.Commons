@@ -22,8 +22,8 @@ namespace biz.dfch.CS.Commons.Diagnostics
 {
     public class TraceSource : System.Diagnostics.TraceSource
     {
-        public const string EXCEPTION_MESSAGE_FORMAT = "{0}@{1}: '{2}'\r\n[{3}]\r\n[{4}]";
-        public const string EXCEPTION_MESSAGE_BASE_FORMAT = "{0}@{1}: '{2}'\r\n[{3}]";
+        public const string EXCEPTION_MESSAGE_FORMAT = "{0}@{1}: '{2}'\r\n[{3}]";
+        public const string EXCEPTION_MESSAGE_MESSAGE_FORMAT = "{0}@{1}: '{2}'\r\n[{3}]\r\n[{4}]";
 
         public TraceSource(string name) 
             : base(name)
@@ -46,7 +46,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 return;
             }
 
-            TraceEvent(TraceEventType.Error, ex.GetType().GetHashCode(), EXCEPTION_MESSAGE_BASE_FORMAT, ex.GetType().Name, ex.Source, ex.Message, ex.StackTrace);
+            TraceEvent(TraceEventType.Error, ex.GetType().GetHashCode(), EXCEPTION_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, ex.Message, ex.StackTrace);
         }
 
         public virtual void TraceException(Exception ex, string message)
@@ -59,7 +59,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 return;
             }
 
-            TraceEvent(TraceEventType.Error, ex.GetType().GetHashCode(), EXCEPTION_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, message, ex.Message, ex.StackTrace);
+            TraceEvent(TraceEventType.Error, ex.GetType().GetHashCode(), EXCEPTION_MESSAGE_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, message, ex.Message, ex.StackTrace);
         }
     }
 }

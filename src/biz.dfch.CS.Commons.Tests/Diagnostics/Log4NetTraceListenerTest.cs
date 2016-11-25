@@ -15,10 +15,13 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using biz.dfch.CS.Commons.Diagnostics;
+using biz.dfch.CS.Commons.Diagnostics.Log4Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 
 namespace biz.dfch.CS.Commons.Tests.Diagnostics
 {
@@ -128,6 +131,58 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Assert.IsTrue(result.IsWarnEnabled);
 
             Mock.Assert(traceAssert);
+        }
+
+        [TestMethod]
+        public void CreatingListenerWithExistingConfigurationFileSucceeds()
+        {
+            var listener = new Log4NetTraceListener("log4net.config");
+            Assert.IsNotNull(listener);
+        }
+
+        [TestMethod]
+        public void LoggingViaTraceSourceToLog4NetTraceListenerSucceeds()
+        {
+            var logger = Mock.Create<ILog>();
+            Mock.Arrange(() => logger.Fatal(Arg.IsAny<string>()))
+                .IgnoreInstance()
+                .DoNothing()
+                .MustBeCalled();
+
+            var traceSource = new System.Diagnostics.TraceSource("TraceSourceWithLog4NetListener");
+            traceSource.TraceEvent(TraceEventType.Critical, 1, "TraceFromTestMethod '{0}'", DateTimeOffset.Now.ToString("O"));
+
+            Mock.Assert(logger);
+        }
+
+        [TestMethod]
+        public void LoggingErrorViaTraceSourceToLog4NetTraceListenerWithFilterSkipsLogging()
+        {
+            var logger = Mock.Create<ILog>();
+            Mock.Arrange(() => logger.Fatal(Arg.IsAny<string>()))
+                .IgnoreInstance()
+                .OccursNever();
+
+            var traceSource = new System.Diagnostics.TraceSource("TraceSourceWithLog4NetListenerWithFilter");
+            traceSource.TraceEvent(TraceEventType.Error, 1, "TraceFromTestMethod '{0}'", DateTimeOffset.Now.ToString("O"));
+            traceSource.TraceEvent(TraceEventType.Error, 1, "TraceFromTestMethod '{0}'", DateTimeOffset.Now.ToString("O"));
+
+            Mock.Assert(logger);
+        }
+
+        [TestMethod]
+        public void LoggingVerboseViaTraceSourceToLog4NetTraceListenerWithFilterSkipsLogging()
+        {
+            var traceListener = Mock.Create<Log4NetTraceListener>(Behavior.CallOriginal);
+            Mock.Arrange(() => traceListener.TraceEvent(Arg.IsAny<TraceEventCache>(), Arg.IsAny<string>(), Arg.IsAny<TraceEventType>(), Arg.IsAny<int>(), Arg.IsAny<string>(), Arg.IsAny<object[]>()))
+                .IgnoreInstance()
+                .OccursNever();
+
+            var traceSource = new System.Diagnostics.TraceSource("TraceSourceWithLog4NetListenerWithFilter");
+            traceSource.TraceEvent(TraceEventType.Verbose, 1, "TraceFromTestMethod '{0}'", DateTimeOffset.Now.ToString("O"));
+            traceSource.TraceEvent(TraceEventType.Verbose, 1, "TraceFromTestMethod '{0}'", DateTimeOffset.Now.ToString("O"));
+
+            Mock.Assert(traceListener);
         }
     }
 }
