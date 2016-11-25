@@ -38,6 +38,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         private const string ASSEMBLY_BASENAME = "log4net";
         private const string ASSEMBLY_NAME = ASSEMBLY_BASENAME + ".dll";
+
         private const string CLASS_NAME_LOG_MANAGER = "LogManager";
         private const string METHOD_NAME_GET_LOGGER = "GetLogger";
 
