@@ -14,4 +14,4 @@ using System.Reflection;
 // NOTE
 // also update the corresponding nuspec file when changing the version
 //
-[assembly: AssemblyVersion("1.1.1.*")]
+[assembly: AssemblyVersion("1.2.0.*")]

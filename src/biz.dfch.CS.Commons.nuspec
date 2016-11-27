@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.1.1</version>
+        <version>1.2.0</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -25,31 +25,27 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 		</description>
         <summary>Common C#/.NET classes</summary>
         <releaseNotes>20161127
+
 # FEATURES
 
-app.config
+UnifiedLog4NetTraceListener
 
-* removed version reference for listeners
+* added log4net trace listener that logs to a single log4net logger (needed for avoiding concurrency issues when using the RollingLogFileAppender)
 
-Converters
+TraceSource
 
-* added BaseDto for JSON conversion
-* added convertible dictionary
-* added conversion key attribute
+* added TraceException overloads with support for specifying an id parameter
 
-Validation
+Log4Net
 
-* added validation attribute for ISO4217 Currencies
-* added validation attribute for IPv4 and IPv6 addresses
-* added validation attribute for Guid
-* added validation attribute for data types
-* added validation attribute for validate sets
-* added validation attribute for validate patterns
-* added validation attribute for DateTimeRange
+* optimised checks for log level enabled settings (value is now read upon logger instantiation on not on every invocation)
 
-Newtonsoft.JSON
+Referenced Assemblies
 
-* updated Newtonsoft.Json to 9.0.1
+* removed unneeded reference System.Data
+* removed unneeded reference System.Data.DataSetExtensions
+* removed unneeded reference Microsoft.CSharp
+
         </releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>
