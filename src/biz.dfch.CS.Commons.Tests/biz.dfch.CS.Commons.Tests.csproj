@@ -134,7 +134,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="Telerik.JustMock">
       <HintPath>../JustMock/Telerik.JustMock.dll</HintPath>
     </Reference>
@@ -155,10 +160,31 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Converters\ArbitraryConversionTestAttribute.cs" />
+    <Compile Include="Converters\ConvertibleBaseDtoConverterTest.cs" />
+    <Compile Include="Converters\DictionaryParametersKeyAttributeTest.cs" />
+    <Compile Include="Converters\DictionaryParametersKeyConverterTest.cs" />
+    <Compile Include="Converters\ConversionKeyAttributeTest.cs" />
+    <Compile Include="Converters\ConversionKeyBaseDtoTest.cs" />
+    <Compile Include="Converters\ConversionKeyConverterTest.cs" />
+    <Compile Include="DictionaryParametersTest.cs" />
+    <Compile Include="Validation\CurrencyAttributeTest.cs" />
+    <Compile Include="Validation\DataTypeValidationAttributeTest.cs" />
+    <Compile Include="Validation\DateRangeTest.cs" />
+    <Compile Include="Validation\DateTimeRangeTest.cs" />
+    <Compile Include="Validation\GuidAttributeTest.cs" />
+    <Compile Include="Validation\IncrementAttributeTest.cs" />
+    <Compile Include="Validation\IpAddressAttributeTest.cs" />
+    <Compile Include="Validation\JsonAttributeTest.cs" />
+    <Compile Include="Validation\TypeAttributeTest.cs" />
+    <Compile Include="Validation\UnitAttributeTest.cs" />
+    <Compile Include="Validation\ValidatePatternIfNotDefaultAttributeTest.cs" />
+    <Compile Include="Validation\ValidateSetIfNotDefaultAttributeTest.cs" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <Compile Include="BaseDtoTest.cs" />
     <Compile Include="Diagnostics\DebugAndTraceListenerAssert.cs" />
     <Compile Include="Diagnostics\DebugAndTraceListenerMock.cs" />
     <Compile Include="Diagnostics\DefaultTraceListenerMock.cs" />
@@ -180,6 +206,7 @@
       <Name>biz.dfch.CS.Commons</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

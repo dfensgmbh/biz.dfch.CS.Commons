@@ -124,7 +124,12 @@
     <AssemblyOriginatorKeyFile>dfch.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -134,13 +139,45 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="BaseDto.cs" />
+    <Compile Include="ConstantsIanaTopLevelDomains.cs" />
+    <Compile Include="ConstantsValidationIso8601.cs" />
+    <Compile Include="ConstantsValidationCurrency.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="ConstantsValidation.cs" />
+    <Compile Include="Converters\ContractClassForIConvertibleBaseDtoConverter.cs" />
+    <Compile Include="Converters\ConversionKeyBaseAttribute.cs" />
+    <Compile Include="Converters\ConvertibleBaseDto.cs" />
+    <Compile Include="Converters\ConvertibleBaseDtoConverter.cs" />
+    <Compile Include="Converters\ConvertibleString.cs" />
+    <Compile Include="Converters\DictionaryParametersBaseDto.cs" />
+    <Compile Include="Converters\DictionaryParametersConverter.cs" />
+    <Compile Include="Converters\DictionaryParametersKeyAttribute.cs" />
+    <Compile Include="Converters\ConversionKeyAttribute.cs" />
+    <Compile Include="Converters\ConversionKeyBaseDto.cs" />
+    <Compile Include="Converters\ConversionKeyConverter.cs" />
+    <Compile Include="Converters\IConvertibleBaseDtoConverter.cs" />
     <Compile Include="Diagnostics\Log4Net\Log4Net.cs" />
     <Compile Include="Diagnostics\Log4Net\ILog.cs" />
     <Compile Include="Diagnostics\Log4NetTraceListener.cs" />
     <Compile Include="Diagnostics\TraceSource.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="DictionaryParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeContracts.cs" />
+    <Compile Include="Validation\CurrencyAttribute.cs" />
+    <Compile Include="Validation\DataTypeValidationBaseAttribute.cs" />
+    <Compile Include="Validation\DateRange.cs" />
+    <Compile Include="Validation\DateTimeRange.cs" />
+    <Compile Include="Validation\GuidAttribute.cs" />
+    <Compile Include="Validation\IncrementAttribute.cs" />
+    <Compile Include="Validation\IpAddressAttribute.cs" />
+    <Compile Include="Validation\JsonAttribute.cs" />
+    <Compile Include="Validation\SecureStringAttribute.cs" />
+    <Compile Include="Validation\TypeAttribute.cs" />
+    <Compile Include="Validation\UnitAttribute.cs" />
+    <Compile Include="Validation\ValidatePatternIfNotDefaultAttribute.cs" />
+    <Compile Include="Validation\ValidateSetIfNotDefaultAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -148,6 +185,7 @@
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.dll">
