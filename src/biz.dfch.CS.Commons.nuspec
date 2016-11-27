@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -24,26 +24,41 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 * See [Releases](https://github.com/dfensgmbh/biz.dfch.CS.Commons/releases) and [Tags](https://github.com/dfensgmbh/biz.dfch.CS.Commons/tags) on [GitHub](https://github.com/dfensgmbh/biz.dfch.CS.Commons)
 		</description>
         <summary>Common C#/.NET classes</summary>
-        <releaseNotes>20161125
+        <releaseNotes>20161127
 # FEATURES
 
-Log4Net TraceListener
+Converters
 
-* added TraceListener that supports log4net as target
+* added BaseDto for JSON conversion
+* added convertible dictionary
+* added conversion key attribute
 
-Logger
+Validation
 
-* added Logger class that wraps TraceSource instances
+* added validation attribute for ISO4217 Currencies
+* added validation attribute for IPv4 and IPv6 addresses
+* added validation attribute for Guid
+* added validation attribute for data types
+* added validation attribute for validate sets
+* added validation attribute for validate patterns
+* added validation attribute for DateTimeRange
+
+Newtonsoft.JSON
+
+* updated Newtonsoft.Json to 9.0.1
         </releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>
         <dependencies>
+			<dependency id="Newtonsoft.Json" version="9.0.1" />
 		</dependencies>
     </metadata>
 	<files>
 		<file src="biz.dfch.CS.Commons\bin\Release\biz.dfch.CS.Commons.dll" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\biz.dfch.CS.Commons.dll.config" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\CodeContracts\biz.dfch.CS.Commons.Contracts.dll" target="lib\CodeContracts\" />
+		<file src="biz.dfch.CS.Commons\bin\Release\Newtonsoft.Json.dll" target="lib\" />
+		<file src="biz.dfch.CS.Commons\bin\Release\Newtonsoft.Json.xml" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\log4net.xml" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\log4net.config" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\log4net.dll" target="lib\" />
