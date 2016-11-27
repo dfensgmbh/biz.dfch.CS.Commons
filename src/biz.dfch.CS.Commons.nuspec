@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -26,6 +26,10 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
         <summary>Common C#/.NET classes</summary>
         <releaseNotes>20161127
 # FEATURES
+
+app.config
+
+* removed version reference for listeners
 
 Converters
 
