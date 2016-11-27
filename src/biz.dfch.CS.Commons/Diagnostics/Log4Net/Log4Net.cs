@@ -48,16 +48,11 @@ namespace biz.dfch.CS.Commons.Diagnostics.Log4Net
         private const string PROPERTY_NAME_IS_INFO_ENABLED  = "IsInfoEnabled";
         private const string PROPERTY_NAME_IS_WARN_ENABLED  = "IsWarnEnabled";
 
-        private readonly PropertyInfo isDebugEnabledPropertyInfo;
-        public bool IsDebugEnabled { get { return (bool) isDebugEnabledPropertyInfo.GetValue(logger); } }
-        private readonly PropertyInfo isErrorEnabledPropertyInfo;
-        public bool IsErrorEnabled { get { return (bool) isErrorEnabledPropertyInfo.GetValue(logger); } }
-        private readonly PropertyInfo isFatalEnabledPropertyInfo;
-        public bool IsFatalEnabled { get { return (bool) isFatalEnabledPropertyInfo.GetValue(logger); } }
-        private readonly PropertyInfo isInfoEnabledPropertyInfo;
-        public bool IsInfoEnabled { get { return (bool) isInfoEnabledPropertyInfo.GetValue(logger); } }
-        private readonly PropertyInfo isWarnEnabledPropertyInfo;
-        public bool IsWarnEnabled { get { return (bool) isWarnEnabledPropertyInfo.GetValue(logger); } }
+        public bool IsDebugEnabled { get; set; }
+        public bool IsErrorEnabled { get; set; }
+        public bool IsFatalEnabled { get; set; }
+        public bool IsInfoEnabled { get; set; }
+        public bool IsWarnEnabled { get; set; }
 
         public Log4Net(object logger)
         {
@@ -67,20 +62,25 @@ namespace biz.dfch.CS.Commons.Diagnostics.Log4Net
 
             #region ========== PROPERTIES ==========
 
-            isDebugEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_DEBUG_ENABLED, BINDING_FLAGS);
+            var isDebugEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_DEBUG_ENABLED, BINDING_FLAGS);
             Contract.Assert(null != isDebugEnabledPropertyInfo);
+            IsDebugEnabled = (bool) isDebugEnabledPropertyInfo.GetValue(logger);
 
-            isErrorEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_ERROR_ENABLED, BINDING_FLAGS);
+            var isErrorEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_ERROR_ENABLED, BINDING_FLAGS);
             Contract.Assert(null != isErrorEnabledPropertyInfo);
+            IsErrorEnabled = (bool) isErrorEnabledPropertyInfo.GetValue(logger);
 
-            isFatalEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_FATAL_ENABLED, BINDING_FLAGS);
+            var isFatalEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_FATAL_ENABLED, BINDING_FLAGS);
             Contract.Assert(null != isFatalEnabledPropertyInfo);
+            IsFatalEnabled = (bool) isFatalEnabledPropertyInfo.GetValue(logger);
 
-            isInfoEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_INFO_ENABLED, BINDING_FLAGS);
+            var isInfoEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_INFO_ENABLED, BINDING_FLAGS);
             Contract.Assert(null != isInfoEnabledPropertyInfo);
+            IsInfoEnabled = (bool) isInfoEnabledPropertyInfo.GetValue(logger);
 
-            isWarnEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_WARN_ENABLED, BINDING_FLAGS);
+            var isWarnEnabledPropertyInfo = this.logger.GetType().GetProperty(PROPERTY_NAME_IS_WARN_ENABLED, BINDING_FLAGS);
             Contract.Assert(null != isWarnEnabledPropertyInfo);
+            IsWarnEnabled = (bool) isWarnEnabledPropertyInfo.GetValue(logger);
 
             #endregion
 
