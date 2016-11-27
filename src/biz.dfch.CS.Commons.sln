@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Release", "Release", "{6E7D3BD2-79A8-4679-961F-D4475D820DC1}"
 	ProjectSection(SolutionItems) = preProject
 		AssemblyVersion.cs = AssemblyVersion.cs
+		biz.dfch.CS.Commons.nuspec = biz.dfch.CS.Commons.nuspec
 	EndProjectSection
 EndProject
 Global
