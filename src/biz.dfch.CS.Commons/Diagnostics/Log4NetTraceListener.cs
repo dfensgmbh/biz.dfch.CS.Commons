@@ -344,7 +344,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             }
         }
 
-        private string TraceEventFormatter(TraceEventCache eventCache, string source, int id, string format, params object[] args)
+        protected string TraceEventFormatter(TraceEventCache eventCache, string source, int id, string format, params object[] args)
         {
             var activityId = Trace.CorrelationManager.ActivityId;
             
