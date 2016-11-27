@@ -61,5 +61,31 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             TraceEvent(TraceEventType.Error, ex.GetType().GetHashCode(), EXCEPTION_MESSAGE_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, message, ex.Message, ex.StackTrace);
         }
+
+        public virtual void TraceException(Exception ex, int id)
+        {
+            Contract.Requires(null != ex);
+
+            if(SourceLevels.Error != (Switch.Level & SourceLevels.Error))
+            {
+                return;
+            }
+
+            TraceEvent(TraceEventType.Error, id, EXCEPTION_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, ex.Message, ex.StackTrace);
+        }
+
+        public virtual void TraceException(Exception ex, int id, string message)
+        {
+            Contract.Requires(null != ex);
+            Contract.Requires(null != message);
+
+            if(SourceLevels.Error != (Switch.Level & SourceLevels.Error))
+            {
+                return;
+            }
+
+            TraceEvent(TraceEventType.Error, id, EXCEPTION_MESSAGE_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, message, ex.Message, ex.StackTrace);
+        }
+
     }
 }
