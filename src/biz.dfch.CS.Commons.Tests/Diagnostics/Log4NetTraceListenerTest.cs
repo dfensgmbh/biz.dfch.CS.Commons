@@ -28,6 +28,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
     [TestClass]
     public class Log4NetTraceListenerTest
     {
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void GetAssemblySucceeds()
         {
@@ -35,6 +36,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Assert.IsNotNull(result);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void GetLoggerWithEmptyNameThrowsContractException()
         {
@@ -42,6 +44,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             var result = Log4NetTraceListener.GetLogger(name);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void GetLoggerSucceeds()
         {
@@ -50,6 +53,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Assert.IsNotNull(result);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void DebugFormatSucceeds()
         {
@@ -60,6 +64,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             result.DebugFormat("format '{0}', '{1}', '{2}', '{3}'", "arg0", "arg1", "arg2", "arg3");
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void ConfigureWithExistingConfigurationFileSucceeds()
         {
@@ -86,6 +91,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Mock.Assert(traceAssert);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void ConfigureWithInexistingConfigurationFileSucceeds()
         {
@@ -109,7 +115,8 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
 
             Mock.Assert(traceAssert);
         }
-        
+
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void ConfigureWithoutParametersTriesToLoadFromConfigurationSection()
         {
@@ -133,6 +140,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Mock.Assert(traceAssert);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void CreatingListenerWithExistingConfigurationFileSucceeds()
         {
@@ -140,6 +148,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Assert.IsNotNull(listener);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void LoggingViaTraceSourceToLog4NetTraceListenerSucceeds()
         {
@@ -155,6 +164,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Mock.Assert(logger);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void LoggingErrorViaTraceSourceToLog4NetTraceListenerWithFilterSkipsLogging()
         {
@@ -170,6 +180,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Mock.Assert(logger);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         public void LoggingVerboseViaTraceSourceToLog4NetTraceListenerWithFilterSkipsLogging()
         {
