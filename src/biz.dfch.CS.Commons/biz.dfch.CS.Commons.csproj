@@ -131,6 +131,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyVersion.cs">
@@ -171,6 +172,9 @@
     <Compile Include="DictionaryParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeContracts.cs" />
+    <Compile Include="Rest\ContentType.cs" />
+    <Compile Include="Rest\HttpMethod.cs" />
+    <Compile Include="Rest\RestCallExecutor.cs" />
     <Compile Include="Security\Cryptography.cs" />
     <Compile Include="Validation\CurrencyAttribute.cs" />
     <Compile Include="Validation\DataTypeValidationBaseAttribute.cs" />
