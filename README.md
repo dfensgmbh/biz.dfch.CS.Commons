@@ -11,3 +11,8 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 * Get it on [NuGet](https://www.nuget.org/packages/biz.dfch.CS.Commons/)
 
 * See [Releases](https://github.com/dfensgmbh/biz.dfch.CS.Commons/releases) and [Tags](https://github.com/dfensgmbh/biz.dfch.CS.Commons/tags) on [GitHub](https://github.com/dfensgmbh/biz.dfch.CS.Commons)
+
+
+[![TeamCity Logo](https://github.com/dfensgmbh/biz.dfch.CS.Commons/blob/develop/TeamCity.png)](https://www.jetbrains.com/teamcity/)
+
+Released with TeamCity
