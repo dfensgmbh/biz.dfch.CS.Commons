@@ -160,6 +160,7 @@
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="Collections\CollectionUtilsTest.cs" />
+    <Compile Include="Collections\IDictionaryExtensionsTest.cs" />
     <Compile Include="Collections\NameValueCollectionExtensionsTest.cs" />
     <Compile Include="Converters\ArbitraryConversionTestAttribute.cs" />
     <Compile Include="Converters\ConvertibleBaseDtoConverterTest.cs" />
