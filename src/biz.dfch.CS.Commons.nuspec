@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.2.0</version>
+        <version>1.3.0</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -24,29 +24,17 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 * See [Releases](https://github.com/dfensgmbh/biz.dfch.CS.Commons/releases) and [Tags](https://github.com/dfensgmbh/biz.dfch.CS.Commons/tags) on [GitHub](https://github.com/dfensgmbh/biz.dfch.CS.Commons)
 		</description>
         <summary>Common C#/.NET classes</summary>
-        <releaseNotes>20161127
-
+        <releaseNotes>20161128
 # FEATURES
 
-UnifiedLog4NetTraceListener
-
-* added log4net trace listener that logs to a single log4net logger (needed for avoiding concurrency issues when using the RollingLogFileAppender)
-
-TraceSource
-
-* added TraceException overloads with support for specifying an id parameter
-
-Log4Net
-
-* optimised checks for log level enabled settings (value is now read upon logger instantiation on not on every invocation)
-
-Referenced Assemblies
-
-* removed unneeded reference System.Data
-* removed unneeded reference System.Data.DataSetExtensions
-* removed unneeded reference Microsoft.CSharp
-
-        </releaseNotes>
+* added StringValue attribute
+* added CollectionUtils
+* added NameValueCollectionComparer
+* added EnumConverter
+* added CompilerServices Shortcuts
+* added Cryptography methods
+* moved log4net resources to separate directory to prevent loaded them as a reference when using this package
+</releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>
         <dependencies>
@@ -59,8 +47,8 @@ Referenced Assemblies
 		<file src="biz.dfch.CS.Commons\bin\Release\CodeContracts\biz.dfch.CS.Commons.Contracts.dll" target="lib\CodeContracts\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\Newtonsoft.Json.dll" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\Newtonsoft.Json.xml" target="lib\" />
-		<file src="biz.dfch.CS.Commons\bin\Release\log4net.xml" target="lib\" />
-		<file src="biz.dfch.CS.Commons\bin\Release\log4net.config" target="lib\" />
-		<file src="biz.dfch.CS.Commons\bin\Release\log4net.dll" target="lib\" />
+		<file src="biz.dfch.CS.Commons\bin\Release\log4net.xml" target="lib\log4net" />
+		<file src="biz.dfch.CS.Commons\bin\Release\log4net.config" target="lib\log4net" />
+		<file src="biz.dfch.CS.Commons\bin\Release\log4net.dll" target="lib\log4net" />
 	</files>
 </package>
