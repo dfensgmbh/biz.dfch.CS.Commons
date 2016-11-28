@@ -159,6 +159,8 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Collections\CollectionUtilsTest.cs" />
+    <Compile Include="Collections\NameValueCollectionExtensionsTest.cs" />
     <Compile Include="Converters\ArbitraryConversionTestAttribute.cs" />
     <Compile Include="Converters\ConvertibleBaseDtoConverterTest.cs" />
     <Compile Include="Converters\DictionaryParametersKeyAttributeTest.cs" />
@@ -166,7 +168,12 @@
     <Compile Include="Converters\ConversionKeyAttributeTest.cs" />
     <Compile Include="Converters\ConversionKeyBaseDtoTest.cs" />
     <Compile Include="Converters\ConversionKeyConverterTest.cs" />
+    <Compile Include="Converters\EnumExample.cs" />
+    <Compile Include="Converters\EnumUtilsTest.cs" />
+    <Compile Include="Converters\StringValueAttributeExtensionTest.cs" />
+    <Compile Include="Diagnostics\MethodTest.cs" />
     <Compile Include="DictionaryParametersTest.cs" />
+    <Compile Include="Security\CryptographyTest.cs" />
     <Compile Include="Validation\CurrencyAttributeTest.cs" />
     <Compile Include="Validation\DataTypeValidationAttributeTest.cs" />
     <Compile Include="Validation\DateRangeTest.cs" />
