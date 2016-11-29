@@ -20,11 +20,23 @@ namespace biz.dfch.CS.Commons.Diagnostics
 {
     public class UnifiedLog4NetTraceListener : Log4NetTraceListener
     {
+        public UnifiedLog4NetTraceListener()
+            : base()
+        {
+            // N/A
+        }
+
+        public UnifiedLog4NetTraceListener(string name)
+            : base(name)
+        {
+            // N/A
+        }
+
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args)
         {
             if (null != base.Filter && !base.Filter.ShouldTrace(eventCache, source, eventType, id, format, args, null, null)) { return; }
 
-            var logger = GetLogger(Logger.DEFAULT_TRACESOURCE_NAME);
+            var logger = GetLoggerOrDefault(Logger.DEFAULT_TRACESOURCE_NAME);
 
             switch (eventType)
             {
