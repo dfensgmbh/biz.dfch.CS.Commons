@@ -375,7 +375,6 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 }
             }
 
-            sb.AppendLine();
             return sb.ToString();
         }
 
