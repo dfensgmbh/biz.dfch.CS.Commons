@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.5.1</version>
+        <version>1.6.0</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -27,14 +27,13 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
         <releaseNotes>20161129
 # FEATURES
 
+ServicePointManager
+
+* added method for disabling certificate validation via delegate
+
 Log4NetTraceListener
 
-* removed extra line append in message formatter
-* added support specifying for default logger instance
-
-RestClient
-
-* added Invoke overload for native .NET HttpMethod verb support
+* optimised call to TraceEvent
 </releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>
