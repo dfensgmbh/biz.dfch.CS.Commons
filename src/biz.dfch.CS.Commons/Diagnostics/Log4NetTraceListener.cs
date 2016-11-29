@@ -317,7 +317,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id)
         {
-            TraceEvent(eventCache, source, eventType, id, string.Empty);
+            TraceEvent(eventCache, source, eventType, id, string.Empty, _emptyArgs);
         }
 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
