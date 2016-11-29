@@ -15,12 +15,14 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using biz.dfch.CS.Commons.Diagnostics.Log4Net;
 
@@ -105,6 +107,8 @@ namespace biz.dfch.CS.Commons.Diagnostics
             return result;
         });
 
+        public const string SUPPORTED_ATTRIBUTE_LOGGER = "logger";
+
         public Log4NetTraceListener()
             : base()
         {
@@ -114,6 +118,12 @@ namespace biz.dfch.CS.Commons.Diagnostics
         public Log4NetTraceListener(string name)
             : base(name)
         {
+
+            if (Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_LOGGER))
+            {
+                DefaultLoggerName = Attributes[SUPPORTED_ATTRIBUTE_LOGGER];
+            }
+
             var configFile = new FileInfo(name);
 
             if (File.Exists(configFile.FullName))
@@ -219,6 +229,8 @@ namespace biz.dfch.CS.Commons.Diagnostics
             }
         }
 
+        public string DefaultLoggerName { get; set; }
+
         public override void Write(string message)
         {
             WriteImpl(message, Logger.DEFAULT_TRACESOURCE_NAME, false);
@@ -274,7 +286,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         private void WriteImpl(string message, string source, bool appendNewLine)
         {
-            var logger = GetLogger(Logger.DEFAULT_TRACESOURCE_NAME);
+            var logger = GetLoggerOrDefault(Logger.DEFAULT_TRACESOURCE_NAME);
             if (!logger.IsDebugEnabled) { return; }
 
             var activityId = Trace.CorrelationManager.ActivityId;
@@ -317,7 +329,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
         {
             if (null != base.Filter && !base.Filter.ShouldTrace(eventCache, source, eventType, id, format, args, null, null)) { return; }
 
-            var logger = GetLogger(source);
+            var logger = GetLoggerOrDefault(source);
 
             switch (eventType)
             {
@@ -380,7 +392,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         public override void Fail(string message)
         {
-            var logger = GetLogger(Logger.DEFAULT_TRACESOURCE_NAME);
+            var logger = GetLoggerOrDefault(Logger.DEFAULT_TRACESOURCE_NAME);
             if (!logger.IsDebugEnabled) { return; }
 
             var eventCache = new TraceEventCache();
@@ -392,13 +404,24 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         public override void Fail(string message, string detailMessage)
         {
-            var logger = GetLogger(Logger.DEFAULT_TRACESOURCE_NAME);
+            var logger = GetLoggerOrDefault(Logger.DEFAULT_TRACESOURCE_NAME);
             if (!logger.IsFatalEnabled) { return; }
 
             var formattedMessage = TraceEventFormatter(new TraceEventCache(), Logger.DEFAULT_TRACESOURCE_NAME, DEFAULT_TRACE_ID, FAIL_MESSAGE_TEMPLATE, message, detailMessage);
             logger.Fatal(formattedMessage);
 
             base.Fail(message, detailMessage);
+        }
+
+        protected override string[] GetSupportedAttributes()
+        {
+            return new string[] { SUPPORTED_ATTRIBUTE_LOGGER };
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected ILog GetLoggerOrDefault(string name)
+        {
+            return string.IsNullOrWhiteSpace(DefaultLoggerName) ? GetLogger(name) : GetLogger(DefaultLoggerName);
         }
     }
 }
