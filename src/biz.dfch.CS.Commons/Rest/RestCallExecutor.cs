@@ -16,9 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using biz.dfch.CS.Commons.Converters;
+using NetHttpMethod = System.Net.Http.HttpMethod;
 
 namespace biz.dfch.CS.Commons.Rest
 {
@@ -170,6 +172,41 @@ namespace biz.dfch.CS.Commons.Rest
             }
         }
 
+        public string Invoke(NetHttpMethod method, string uri, IDictionary<string, string> headers, string body)
+        {
+            Contract.Requires(null != method);
+
+            var httpMethod = HttpMethod.Get;
+
+            if(NetHttpMethod.Get == method)
+            {
+                httpMethod = HttpMethod.Get;
+            }
+            else if(NetHttpMethod.Post == method)
+            {
+                httpMethod = HttpMethod.Post;
+            }
+            else if(NetHttpMethod.Put == method)
+            {
+                httpMethod = HttpMethod.Put;
+            }
+            else if(NetHttpMethod.Delete == method)
+            {
+                httpMethod = HttpMethod.Delete;
+            }
+            else if(NetHttpMethod.Head == method)
+            {
+                httpMethod = HttpMethod.Head;
+            }
+            else
+            {
+                const bool isSupportedHttpMethod = false;
+                Contract.Assert(isSupportedHttpMethod);
+            }
+
+            return Invoke(httpMethod, uri, headers, body);
+        }
+            
         /// <summary>
         /// Extracts the 'User-Agent' header from the header parameters
         /// and removes the value from the passed headers dictionary.
