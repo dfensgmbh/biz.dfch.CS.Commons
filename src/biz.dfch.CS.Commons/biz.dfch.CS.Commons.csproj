@@ -176,6 +176,7 @@
     <Compile Include="Rest\HttpMethod.cs" />
     <Compile Include="Rest\RestCallExecutor.cs" />
     <Compile Include="Security\Cryptography.cs" />
+    <Compile Include="Security\ServicePointManagerUtils.cs" />
     <Compile Include="Validation\CurrencyAttribute.cs" />
     <Compile Include="Validation\DataTypeValidationBaseAttribute.cs" />
     <Compile Include="Validation\DateRange.cs" />

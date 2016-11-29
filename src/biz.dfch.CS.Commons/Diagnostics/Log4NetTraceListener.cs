@@ -32,7 +32,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
     {
         private const char DELIMITER = '|';
         private static readonly object[] _emptyArgs = {};
-        private const int DEFAULT_TRACE_ID = 1;
+        private const int DEFAULT_TRACE_ID = short.MaxValue;
         private const string ISO8601_FORMAT_STRING = "O";
         private const string FAIL_MESSAGE_TEMPLATE = "{0} ({1})";
 
@@ -317,7 +317,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id)
         {
-            TraceEvent(eventCache, source, eventType, id, string.Empty);
+            TraceEvent(eventCache, source, eventType, id, string.Empty, _emptyArgs);
         }
 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
