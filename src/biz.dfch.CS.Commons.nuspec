@@ -30,6 +30,7 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 Log4NetTraceListener
 
 * removed extra line append in message formatter
+* added support specifying for default logger instance
 
 RestClient
 
