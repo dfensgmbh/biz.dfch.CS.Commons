@@ -32,7 +32,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
     {
         private const char DELIMITER = '|';
         private static readonly object[] _emptyArgs = {};
-        private const int DEFAULT_TRACE_ID = 1;
+        private const int DEFAULT_TRACE_ID = short.MaxValue;
         private const string ISO8601_FORMAT_STRING = "O";
         private const string FAIL_MESSAGE_TEMPLATE = "{0} ({1})";
 
