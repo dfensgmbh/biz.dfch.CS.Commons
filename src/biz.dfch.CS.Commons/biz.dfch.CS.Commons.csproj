@@ -159,6 +159,9 @@
     <Compile Include="Converters\ConversionKeyBaseDto.cs" />
     <Compile Include="Converters\ConversionKeyConverter.cs" />
     <Compile Include="Converters\EnumUtils.cs" />
+    <Compile Include="Converters\EnvironmentVariableAttribute.cs" />
+    <Compile Include="Converters\EnvironmentVariableBaseDto.cs" />
+    <Compile Include="Converters\EnvironmentVariableConverter.cs" />
     <Compile Include="Converters\IConvertibleBaseDtoConverter.cs" />
     <Compile Include="Converters\StringValueAttribute.cs" />
     <Compile Include="Converters\StringValueAttributeExtension.cs" />
