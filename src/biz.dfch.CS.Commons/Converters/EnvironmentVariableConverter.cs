@@ -119,11 +119,17 @@ namespace biz.dfch.CS.Commons.Converters
 
         public static void Import(EnvironmentVariableBaseDto environmentVariableBaseDto)
         {
+            Import(environmentVariableBaseDto, EnvironmentVariableTarget.Process);
+        }
+
+        public static void Import(EnvironmentVariableBaseDto environmentVariableBaseDto, EnvironmentVariableTarget target)
+        {
             Contract.Requires(null != environmentVariableBaseDto);
+            Contract.Requires(Enum.IsDefined(typeof(EnvironmentVariableTarget), target));
 
             var propertyInfos = environmentVariableBaseDto
                 .GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+                .GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             
             foreach (var propertyInfo in propertyInfos)
             {
@@ -133,7 +139,7 @@ namespace biz.dfch.CS.Commons.Converters
                     continue;
                 }
 
-                var stringValue = Environment.GetEnvironmentVariable(attribute.Name);
+                var stringValue = Environment.GetEnvironmentVariable(attribute.Name, target);
                 if (null == stringValue)
                 {
                     continue;
@@ -154,11 +160,17 @@ namespace biz.dfch.CS.Commons.Converters
 
         public static void Export(EnvironmentVariableBaseDto environmentVariableBaseDto)
         {
+            Export(environmentVariableBaseDto, EnvironmentVariableTarget.Process);
+        }
+
+        public static void Export(EnvironmentVariableBaseDto environmentVariableBaseDto, EnvironmentVariableTarget target)
+        {
             Contract.Requires(null != environmentVariableBaseDto);
+            Contract.Requires(Enum.IsDefined(typeof(EnvironmentVariableTarget), target));
 
             var propertyInfos = environmentVariableBaseDto
                 .GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+                .GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);
             
             foreach (var propertyInfo in propertyInfos)
             {
@@ -169,7 +181,7 @@ namespace biz.dfch.CS.Commons.Converters
                 }
 
                 var value = propertyInfo.GetValue(environmentVariableBaseDto, null);
-                Environment.SetEnvironmentVariable(attribute.Name, value.ToString());
+                Environment.SetEnvironmentVariable(attribute.Name, null != value ? value.ToString() : null, target);
             }
         }
 

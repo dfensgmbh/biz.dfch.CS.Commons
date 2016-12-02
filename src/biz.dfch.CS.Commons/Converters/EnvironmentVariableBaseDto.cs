@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using Newtonsoft.Json;
 
 namespace biz.dfch.CS.Commons.Converters
@@ -37,12 +38,22 @@ namespace biz.dfch.CS.Commons.Converters
 
         public void Import()
         {
-            EnvironmentVariableConverter.Import(this);
+            EnvironmentVariableConverter.Import(this, EnvironmentVariableTarget.Process);
+        }
+
+        public void Import(EnvironmentVariableTarget target)
+        {
+            EnvironmentVariableConverter.Import(this, target);
         }
 
         public void Export()
         {
-            EnvironmentVariableConverter.Export(this);
+            EnvironmentVariableConverter.Export(this, EnvironmentVariableTarget.Process);
+        }
+
+        public void Export(EnvironmentVariableTarget target)
+        {
+            EnvironmentVariableConverter.Export(this, target);
         }
     }
 }

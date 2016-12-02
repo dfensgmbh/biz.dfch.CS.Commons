@@ -41,6 +41,20 @@ namespace biz.dfch.CS.Commons.Tests.Converters
             public long LongPropertyWithoutAnnotation { get; set; }
         }
 
+        public class ClassWithStaticEnvironmentVariableAttributes : EnvironmentVariableBaseDto
+        {
+            [EnvironmentVariable(STRING_PROPERTY_WITH_ANNOTATION_ANNOTATION)]
+            [DictionaryParametersKey(STRING_PROPERTY_WITH_ANNOTATION_ANNOTATION)]
+            public string StringPropertyWithAnnotation { get; set; }
+
+            [EnvironmentVariable(LONG_PROPERTY_WITH_ANNOTATION_ANNOTATION)]
+            public static long StaticLongPropertyWithAnnotation { get; set; }
+
+            public string StringPropertyWithoutAnnotation { get; set; }
+
+            public long LongPropertyWithoutAnnotation { get; set; }
+        }
+
         [TestMethod]
         [ExpectContractFailure]
         public void ConvertEnvironmentVariableBaseDtoWithNullEnvironmentVariableBaseDtoThrowsContractFailure()
@@ -407,6 +421,44 @@ namespace biz.dfch.CS.Commons.Tests.Converters
             EnvironmentVariableConverter.Import(sut);
 
             Assert.AreEqual(longValue, sut.LongPropertyWithAnnotation);
+            Assert.AreEqual(stringValue, sut.StringPropertyWithAnnotation);
+            Assert.AreEqual(0, sut.LongPropertyWithoutAnnotation);
+            Assert.IsNull(sut.StringPropertyWithoutAnnotation);
+
+            // Cleanup
+            System.Environment.SetEnvironmentVariable(STRING_PROPERTY_WITH_ANNOTATION_ANNOTATION, null);
+            System.Environment.SetEnvironmentVariable(LONG_PROPERTY_WITH_ANNOTATION_ANNOTATION, null);
+            stringParam = System.Environment.GetEnvironmentVariable(STRING_PROPERTY_WITH_ANNOTATION_ANNOTATION);
+            Assert.IsNull(stringParam);
+            longParam = System.Environment.GetEnvironmentVariable(LONG_PROPERTY_WITH_ANNOTATION_ANNOTATION);
+            Assert.IsNull(longParam);
+        }
+
+        [TestMethod]
+        public void ImportStaticTestSucceeds()
+        {
+            // Initialise
+            System.Environment.SetEnvironmentVariable(STRING_PROPERTY_WITH_ANNOTATION_ANNOTATION, null);
+            System.Environment.SetEnvironmentVariable(LONG_PROPERTY_WITH_ANNOTATION_ANNOTATION, null);
+
+            string stringParam;
+            var stringValue = "tralala";
+            string longParam;
+            var longValue = 42L;
+
+            stringParam = System.Environment.GetEnvironmentVariable(STRING_PROPERTY_WITH_ANNOTATION_ANNOTATION);
+            Assert.IsNull(stringParam);
+            longParam = System.Environment.GetEnvironmentVariable(LONG_PROPERTY_WITH_ANNOTATION_ANNOTATION);
+            Assert.IsNull(longParam);
+
+            System.Environment.SetEnvironmentVariable(STRING_PROPERTY_WITH_ANNOTATION_ANNOTATION, stringValue);
+            System.Environment.SetEnvironmentVariable(LONG_PROPERTY_WITH_ANNOTATION_ANNOTATION, longValue.ToString());
+
+            var sut = new ClassWithStaticEnvironmentVariableAttributes();
+
+            EnvironmentVariableConverter.Import(sut);
+
+            Assert.AreEqual(longValue, ClassWithStaticEnvironmentVariableAttributes.StaticLongPropertyWithAnnotation);
             Assert.AreEqual(stringValue, sut.StringPropertyWithAnnotation);
             Assert.AreEqual(0, sut.LongPropertyWithoutAnnotation);
             Assert.IsNull(sut.StringPropertyWithoutAnnotation);
