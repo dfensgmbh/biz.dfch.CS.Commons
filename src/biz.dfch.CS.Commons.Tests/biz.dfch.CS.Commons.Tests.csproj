@@ -172,6 +172,9 @@
     <Compile Include="Converters\ConversionKeyConverterTest.cs" />
     <Compile Include="Converters\EnumExample.cs" />
     <Compile Include="Converters\EnumUtilsTest.cs" />
+    <Compile Include="Converters\EnvironmentVariableAttributeTest.cs" />
+    <Compile Include="Converters\EnvironmentVariableBaseDtoTest.cs" />
+    <Compile Include="Converters\EnvironmentVariableConverterTest.cs" />
     <Compile Include="Converters\StringValueAttributeExtensionTest.cs" />
     <Compile Include="Diagnostics\MethodTest.cs" />
     <Compile Include="DictionaryParametersTest.cs" />
