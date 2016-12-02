@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.7.0</version>
+        <version>1.7.1</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -25,11 +25,17 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 		</description>
         <summary>Common C#/.NET classes</summary>
         <releaseNotes>20161202
+# BUGFIXES
+
+EnvironmentVariableConverter
+
+* fixed setting null variables (effectively removing variables)
+
 # FEATURES
 
-EnvironmentVariableAttribute
+EnvironmentVariableConverter
 
-* added attribute and converter to support importing from and exporting to environment variables
+* added support for importing and exporting environment variables from and to machine and user target
 </releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>
