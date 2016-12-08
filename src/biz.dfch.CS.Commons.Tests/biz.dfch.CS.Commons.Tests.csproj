@@ -179,9 +179,9 @@
     <Compile Include="Converters\StringValueAttributeExtensionTest.cs" />
     <Compile Include="Diagnostics\MessageFactory.cs" />
     <Compile Include="Diagnostics\MethodTest.cs" />
-    <Compile Include="Diagnostics\ClientInfo.ClientInfo.cs" />
+    <Compile Include="Diagnostics\ClientInfo.cs" />
     <Compile Include="Diagnostics\PipeTest.cs" />
-    <Compile Include="Diagnostics\PipeHandler.PipeHandler.cs" />
+    <Compile Include="Diagnostics\PipeHandler.cs" />
     <Compile Include="Diagnostics\ServerInfo.cs" />
     <Compile Include="DictionaryParametersTest.cs" />
     <Compile Include="Rest\RestCallExecutorTest.cs" />
