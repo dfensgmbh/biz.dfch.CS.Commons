@@ -170,6 +170,7 @@
     <Compile Include="Diagnostics\Log4Net\ILog.cs" />
     <Compile Include="Diagnostics\Log4NetTraceListener.cs" />
     <Compile Include="Diagnostics\Method.cs" />
+    <Compile Include="Diagnostics\MessageHandler.cs" />
     <Compile Include="Diagnostics\TraceSource.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Diagnostics\UnifiedLog4NetTraceListener.cs" />
