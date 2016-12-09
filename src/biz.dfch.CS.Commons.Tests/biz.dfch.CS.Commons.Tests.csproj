@@ -180,6 +180,7 @@
     <Compile Include="Diagnostics\MessageFactory.cs" />
     <Compile Include="Diagnostics\MethodTest.cs" />
     <Compile Include="Diagnostics\ClientInfo.cs" />
+    <Compile Include="Diagnostics\NamedPipeServer\NamedPipeServerTraceWriterTest.cs" />
     <Compile Include="Diagnostics\PipeTest.cs" />
     <Compile Include="Diagnostics\PipeHandler.cs" />
     <Compile Include="Diagnostics\ServerInfo.cs" />
