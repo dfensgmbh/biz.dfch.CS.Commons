@@ -15,37 +15,31 @@
  */
 
 using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.IO;
 using System.IO.Pipes;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using biz.dfch.CS.Commons.Collections;
-using biz.dfch.CS.Commons.Diagnostics.Log4Net;
+using biz.dfch.CS.Commons.Diagnostics.NamedPipeServer;
 
 namespace biz.dfch.CS.Commons.Diagnostics
 {
-    public class NamedPipeTraceListener : TraceListener
+    public class NamedPipeTraceListener : TraceListener, IDisposable
     {
-        private const char DELIMITER = '|';
         private static readonly object[] _emptyArgs = {};
         private const int DEFAULT_TRACE_ID = short.MaxValue;
         private const string ISO8601_FORMAT_STRING = "O";
         private const string FAIL_MESSAGE_TEMPLATE = "{0} ({1})";
 
-        public const string NAMED_PIPE_NAME_DEFAULT = "biz.dfch.CS.Commons.Diagnostics.NamedPipeTraceListener";
+        private readonly ManualResetEventSlim abortEvent = 
+            new ManualResetEventSlim(false, 0);
 
         public const int CIRCULAR_QUEUE_CAPACITY_DEFAULT = 4096;
         public const string SUPPORTED_ATTRIBUTE_CAPACITY = "capacity";
 
         private const string LOCAL_HOST = ".";
-        private const int NAMED_PIPE_CONNECT_TIMEOUT_MS = 10 * 1000;
+        private const int NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS = 5 * 1000;
 
         public string PipeName { get; set; }
 
@@ -63,7 +57,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
         }
 
         public NamedPipeTraceListener()
-            : this(NAMED_PIPE_NAME_DEFAULT)
+            : this(NamedPipeServerTraceWriter.NAMED_PIPE_NAME_DEFAULT)
         {
             // N/A
         }
@@ -73,7 +67,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
         {
             PipeName = !string.IsNullOrWhiteSpace(name)
                 ? name
-                : NAMED_PIPE_NAME_DEFAULT;
+                : NamedPipeServerTraceWriter.NAMED_PIPE_NAME_DEFAULT;
 
             Capacity = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_CAPACITY)
                 ? int.Parse(Attributes[SUPPORTED_ATTRIBUTE_CAPACITY])
@@ -87,56 +81,64 @@ namespace biz.dfch.CS.Commons.Diagnostics
         public static void DequeueAndWriteMessageProc(object stateInfo)
         {
             Contract.Requires(null != stateInfo);
-            var _this = stateInfo as NamedPipeTraceListener;
-            Contract.Assert(null != _this);
+            var instance = stateInfo as NamedPipeTraceListener;
+            Contract.Assert(null != instance);
 
             for(;;)
             {
                 try
                 {
-                    using (var client = new NamedPipeClientStream(LOCAL_HOST, _this.PipeName, PipeDirection.Out))
+                    using (var client = new NamedPipeClientStream(LOCAL_HOST, instance.PipeName, PipeDirection.Out))
                     {
-                        new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: Connecting to '{0}' ...", _this.PipeName));
+                        new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: Connecting to '{0}' ...", instance.PipeName));
 
-                        client.Connect(NAMED_PIPE_CONNECT_TIMEOUT_MS);
+                        client.Connect(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
                         client.ReadMode = PipeTransmissionMode.Message;
-                
+
                         var messageHandler = new MessageHandler(client);
 
-                        for(;;)
+                        for (;;)
                         {
                             if (!client.IsConnected)
                             {
-                                new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: Pipe '{0}' is not connected.", _this.PipeName));
+                                new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: Pipe '{0}' is not connected.", instance.PipeName));
                                 break;
                             }
 
                             Item item;
-                            var result = _this.circularQueue.TryDequeue(out item, Timeout.Infinite);
+                            var result = instance.circularQueue.TryDequeue(out item, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
 
                             if (!result)
                             {
-                                new DefaultTraceListener().WriteLine("NamedPipeTraceListener: Nothing dequeued");
+                                if (instance.abortEvent.IsSet)
+                                {
+                                    return;
+                                }
+
                                 continue;
                             }
 
-                            var sb = new StringBuilder(DELIMITER);
+                            var sb = new StringBuilder(MessageHandler.DELIMITER);
                             sb.Append(item.TraceEventType);
-                            sb.Append(DELIMITER);
+                            sb.Append(MessageHandler.DELIMITER);
                             sb.Append(item.Source);
-                            sb.Append(DELIMITER);
+                            sb.Append(MessageHandler.DELIMITER);
                             sb.Append(item.Message);
 
                             messageHandler.Write(sb.ToString());
                         }
                     }
                 }
+                catch (TimeoutException)
+                {
+                    Thread.Sleep(2 * NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
+                }
                 catch (Exception ex)
                 {
 
                     new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: {0}: {1}", ex.GetType().Name, ex.Message));
 
-                    Thread.Sleep(NAMED_PIPE_CONNECT_TIMEOUT_MS);
+                    Thread.Sleep(2 * NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
                 }
             }
 
@@ -202,17 +204,17 @@ namespace biz.dfch.CS.Commons.Diagnostics
             var sb = new StringBuilder(activityId.ToString());
             if (0 != (TraceOutputOptions & TraceOptions.DateTime))
             {
-                sb.Append(DELIMITER);
+                sb.Append(MessageHandler.DELIMITER);
                 sb.Append(DateTimeOffset.Now.ToString(ISO8601_FORMAT_STRING));
             }
 
-            sb.Append(DELIMITER);
+            sb.Append(MessageHandler.DELIMITER);
             sb.Append(source);
 
-            sb.Append(DELIMITER);
+            sb.Append(MessageHandler.DELIMITER);
             sb.Append(DEFAULT_TRACE_ID);
 
-            sb.Append(DELIMITER);
+            sb.Append(MessageHandler.DELIMITER);
             sb.Append(message);
 
             if (appendNewLine)
@@ -259,19 +261,19 @@ namespace biz.dfch.CS.Commons.Diagnostics
             var sb = new StringBuilder(activityId.ToString());
             if (null != eventCache && 0 != (TraceOutputOptions & TraceOptions.DateTime))
             {
-                sb.Append(DELIMITER);
+                sb.Append(MessageHandler.DELIMITER);
                 sb.Append(eventCache.DateTime.ToString(ISO8601_FORMAT_STRING));
             }
 
-            sb.Append(DELIMITER);
+            sb.Append(MessageHandler.DELIMITER);
             sb.Append(source);
 
-            sb.Append(DELIMITER);
+            sb.Append(MessageHandler.DELIMITER);
             sb.Append(id);
 
             if (!string.IsNullOrEmpty(format))
             {
-                sb.Append(DELIMITER);
+                sb.Append(MessageHandler.DELIMITER);
                 
                 if (null != args && 0 < args.Length)
                 {
@@ -319,6 +321,24 @@ namespace biz.dfch.CS.Commons.Diagnostics
         protected override string[] GetSupportedAttributes()
         {
             return new string[] { SUPPORTED_ATTRIBUTE_CAPACITY };
+        }
+
+        public new void Dispose()  
+        {  
+            Dispose(true);  
+            GC.SuppressFinalize(this);  
+        }
+
+        protected override void Dispose(bool disposing)  
+        {  
+            base.Dispose(disposing);
+
+            if (!disposing)
+            {
+                return;
+            }
+
+            abortEvent.Set();
         }
 
     }
