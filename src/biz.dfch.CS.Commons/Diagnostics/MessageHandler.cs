@@ -27,6 +27,8 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         private readonly PipeStream pipeStream;
 
+        public const char DELIMITER = '|';
+
         public const int MESSAGE_SIZE_MAX = 256 * 1024;
 
         public MessageHandler(PipeStream pipeStream)
