@@ -30,6 +30,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
         public const char DELIMITER = '|';
 
         public const int MESSAGE_SIZE_MAX = 256 * 1024;
+        public const int READ_SIZE = MESSAGE_SIZE_MAX;
 
         public MessageHandler(PipeStream pipeStream)
         {
@@ -42,11 +43,15 @@ namespace biz.dfch.CS.Commons.Diagnostics
         {
             var bytes = new byte[MESSAGE_SIZE_MAX];
 
-            var bytesRead = pipeStream.Read(bytes, 0, bytes.Length);
-            Contract.Assert(pipeStream.IsMessageComplete);
-            Contract.Assert(0 != bytesRead);
+            var bytesRead = pipeStream.Read(bytes, 0, READ_SIZE);
 
-            return _streamEncoding.GetString(bytes, 0, bytesRead);
+            if (!pipeStream.IsMessageComplete || 0 == bytesRead)
+            {
+                return default(string);
+            }
+
+            var message = _streamEncoding.GetString(bytes, 0, bytesRead);
+            return message;
         }
         public void Write(string message)
         {
