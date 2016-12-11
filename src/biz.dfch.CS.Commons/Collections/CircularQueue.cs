@@ -28,9 +28,9 @@ namespace biz.dfch.CS.Commons.Collections
 
         private volatile bool isInitialised;
 
-        private int enqueuePointer;
-        private int dequeuePointer;
-        private int enqueuedItems;
+        private volatile int enqueuePointer;
+        private volatile int dequeuePointer;
+
         private readonly int capacity;
         public int Capacity
         {
@@ -41,7 +41,7 @@ namespace biz.dfch.CS.Commons.Collections
 
         private readonly object _lock = new object();
 
-        private ManualResetEventSlim manualResetEventSlim = new ManualResetEventSlim(false);
+        private readonly ManualResetEventSlim manualResetEventSlim = new ManualResetEventSlim(false);
 
         public CircularQueue()
             : this(CAPACITY_DEFAULT)
@@ -65,6 +65,10 @@ namespace biz.dfch.CS.Commons.Collections
                 {
                     list.Add(item);
 
+                    // once we filled the whole list with items
+                    // we consider the list to be initialised
+                    // i.e. we do not have to add any more items
+                    // but just have to overwrite an existing item
                     isInitialised = 0 == (enqueuePointer = ++enqueuePointer % capacity);
                 }
                 else
@@ -74,7 +78,14 @@ namespace biz.dfch.CS.Commons.Collections
                     enqueuePointer = ++enqueuePointer % capacity;
                 }
 
-                enqueuedItems++;
+                // if enqueue operations pointer "overrounds" dequeue pointer
+                // we have to increment the dequeue pointer so it reads the 
+                // oldest item
+                if (enqueuePointer == dequeuePointer)
+                {
+                    dequeuePointer = ++dequeuePointer % capacity;
+                }
+
                 manualResetEventSlim.Set();
             }
         }
@@ -84,6 +95,8 @@ namespace biz.dfch.CS.Commons.Collections
             var result = TryDequeue(out item);
             if (result)
             {
+                manualResetEventSlim.Reset();
+
                 return true;
             }
 
@@ -93,9 +106,10 @@ namespace biz.dfch.CS.Commons.Collections
                 return false;
             }
 
+            result = TryDequeue(out item);
+
             manualResetEventSlim.Reset();
 
-            result = TryDequeue(out item);
             return result;
         }
 
@@ -103,7 +117,7 @@ namespace biz.dfch.CS.Commons.Collections
         {
             lock (_lock)
             {
-                if (0 >= enqueuedItems)
+                if (enqueuePointer == dequeuePointer)
                 {
                     item = default(T);
                     return false;
@@ -113,8 +127,6 @@ namespace biz.dfch.CS.Commons.Collections
 
                 dequeuePointer = ++dequeuePointer % capacity;
 
-                enqueuedItems--;
-
                 return true;
             }
         }
@@ -123,7 +135,7 @@ namespace biz.dfch.CS.Commons.Collections
         {
             lock (_lock)
             {
-                if (0 >= enqueuedItems)
+                if (enqueuePointer == dequeuePointer)
                 {
                     item = default(T);
                     return false;
