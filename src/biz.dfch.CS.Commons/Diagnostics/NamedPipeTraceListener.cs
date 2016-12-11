@@ -38,12 +38,17 @@ namespace biz.dfch.CS.Commons.Diagnostics
         public const int CIRCULAR_QUEUE_CAPACITY_DEFAULT = 4096;
         public const string SUPPORTED_ATTRIBUTE_CAPACITY = "capacity";
 
+        public const string SOURCE_NAME_DEFAULT = Logger.DEFAULT_TRACESOURCE_NAME;
+        public const string SUPPORTED_ATTRIBUTE_SOURCE = "source";
+
         private const string LOCAL_HOST = ".";
         private const int NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS = 5 * 1000;
 
         public string PipeName { get; set; }
 
-        public int Capacity { get; set; }
+        //public int Capacity { get; set; }
+
+        public string Source { get; set; }
 
         private readonly CircularQueue<Item> circularQueue;
 
@@ -69,13 +74,17 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 ? name
                 : NamedPipeServerTraceWriter.NAMED_PIPE_NAME_DEFAULT;
 
-            Capacity = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_CAPACITY)
+            var capacity = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_CAPACITY)
                 ? int.Parse(Attributes[SUPPORTED_ATTRIBUTE_CAPACITY])
                 : CIRCULAR_QUEUE_CAPACITY_DEFAULT;
 
-            circularQueue = new CircularQueue<Item>(Capacity);
+            Source = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_SOURCE)
+                ? Attributes[SUPPORTED_ATTRIBUTE_SOURCE]
+                : SOURCE_NAME_DEFAULT;
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback(DequeueAndWriteMessageProc), this);
+            circularQueue = new CircularQueue<Item>(capacity);
+
+            ThreadPool.QueueUserWorkItem(DequeueAndWriteMessageProc, this);
         }
 
         public static void DequeueAndWriteMessageProc(object stateInfo)
@@ -225,7 +234,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             circularQueue.Enqueue(new Item
             {
                 Message = sb.ToString(),
-                Source = source,
+                Source = Source,
                 TraceEventType = TraceEventType.Information
             });
         }
@@ -242,15 +251,15 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args)
         {
-            if (null != base.Filter && !base.Filter.ShouldTrace(eventCache, source, eventType, id, format, args, null, null)) { return; }
+            if (null != Filter && !Filter.ShouldTrace(eventCache, source, eventType, id, format, args, null, null)) { return; }
 
             var formattedMessage = TraceEventFormatter(eventCache, source, id, format, args);
 
             circularQueue.Enqueue(new Item
             {
                 Message = formattedMessage,
-                TraceEventType = TraceEventType.Critical,
-                Source = Logger.DEFAULT_TRACESOURCE_NAME,
+                TraceEventType = eventType,
+                Source = Source,
             });
         }
 
@@ -298,7 +307,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             {
                 Message = formattedMessage,
                 TraceEventType = TraceEventType.Critical,
-                Source = Logger.DEFAULT_TRACESOURCE_NAME,
+                Source = Source,
             });
 
             base.Fail(message);
@@ -312,7 +321,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             {
                 Message = formattedMessage,
                 TraceEventType = TraceEventType.Critical,
-                Source = Logger.DEFAULT_TRACESOURCE_NAME,
+                Source = Source,
             });
 
             base.Fail(message, detailMessage);
@@ -320,7 +329,12 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         protected override string[] GetSupportedAttributes()
         {
-            return new string[] { SUPPORTED_ATTRIBUTE_CAPACITY };
+            return new[] { SUPPORTED_ATTRIBUTE_CAPACITY, SUPPORTED_ATTRIBUTE_SOURCE };
+        }
+
+        public override bool IsThreadSafe
+        {
+            get { return true; }
         }
 
         public new void Dispose()  
