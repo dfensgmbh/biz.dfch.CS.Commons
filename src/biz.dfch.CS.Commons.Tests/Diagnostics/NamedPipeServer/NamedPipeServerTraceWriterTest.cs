@@ -71,11 +71,11 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics.NamedPipeServer
             bool result;
             for (c = 0; c < count; c++)
             {
-                result = sut.ConcurrentQueue.TryDequeue(out item);
+                result = sut.Messages.TryDequeue(out item);
                 Assert.IsTrue(result, c.ToString());
             }
 
-            result = sut.ConcurrentQueue.TryDequeue(out item);
+            result = sut.Messages.TryDequeue(out item);
             Assert.IsFalse(result, c.ToString());
             
             listener.Dispose();

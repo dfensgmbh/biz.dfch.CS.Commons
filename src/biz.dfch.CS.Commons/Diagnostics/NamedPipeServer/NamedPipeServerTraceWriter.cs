@@ -40,7 +40,7 @@ namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
         private static readonly object _lock = new object();
         private readonly List<NamedPipeServerStream> serverConnections; 
 
-        public readonly ConcurrentQueue<string> ConcurrentQueue = new ConcurrentQueue<string>();
+        public readonly ConcurrentQueue<string> Messages = new ConcurrentQueue<string>();
 
         public string Name { get; private set; }
 
@@ -165,7 +165,7 @@ namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
                         continue;
                     }
 
-                    connectionInfo.Instance.ConcurrentQueue.Enqueue(message);
+                    connectionInfo.Instance.Messages.Enqueue(message);
 
                     if (connectionInfo.Instance.abortEvent.IsSet)
                     {
