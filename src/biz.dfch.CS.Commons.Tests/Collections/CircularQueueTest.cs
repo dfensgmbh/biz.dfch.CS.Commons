@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using biz.dfch.CS.Commons.Collections;
+using biz.dfch.CS.Testing.Attributes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace biz.dfch.CS.Commons.Tests.Collections
@@ -14,7 +15,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
     [TestClass]
     public class CircularQueueTest
     {
-        public const int CAPACITY = 27;
+        public const int CAPACITY = 32;
 
         [TestMethod]
         public void EmptyTryDequeueReturnsFalse()
@@ -47,13 +48,14 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         [TestMethod]
         public void EnqueueWithTryDequeueCirculates()
         {
-            var sut = new CircularQueue<string>(CAPACITY);
+            var capacity = CAPACITY;
 
-            for (var c = 0; c < 1000*1000; c++)
+            var sut = new CircularQueue<string>(capacity);
+
+            const int count = 1000*1000;
+            for (var c = 0; c < count; c++)
             {
-                var baseItem = "item" + c;
-
-                for (var i = c; i < c + CAPACITY; i++)
+                for (var i = c; i < c + capacity; i++)
                 {
                     var item = "item" + i;
                     sut.Enqueue(item);
@@ -61,13 +63,17 @@ namespace biz.dfch.CS.Commons.Tests.Collections
                     string enqueuedItem;
 
                     var result = sut.TryPeek(out enqueuedItem);
-                    
-                    Assert.IsTrue(result);
-                    Assert.AreEqual(baseItem, enqueuedItem);
+
+                    var baseItem = "item" + sut.DiscardedItems;
+
+                    Assert.IsTrue(result, c + "; " + i);
+                    Assert.AreEqual(baseItem, enqueuedItem, c + "; " + i);
                 }
 
-                c += CAPACITY;
+                c += capacity -1;
             }
+
+            Assert.AreEqual(count - (ulong) capacity, sut.DiscardedItems);
         }
 
         [TestMethod]
@@ -171,5 +177,159 @@ namespace biz.dfch.CS.Commons.Tests.Collections
 
         }
 
+        private volatile int enqueuePointer;
+        private volatile int capacity;
+
+        [TestMethod]
+        public void TestWithAndXorModulo()
+        {
+            const int cStart = 0;
+            const int cCount = 1000 * 1000;
+
+            Stopwatch sw;
+
+            enqueuePointer = 0;
+            capacity = 4096;
+
+            sw = Stopwatch.StartNew();
+            for (var c = cStart; c < cStart + cCount; c++)
+            {
+                if (0 != (++enqueuePointer & capacity))
+                {
+                    enqueuePointer = 0;
+                }
+            }
+            sw.Stop();
+
+            Trace.WriteLine(string.Format("Count {0}'. Ticks/Count {1}. Ticks {2}. ms {3}", cCount, sw.ElapsedTicks / cCount, sw.ElapsedTicks, sw.ElapsedMilliseconds));
+
+            sw = Stopwatch.StartNew();
+            for (var c = cStart; c < cStart + cCount; c++)
+            {
+                if (0 == (++enqueuePointer ^ capacity))
+                {
+                    enqueuePointer = 0;
+                }
+            }
+            sw.Stop();
+
+            Trace.WriteLine(string.Format("Count {0}'. Ticks/Count {1}. Ticks {2}. ms {3}", cCount, sw.ElapsedTicks / cCount, sw.ElapsedTicks, sw.ElapsedMilliseconds));
+            enqueuePointer = 0;
+            capacity = 4096;
+
+            sw = Stopwatch.StartNew();
+            for (var c = cStart; c < cStart + cCount; c++)
+            {
+                enqueuePointer = ++enqueuePointer % capacity;
+            }
+            sw.Stop();
+
+            Trace.WriteLine(string.Format("Count {0}'. Ticks/Count {1}. Ticks {2}. ms {3}", cCount, sw.ElapsedTicks / cCount, sw.ElapsedTicks, sw.ElapsedMilliseconds));
+        }
+
+        [TestMethod]
+        public void AssertAndXorModulo()
+        {
+            const int cStart = 0;
+            const int cCount = 1000*1000;
+
+            var andPointer = 0;
+            var xorPointer = 0;
+            var modPointer = 0;
+            capacity = 4096;
+
+            for (var c = cStart; c < cStart + cCount; c++)
+            {
+                if (0 != (++andPointer & capacity))
+                {
+                    andPointer = 0;
+                }
+
+                if (0 == (++xorPointer ^ capacity))
+                {
+                    xorPointer = 0;
+                }
+
+                modPointer = ++modPointer % capacity;
+
+                Assert.AreEqual(andPointer, xorPointer);
+                Assert.AreEqual(modPointer, xorPointer);
+            }
+        }
+
+        private volatile ManualResetEventSlim eventSlim;
+        private volatile int interlocked;
+
+        [TestMethod]
+        public void CompareManualResetEventSlimAndInterlocked()
+        {
+            eventSlim = new ManualResetEventSlim(false);
+            interlocked = 0;
+
+            Stopwatch sw;
+            const int cStart = 0;
+            const int cCount = 1000*1000;
+
+            sw = Stopwatch.StartNew();
+            for (var c = cStart; c < cStart + cCount; c++)
+            {
+                eventSlim.Set();
+
+                if (eventSlim.IsSet)
+                {
+                    eventSlim.Reset();
+                }
+            }
+            sw.Stop();
+            Trace.WriteLine(string.Format("Count {0}'. Ticks/Count {1}. Ticks {2}. ms {3}", cCount, sw.ElapsedTicks / cCount, sw.ElapsedTicks, sw.ElapsedMilliseconds));
+
+            sw = Stopwatch.StartNew();
+            for (var c = cStart; c < cStart + cCount; c++)
+            {
+                Interlocked.Increment(ref interlocked);
+
+                if (0 != interlocked)
+                {
+                    Interlocked.Decrement(ref interlocked);
+                    //Interlocked.CompareExchange(ref interlocked, 0, 0);
+                }
+            }
+            sw.Stop();
+            Trace.WriteLine(string.Format("Count {0}'. Ticks/Count {1}. Ticks {2}. ms {3}", cCount, sw.ElapsedTicks / cCount, sw.ElapsedTicks, sw.ElapsedMilliseconds));
+        }
+
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "Precondition.+2.+capacity")]
+        public void CircularQueueWithCapacity0ThrowsContractException()
+        {
+            var sut = new CircularQueue<string>(0);
+        }
+
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "Precondition.+2.+capacity")]
+        public void CircularQueueWithCapacity1ThrowsContractException()
+        {
+            var sut = new CircularQueue<string>(1);
+        }
+
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "Precondition.+capacity")]
+        public void CircularQueueWithCapacity3ThrowsContractException()
+        {
+            var sut = new CircularQueue<string>(3);
+        }
+
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "Precondition.+capacity")]
+        public void CircularQueueWithCapacity7ThrowsContractException()
+        {
+            var sut = new CircularQueue<string>(7);
+        }
+
+        [TestMethod]
+        public void CircularQueueWithCapacity4096Succeeds()
+        {
+            var sut = new CircularQueue<string>(4096);
+        }
     }
 }

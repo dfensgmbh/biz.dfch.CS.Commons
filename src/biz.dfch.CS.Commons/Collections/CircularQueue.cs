@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading;
 
@@ -28,8 +29,9 @@ namespace biz.dfch.CS.Commons.Collections
 
         private volatile bool isInitialised;
 
-        private volatile int enqueuePointer;
         private volatile int dequeuePointer;
+        private volatile int enqueuePointer;
+        private volatile int availableItems;
 
         private readonly int capacity;
         public int Capacity
@@ -37,11 +39,15 @@ namespace biz.dfch.CS.Commons.Collections
             get { return capacity; }
         }
 
+        private ulong discardedItems;
+        public ulong DiscardedItems
+        {
+            get { return discardedItems; }
+        }
+
         private readonly List<T> list;
 
         private readonly object _lock = new object();
-
-        private readonly ManualResetEventSlim manualResetEventSlim = new ManualResetEventSlim(false);
 
         public CircularQueue()
             : this(CAPACITY_DEFAULT)
@@ -51,7 +57,8 @@ namespace biz.dfch.CS.Commons.Collections
 
         public CircularQueue(int capacity)
         {
-            Contract.Requires(0 < capacity);
+            Contract.Requires(2 <= capacity);
+            Contract.Requires(capacity >> 1 == capacity / (decimal)2);
 
             list = new List<T>(capacity);
             this.capacity = capacity;
@@ -69,55 +76,76 @@ namespace biz.dfch.CS.Commons.Collections
                     // we consider the list to be initialised
                     // i.e. we do not have to add any more items
                     // but just have to overwrite an existing item
-                    isInitialised = 0 == (enqueuePointer = ++enqueuePointer % capacity);
-                }
-                else
-                {
-                    list[enqueuePointer] = item;
+                    if (0 == (++enqueuePointer ^ capacity))
+                    {
+                        enqueuePointer = 0;
+                        isInitialised = true;
+                    }
 
-                    enqueuePointer = ++enqueuePointer % capacity;
+                    availableItems++;
+
+                    return;
                 }
+
+                // already initialised
+                list[enqueuePointer] = item;
+
+                if (0 == (++enqueuePointer ^ capacity))
+                {
+                    enqueuePointer = 0;
+                }
+
+                if (capacity == availableItems)
+                {
+                    dequeuePointer = enqueuePointer;
+
+                    discardedItems++;
+
+                    return;
+                }
+
+                availableItems++;
 
                 // if enqueue operations pointer "overrounds" dequeue pointer
                 // we have to increment the dequeue pointer so it reads the 
                 // oldest item
                 if (enqueuePointer == dequeuePointer)
                 {
-                    dequeuePointer = ++dequeuePointer % capacity;
+                    if (0 == (++dequeuePointer ^ capacity))
+                    {
+                        dequeuePointer = 0;
+                    }
                 }
 
-                manualResetEventSlim.Set();
             }
         }
 
         public bool TryDequeue(out T item, int waitTimeoutMs)
         {
-            var result = TryDequeue(out item);
-            if (result)
+            Contract.Requires(Timeout.Infinite == waitTimeoutMs || 0 < waitTimeoutMs);
+
+            var sw = Stopwatch.StartNew();
+            do
             {
-                manualResetEventSlim.Reset();
+                var result = TryDequeue(out item);
+                if (result)
+                {
+                    return true;
+                }
 
-                return true;
+                Thread.Sleep(1);
             }
+            while (waitTimeoutMs > sw.ElapsedMilliseconds);
+            sw.Stop();
 
-            result = manualResetEventSlim.Wait(waitTimeoutMs);
-            if (!result)
-            {
-                return false;
-            }
-
-            result = TryDequeue(out item);
-
-            manualResetEventSlim.Reset();
-
-            return result;
+            return false;
         }
 
         public bool TryDequeue(out T item)
         {
             lock (_lock)
             {
-                if (enqueuePointer == dequeuePointer)
+                if (0 == availableItems)
                 {
                     item = default(T);
                     return false;
@@ -125,8 +153,12 @@ namespace biz.dfch.CS.Commons.Collections
 
                 item = list[dequeuePointer];
 
-                dequeuePointer = ++dequeuePointer % capacity;
+                if (0 == (++dequeuePointer ^ capacity))
+                {
+                    dequeuePointer = 0;
+                }
 
+                availableItems--;
                 return true;
             }
         }
@@ -135,7 +167,8 @@ namespace biz.dfch.CS.Commons.Collections
         {
             lock (_lock)
             {
-                if (enqueuePointer == dequeuePointer)
+                //if (enqueuePointer == dequeuePointer || UNINITIALISED_DEQUEUE_POINTER == dequeuePointer)
+                if (0 == availableItems)
                 {
                     item = default(T);
                     return false;
