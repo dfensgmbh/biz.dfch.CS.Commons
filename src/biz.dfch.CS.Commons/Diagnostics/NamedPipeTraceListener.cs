@@ -32,8 +32,11 @@ namespace biz.dfch.CS.Commons.Diagnostics
         private const string ISO8601_FORMAT_STRING = "O";
         private const string FAIL_MESSAGE_TEMPLATE = "{0} ({1})";
 
-        private readonly ManualResetEventSlim abortEvent = 
-            new ManualResetEventSlim(false, 0);
+        private const string MESSAGE_NAMEDPIPE_CONNECTING = "NamedPipeTraceListener: Connecting to '{0}' ...";
+        private const string MESSAGE_NAMEDPIPE_NOT_CONNECTED = "NamedPipeTraceListener: Pipe '{0}' is not connected.";
+        private const string MESSAGE_NAMEDPIPE_EXCEPTION = "NamedPipeTraceListener: {0}: {1}\r\n{2}";
+
+        private volatile bool abortMessageProc;
 
         public const int CIRCULAR_QUEUE_CAPACITY_DEFAULT = 4096;
         public const string SUPPORTED_ATTRIBUTE_CAPACITY = "capacity";
@@ -43,6 +46,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         private const string SERVER_NAME = ".";
         private const int NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS = 5 * 1000;
+        private const int ABORT_EVENT_TIMEOUT_CHECK_MS = 15 * 1000;
 
         public string PipeName { get; set; }
 
@@ -109,7 +113,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 {
                     using (var client = new NamedPipeClientStream(SERVER_NAME, instance.PipeName, PipeDirection.Out))
                     {
-                        new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: Connecting to '{0}' ...", instance.PipeName));
+                        new DefaultTraceListener().WriteLine(string.Format(MESSAGE_NAMEDPIPE_CONNECTING, instance.PipeName));
 
                         client.Connect(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
                         client.ReadMode = PipeTransmissionMode.Message;
@@ -120,18 +124,17 @@ namespace biz.dfch.CS.Commons.Diagnostics
                         {
                             if (!client.IsConnected)
                             {
-                                new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: Pipe '{0}' is not connected.", instance.PipeName));
+                                new DefaultTraceListener().WriteLine(string.Format(MESSAGE_NAMEDPIPE_NOT_CONNECTED, instance.PipeName));
                                 break;
                             }
 
                             Item item;
                             var result = instance.circularQueue.TryDequeue(out item, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
 
-                            const int ABORT_EVENT_TIMEOUT_CHECK_MS = 15 * 1000;
                             if (!result || ABORT_EVENT_TIMEOUT_CHECK_MS < sw.ElapsedMilliseconds)
                             {
                                 sw.Restart();
-                                if (instance.abortEvent.IsSet)
+                                if (instance.abortMessageProc)
                                 {
                                     return;
                                 }
@@ -152,14 +155,13 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 }
                 catch (TimeoutException)
                 {
-                    Thread.Sleep(2 * NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
+                    Thread.Sleep(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
                 }
                 catch (Exception ex)
                 {
+                    new DefaultTraceListener().WriteLine(string.Format(MESSAGE_NAMEDPIPE_EXCEPTION, ex.GetType().Name, ex.Message, ex.StackTrace));
 
-                    new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: {0}: {1}\r\n{2}", ex.GetType().Name, ex.Message,ex.StackTrace));
-
-                    Thread.Sleep(2 * NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
+                    Thread.Sleep(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
                 }
             }
 
@@ -364,7 +366,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 return;
             }
 
-            abortEvent.Set();
+            abortMessageProc = true;
         }
 
     }
