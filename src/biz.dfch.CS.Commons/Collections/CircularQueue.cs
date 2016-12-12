@@ -25,7 +25,11 @@ namespace biz.dfch.CS.Commons.Collections
     public class CircularQueue<T>
         where T : class
     {
-        public const int CAPACITY_DEFAULT = 16;
+        private const int DEQUEUE_SLEEP_TIME_MS = 1;
+
+        private readonly List<T> list;
+
+        private readonly object _lock = new object();
 
         private volatile bool isInitialised;
 
@@ -49,9 +53,7 @@ namespace biz.dfch.CS.Commons.Collections
             get { return discardedItems; }
         }
 
-        private readonly List<T> list;
-
-        private readonly object _lock = new object();
+        public const int CAPACITY_DEFAULT = 16;
 
         public CircularQueue()
             : this(CAPACITY_DEFAULT)
@@ -62,7 +64,6 @@ namespace biz.dfch.CS.Commons.Collections
         public CircularQueue(int capacity)
         {
             Contract.Requires(2 <= capacity);
-            Contract.Requires(capacity >> 1 == capacity / (decimal)2);
 
             list = new List<T>(capacity);
             this.capacity = capacity;
@@ -74,31 +75,49 @@ namespace biz.dfch.CS.Commons.Collections
             {
                 if (!isInitialised)
                 {
+                    // in this branch we fill the list for the first time
+                    // really adding items to the list, i.e. the list Count 
+                    // increments on every Add operation
                     list.Add(item);
 
                     // once we filled the whole list with items
                     // we consider the list to be initialised
                     // i.e. we do not have to add any more items
                     // but just have to overwrite an existing item
-                    if (0 == (++enqueuePointer ^ capacity))
+                    if (0 != (++enqueuePointer & capacity))
                     {
                         enqueuePointer = 0;
                         isInitialised = true;
                     }
 
+                    // naturally the number of available items increments
+                    // as well
                     availableItems++;
+
+                    // hint:
+                    // there is no need to increment the dequeue pointer
+                    // while initialising, as it starts at 0 and can dequeue
+                    // up to the position of the enqueue pointer
 
                     return;
                 }
 
-                // already initialised
+                // here we have an already initialised list
+                // so we just replace the items
                 list[enqueuePointer] = item;
 
-                if (0 == (++enqueuePointer ^ capacity))
+                // we increment the enqueue pointer
+                // as always checking if we have to start at the 
+                // bottom of the list
+                if (0 != (++enqueuePointer & capacity))
                 {
                     enqueuePointer = 0;
                 }
 
+                // if the number of available items already equals the capacity
+                // we have effectively lost an item
+                // in addition, we have to set the dequeue pointer to the 
+                // enqueue pointer as we now have a full list of buffered items
                 if (capacity == availableItems)
                 {
                     dequeuePointer = enqueuePointer;
@@ -108,6 +127,8 @@ namespace biz.dfch.CS.Commons.Collections
                     return;
                 }
 
+                // after adding we have an additional item available
+                // after icrementing this is at maximum euqal to the capacity
                 availableItems++;
 
                 // if enqueue operations pointer "overrounds" dequeue pointer
@@ -115,7 +136,7 @@ namespace biz.dfch.CS.Commons.Collections
                 // oldest item
                 if (enqueuePointer == dequeuePointer)
                 {
-                    if (0 == (++dequeuePointer ^ capacity))
+                    if (0 != (++dequeuePointer & capacity))
                     {
                         dequeuePointer = 0;
                     }
@@ -137,9 +158,15 @@ namespace biz.dfch.CS.Commons.Collections
                     return true;
                 }
 
-                Thread.Sleep(1);
+                if (waitTimeoutMs <= sw.ElapsedMilliseconds + DEQUEUE_SLEEP_TIME_MS)
+                {
+                    continue;
+                }
+
+                Thread.Sleep(DEQUEUE_SLEEP_TIME_MS);
             }
-            while (waitTimeoutMs > sw.ElapsedMilliseconds);
+            // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
+            while (Timeout.Infinite != waitTimeoutMs);
             sw.Stop();
 
             return false;
@@ -157,7 +184,7 @@ namespace biz.dfch.CS.Commons.Collections
 
                 item = list[dequeuePointer];
 
-                if (0 == (++dequeuePointer ^ capacity))
+                if (0 != (++dequeuePointer & capacity))
                 {
                     dequeuePointer = 0;
                 }
@@ -171,7 +198,6 @@ namespace biz.dfch.CS.Commons.Collections
         {
             lock (_lock)
             {
-                //if (enqueuePointer == dequeuePointer || UNINITIALISED_DEQUEUE_POINTER == dequeuePointer)
                 if (0 == availableItems)
                 {
                     item = default(T);

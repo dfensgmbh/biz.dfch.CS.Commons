@@ -313,15 +313,13 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         }
 
         [TestMethod]
-        [ExpectContractFailure(MessagePattern = "Precondition.+capacity")]
-        public void CircularQueueWithCapacity3ThrowsContractException()
+        public void CircularQueueWithCapacity3Succeeds()
         {
             var sut = new CircularQueue<string>(3);
         }
 
         [TestMethod]
-        [ExpectContractFailure(MessagePattern = "Precondition.+capacity")]
-        public void CircularQueueWithCapacity7ThrowsContractException()
+        public void CircularQueueWithCapacity7Succeeds()
         {
             var sut = new CircularQueue<string>(7);
         }
