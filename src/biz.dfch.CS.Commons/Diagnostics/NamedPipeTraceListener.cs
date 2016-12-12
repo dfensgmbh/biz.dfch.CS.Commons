@@ -48,22 +48,21 @@ namespace biz.dfch.CS.Commons.Diagnostics
         private const int NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS = 5 * 1000;
         private const int ABORT_EVENT_TIMEOUT_CHECK_MS = 15 * 1000;
 
-        public string PipeName { get; set; }
+        public string PipeName { get; private set; }
 
-        public string Source { get; set; }
+        public string Source { get; private set; }
 
         public ulong DiscardedItems
         {
-            get { return circularQueue.DiscardedItems; }
+            get { return messages.DiscardedItems; }
         }
 
         public int BufferedItems
         {
-            get { return circularQueue.AvailableItems; }
+            get { return messages.AvailableItems; }
         }
-        //public int Capacity { get; set; }
 
-        private readonly CircularQueue<Item> circularQueue;
+        private CircularQueue<Item> messages;
 
         private class Item
         {
@@ -72,6 +71,22 @@ namespace biz.dfch.CS.Commons.Diagnostics
             public string Source;
 
             public TraceEventType TraceEventType;
+
+            public override string ToString()
+            {
+                Contract.Requires(!string.IsNullOrEmpty(Message));
+                Contract.Requires(!string.IsNullOrEmpty(Source));
+
+                var sb = new StringBuilder(MessageHandler.DELIMITER);
+
+                sb.Append(TraceEventType);
+                sb.Append(MessageHandler.DELIMITER);
+                sb.Append(Source);
+                sb.Append(MessageHandler.DELIMITER);
+                sb.Append(Message);
+
+                return sb.ToString();
+            }
         }
 
         public NamedPipeTraceListener()
@@ -87,17 +102,26 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 ? name
                 : NamedPipeServerTraceWriter.NAMED_PIPE_NAME_DEFAULT;
 
-            var capacity = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_CAPACITY)
-                ? int.Parse(Attributes[SUPPORTED_ATTRIBUTE_CAPACITY])
-                : CIRCULAR_QUEUE_CAPACITY_DEFAULT;
+            ThreadPool.QueueUserWorkItem(Initialise, this);
+        }
 
-            Source = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_SOURCE)
-                ? Attributes[SUPPORTED_ATTRIBUTE_SOURCE]
+        // this method is needed as we cannot access the attributes in the constructor
+        public static void Initialise(object stateInfo)
+        {
+            var instance = stateInfo as NamedPipeTraceListener;
+            Contract.Assert(null != instance);
+
+            instance.Source = instance.Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_SOURCE)
+                ? instance.Attributes[SUPPORTED_ATTRIBUTE_SOURCE]
                 : SOURCE_NAME_DEFAULT;
 
-            circularQueue = new CircularQueue<Item>(capacity);
+            var capacity = instance.Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_CAPACITY)
+                ? int.Parse(instance.Attributes[SUPPORTED_ATTRIBUTE_CAPACITY])
+                : CIRCULAR_QUEUE_CAPACITY_DEFAULT;
 
-            ThreadPool.QueueUserWorkItem(DequeueAndWriteMessageProc, this);
+            instance.messages = new CircularQueue<Item>(capacity);
+
+            ThreadPool.QueueUserWorkItem(DequeueAndWriteMessageProc, instance);
         }
 
         public static void DequeueAndWriteMessageProc(object stateInfo)
@@ -129,7 +153,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                             }
 
                             Item item;
-                            var result = instance.circularQueue.TryDequeue(out item, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
+                            var result = instance.messages.TryDequeue(out item, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
 
                             if (!result || ABORT_EVENT_TIMEOUT_CHECK_MS < sw.ElapsedMilliseconds)
                             {
@@ -142,14 +166,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                                 continue;
                             }
 
-                            var sb = new StringBuilder(MessageHandler.DELIMITER);
-                            sb.Append(item.TraceEventType);
-                            sb.Append(MessageHandler.DELIMITER);
-                            sb.Append(item.Source);
-                            sb.Append(MessageHandler.DELIMITER);
-                            sb.Append(item.Message);
-
-                            messageHandler.Write(sb.ToString());
+                            messageHandler.Write(item.ToString());
                         }
                     }
                 }
@@ -245,7 +262,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 sb.AppendLine();
             }
 
-            circularQueue.Enqueue(new Item
+            messages.Enqueue(new Item
             {
                 Message = sb.ToString(),
                 Source = Source,
@@ -269,7 +286,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var formattedMessage = TraceEventFormatter(eventCache, source, id, format, args);
 
-            circularQueue.Enqueue(new Item
+            messages.Enqueue(new Item
             {
                 Message = formattedMessage,
                 TraceEventType = eventType,
@@ -317,7 +334,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var formattedMessage = TraceEventFormatter(eventCache, Logger.DEFAULT_TRACESOURCE_NAME, DEFAULT_TRACE_ID, message, _emptyArgs);
 
-            circularQueue.Enqueue(new Item
+            messages.Enqueue(new Item
             {
                 Message = formattedMessage,
                 TraceEventType = TraceEventType.Critical,
@@ -331,7 +348,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
         {
             var formattedMessage = TraceEventFormatter(new TraceEventCache(), Logger.DEFAULT_TRACESOURCE_NAME, DEFAULT_TRACE_ID, FAIL_MESSAGE_TEMPLATE, message, detailMessage);
 
-            circularQueue.Enqueue(new Item
+            messages.Enqueue(new Item
             {
                 Message = formattedMessage,
                 TraceEventType = TraceEventType.Critical,
