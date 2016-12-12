@@ -41,14 +41,23 @@ namespace biz.dfch.CS.Commons.Diagnostics
         public const string SOURCE_NAME_DEFAULT = Logger.DEFAULT_TRACESOURCE_NAME;
         public const string SUPPORTED_ATTRIBUTE_SOURCE = "source";
 
-        private const string LOCAL_HOST = ".";
+        private const string SERVER_NAME = ".";
         private const int NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS = 5 * 1000;
 
         public string PipeName { get; set; }
 
-        //public int Capacity { get; set; }
-
         public string Source { get; set; }
+
+        public ulong DiscardedItems
+        {
+            get { return circularQueue.DiscardedItems; }
+        }
+
+        public int BufferedItems
+        {
+            get { return circularQueue.AvailableItems; }
+        }
+        //public int Capacity { get; set; }
 
         private readonly CircularQueue<Item> circularQueue;
 
@@ -93,11 +102,12 @@ namespace biz.dfch.CS.Commons.Diagnostics
             var instance = stateInfo as NamedPipeTraceListener;
             Contract.Assert(null != instance);
 
+            var sw = Stopwatch.StartNew();
             for(;;)
             {
                 try
                 {
-                    using (var client = new NamedPipeClientStream(LOCAL_HOST, instance.PipeName, PipeDirection.Out))
+                    using (var client = new NamedPipeClientStream(SERVER_NAME, instance.PipeName, PipeDirection.Out))
                     {
                         new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: Connecting to '{0}' ...", instance.PipeName));
 
@@ -117,8 +127,10 @@ namespace biz.dfch.CS.Commons.Diagnostics
                             Item item;
                             var result = instance.circularQueue.TryDequeue(out item, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
 
-                            if (!result)
+                            const int ABORT_EVENT_TIMEOUT_CHECK_MS = 15 * 1000;
+                            if (!result || ABORT_EVENT_TIMEOUT_CHECK_MS < sw.ElapsedMilliseconds)
                             {
+                                sw.Restart();
                                 if (instance.abortEvent.IsSet)
                                 {
                                     return;
@@ -145,7 +157,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 catch (Exception ex)
                 {
 
-                    new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: {0}: {1}", ex.GetType().Name, ex.Message));
+                    new DefaultTraceListener().WriteLine(string.Format("NamedPipeTraceListener: {0}: {1}\r\n{2}", ex.GetType().Name, ex.Message,ex.StackTrace));
 
                     Thread.Sleep(2 * NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
                 }

@@ -32,6 +32,10 @@ namespace biz.dfch.CS.Commons.Collections
         private volatile int dequeuePointer;
         private volatile int enqueuePointer;
         private volatile int availableItems;
+        public int AvailableItems
+        {
+            get { return availableItems; }
+        }
 
         private readonly int capacity;
         public int Capacity
