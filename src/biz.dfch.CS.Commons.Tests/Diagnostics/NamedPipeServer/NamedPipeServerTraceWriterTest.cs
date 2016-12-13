@@ -52,6 +52,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics.NamedPipeServer
         }
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void InvokeTraceListenerAndDequeueFromNamedPipeServerSucceeds()
         {
             var sut = new NamedPipeServerTraceWriter();
