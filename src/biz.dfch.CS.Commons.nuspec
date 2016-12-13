@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.8.0</version>
+        <version>1.8.1</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -27,13 +27,19 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
         <releaseNotes>20161213
 # BUGFIXES
 
-N/A
+CircluarQueue
+
+* fixed spinning on empty queue
+
+NamedPipeTraceListener
+
+* fixed spinning on pipe connect (due to internal .NET bug)
 
 # FEATURES
 
 NamedPipeTraceListener
 
-* added TraceListener to support sending messages via NamedPipes to a centralised server
+* added IsInitialised property
 </releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>
