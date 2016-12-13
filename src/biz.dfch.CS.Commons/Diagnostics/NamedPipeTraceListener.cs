@@ -64,31 +64,6 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         private CircularQueue<Item> messages;
 
-        private class Item
-        {
-            public string Message;
-
-            public string Source;
-
-            public TraceEventType TraceEventType;
-
-            public override string ToString()
-            {
-                Contract.Requires(!string.IsNullOrEmpty(Message));
-                Contract.Requires(!string.IsNullOrEmpty(Source));
-
-                var sb = new StringBuilder(MessageHandler.DELIMITER);
-
-                sb.Append(TraceEventType);
-                sb.Append(MessageHandler.DELIMITER);
-                sb.Append(Source);
-                sb.Append(MessageHandler.DELIMITER);
-                sb.Append(Message);
-
-                return sb.ToString();
-            }
-        }
-
         public NamedPipeTraceListener()
             : this(NamedPipeServerTraceWriter.NAMED_PIPE_NAME_DEFAULT)
         {
