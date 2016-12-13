@@ -5,9 +5,9 @@ using System.Text;
 
 namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
 {
-    public class Item
+    public class PipeMessage
     {
-        public const char DELIMITER = MessageHandler.DELIMITER;
+        public const char DELIMITER = '|';
 
         public TraceEventType TraceEventType;
 
@@ -15,12 +15,12 @@ namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
 
         public string Message;
 
-        public Item()
+        public PipeMessage()
         {
             // ctor for composing messages when setting properties indepedently
         }
             
-        public Item(TraceEventType traceEventType, string source, string message)
+        public PipeMessage(TraceEventType traceEventType, string source, string message)
         {
             Contract.Requires(Enum.IsDefined(typeof(TraceEventType), traceEventType));
             Contract.Requires(!string.IsNullOrWhiteSpace(source));
@@ -31,7 +31,7 @@ namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
             Message = message;
         }
             
-        public Item(string composedMessage)
+        public PipeMessage(string composedMessage)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(composedMessage));
 

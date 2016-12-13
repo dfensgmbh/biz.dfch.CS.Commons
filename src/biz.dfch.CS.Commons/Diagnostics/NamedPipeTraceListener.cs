@@ -62,7 +62,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             get { return messages.AvailableItems; }
         }
 
-        private CircularQueue<Item> messages;
+        private CircularQueue<PipeMessage> messages;
 
         public NamedPipeTraceListener()
             : this(NamedPipeServerTraceWriter.NAMED_PIPE_NAME_DEFAULT)
@@ -94,7 +94,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 ? int.Parse(instance.Attributes[SUPPORTED_ATTRIBUTE_CAPACITY])
                 : CIRCULAR_QUEUE_CAPACITY_DEFAULT;
 
-            instance.messages = new CircularQueue<Item>(capacity);
+            instance.messages = new CircularQueue<PipeMessage>(capacity);
 
             ThreadPool.QueueUserWorkItem(DequeueAndWriteMessageProc, instance);
         }
@@ -117,7 +117,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                         client.Connect(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
                         client.ReadMode = PipeTransmissionMode.Message;
 
-                        var messageHandler = new MessageHandler(client);
+                        var messageHandler = new PipeHandler(client);
 
                         for (;;)
                         {
@@ -127,8 +127,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                                 break;
                             }
 
-                            Item item;
-                            var result = instance.messages.TryDequeue(out item, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
+                            var result = instance.messages.TryDequeue(out pipeMessage, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
 
                             if (!result || ABORT_EVENT_TIMEOUT_CHECK_MS < sw.ElapsedMilliseconds)
                             {
@@ -219,17 +218,17 @@ namespace biz.dfch.CS.Commons.Diagnostics
             var sb = new StringBuilder(activityId.ToString());
             if (0 != (TraceOutputOptions & TraceOptions.DateTime))
             {
-                sb.Append(MessageHandler.DELIMITER);
+                sb.Append(PipeMessage.DELIMITER);
                 sb.Append(DateTimeOffset.Now.ToString(ISO8601_FORMAT_STRING));
             }
 
-            sb.Append(MessageHandler.DELIMITER);
+            sb.Append(PipeMessage.DELIMITER);
             sb.Append(source);
 
-            sb.Append(MessageHandler.DELIMITER);
+            sb.Append(PipeMessage.DELIMITER);
             sb.Append(DEFAULT_TRACE_ID);
 
-            sb.Append(MessageHandler.DELIMITER);
+            sb.Append(PipeMessage.DELIMITER);
             sb.Append(message);
 
             if (appendNewLine)
@@ -237,7 +236,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 sb.AppendLine();
             }
 
-            messages.Enqueue(new Item
+            messages.Enqueue(new PipeMessage
             {
                 TraceEventType = TraceEventType.Information,
                 Source = Source,
@@ -261,7 +260,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var formattedMessage = TraceEventFormatter(eventCache, source, id, format, args);
 
-            messages.Enqueue(new Item
+            messages.Enqueue(new PipeMessage
             {
                 TraceEventType = eventType,
                 Source = Source,
@@ -273,34 +272,34 @@ namespace biz.dfch.CS.Commons.Diagnostics
         {
             var activityId = Trace.CorrelationManager.ActivityId;
             
-            var sb = new StringBuilder(activityId.ToString());
+            var message = new StringBuilder(activityId.ToString());
             if (null != eventCache && 0 != (TraceOutputOptions & TraceOptions.DateTime))
             {
-                sb.Append(MessageHandler.DELIMITER);
-                sb.Append(eventCache.DateTime.ToString(ISO8601_FORMAT_STRING));
+                message.Append(PipeMessage.DELIMITER);
+                message.Append(eventCache.DateTime.ToString(ISO8601_FORMAT_STRING));
             }
 
-            sb.Append(MessageHandler.DELIMITER);
-            sb.Append(source);
+            message.Append(PipeMessage.DELIMITER);
+            message.Append(source);
 
-            sb.Append(MessageHandler.DELIMITER);
-            sb.Append(id);
+            message.Append(PipeMessage.DELIMITER);
+            message.Append(id);
 
             if (!string.IsNullOrEmpty(format))
             {
-                sb.Append(MessageHandler.DELIMITER);
+                message.Append(PipeMessage.DELIMITER);
                 
                 if (null != args && 0 < args.Length)
                 {
-                    sb.AppendFormat(format, args);
+                    message.AppendFormat(format, args);
                 }
                 else
                 {
-                    sb.Append(format);
+                    message.Append(format);
                 }
             }
 
-            return sb.ToString();
+            return message.ToString();
         }
 
         public override void Fail(string message)
@@ -309,7 +308,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var formattedMessage = TraceEventFormatter(eventCache, Logger.DEFAULT_TRACESOURCE_NAME, DEFAULT_TRACE_ID, message, _emptyArgs);
 
-            messages.Enqueue(new Item
+            messages.Enqueue(new PipeMessage
             {
                 TraceEventType = TraceEventType.Critical,
                 Source = Source,
@@ -323,7 +322,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
         {
             var formattedMessage = TraceEventFormatter(new TraceEventCache(), Logger.DEFAULT_TRACESOURCE_NAME, DEFAULT_TRACE_ID, FAIL_MESSAGE_TEMPLATE, message, detailMessage);
 
-            messages.Enqueue(new Item
+            messages.Enqueue(new PipeMessage
             {
                 TraceEventType = TraceEventType.Critical,
                 Source = Source,

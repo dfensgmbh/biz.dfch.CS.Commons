@@ -150,7 +150,7 @@ namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
             try
             {
                 connectionInfo.Server.WaitForConnection();
-                var pipeHandler = new MessageHandler(connectionInfo.Server);
+                var pipeHandler = new PipeHandler(connectionInfo.Server);
 
                 for(;;)
                 {

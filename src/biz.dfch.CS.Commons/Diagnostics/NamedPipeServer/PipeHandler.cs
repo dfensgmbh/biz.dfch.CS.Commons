@@ -20,18 +20,16 @@ using System.Text;
 
 namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
 {
-    public class MessageHandler
+    public class PipeHandler
     {
         private static readonly UTF8Encoding _streamEncoding = new UTF8Encoding();
 
         private readonly PipeStream pipeStream;
 
-        public const char DELIMITER = '|';
-
         public const int MESSAGE_SIZE_MAX = 256 * 1024;
         public const int READ_SIZE = MESSAGE_SIZE_MAX;
 
-        public MessageHandler(PipeStream pipeStream)
+        public PipeHandler(PipeStream pipeStream)
         {
             Contract.Requires(null != pipeStream);
 
