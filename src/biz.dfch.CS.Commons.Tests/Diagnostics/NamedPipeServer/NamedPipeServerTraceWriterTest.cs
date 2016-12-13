@@ -58,6 +58,12 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics.NamedPipeServer
 
             var listener = new NamedPipeTraceListener();
 
+            do
+            {
+                Thread.Sleep(1000);
+            }
+            while (!listener.IsInitialised);
+
             int c;
             var count = 1000;
             for (c = 0; c < count; c++)

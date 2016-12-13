@@ -64,6 +64,11 @@ namespace biz.dfch.CS.Commons.Diagnostics
             get { return messages.AvailableItems; }
         }
 
+        public bool IsInitialised
+        {
+            get { return null != messages; }
+        }
+
         private CircularQueue<PipeMessage> messages;
 
         public NamedPipeTraceListener()
@@ -79,26 +84,25 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 ? name
                 : NamedPipeServerTraceWriter.NAMED_PIPE_NAME_DEFAULT;
 
-            ThreadPool.QueueUserWorkItem(Initialise, this);
+            ThreadPool.QueueUserWorkItem(Initialise);
         }
 
         // this method is needed as we cannot access the attributes in the constructor
-        public static void Initialise(object stateInfo)
+        private void Initialise(object stateInfo)
         {
-            var instance = stateInfo as NamedPipeTraceListener;
-            Contract.Assert(null != instance);
+            Contract.Assert(null == stateInfo);
 
-            instance.Source = instance.Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_SOURCE)
-                ? instance.Attributes[SUPPORTED_ATTRIBUTE_SOURCE]
+            Source = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_SOURCE)
+                ? Attributes[SUPPORTED_ATTRIBUTE_SOURCE]
                 : SOURCE_NAME_DEFAULT;
 
-            var capacity = instance.Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_CAPACITY)
-                ? int.Parse(instance.Attributes[SUPPORTED_ATTRIBUTE_CAPACITY])
+            var capacity = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_CAPACITY)
+                ? int.Parse(Attributes[SUPPORTED_ATTRIBUTE_CAPACITY])
                 : CIRCULAR_QUEUE_CAPACITY_DEFAULT;
 
-            instance.messages = new CircularQueue<PipeMessage>(capacity);
+            messages = new CircularQueue<PipeMessage>(capacity);
 
-            ThreadPool.QueueUserWorkItem(DequeueAndWriteMessageProc, instance);
+            ThreadPool.QueueUserWorkItem(DequeueAndWriteMessageProc, this);
         }
 
         public static void DequeueAndWriteMessageProc(object stateInfo)
