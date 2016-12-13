@@ -17,9 +17,8 @@
 using System.Diagnostics.Contracts;
 using System.IO.Pipes;
 using System.Text;
-using System.Threading;
 
-namespace biz.dfch.CS.Commons.Diagnostics
+namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
 {
     public class MessageHandler
     {

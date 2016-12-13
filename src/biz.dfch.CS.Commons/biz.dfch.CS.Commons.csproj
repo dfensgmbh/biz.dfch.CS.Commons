@@ -172,7 +172,7 @@
     <Compile Include="Diagnostics\Method.cs" />
     <Compile Include="Diagnostics\NamedPipeServer\NamedPipeServerTraceWriter.cs" />
     <Compile Include="Diagnostics\NamedPipeTraceListener.cs" />
-    <Compile Include="Diagnostics\MessageHandler.cs" />
+    <Compile Include="Diagnostics\NamedPipeServer\MessageHandler.cs" />
     <Compile Include="Diagnostics\NamedPipeServer\Item.cs" />
     <Compile Include="Diagnostics\TraceSource.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
