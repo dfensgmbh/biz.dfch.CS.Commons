@@ -117,12 +117,12 @@ namespace biz.dfch.CS.Commons.Converters
             return result;
         }
 
-        public static void Import(EnvironmentVariableBaseDto environmentVariableBaseDto)
+        public static EnvironmentVariableBaseDto Import(EnvironmentVariableBaseDto environmentVariableBaseDto)
         {
-            Import(environmentVariableBaseDto, EnvironmentVariableTarget.Process);
+            return Import(environmentVariableBaseDto, EnvironmentVariableTarget.Process);
         }
 
-        public static void Import(EnvironmentVariableBaseDto environmentVariableBaseDto, EnvironmentVariableTarget target)
+        public static EnvironmentVariableBaseDto Import(EnvironmentVariableBaseDto environmentVariableBaseDto, EnvironmentVariableTarget target)
         {
             Contract.Requires(null != environmentVariableBaseDto);
             Contract.Requires(Enum.IsDefined(typeof(EnvironmentVariableTarget), target));
@@ -156,14 +156,16 @@ namespace biz.dfch.CS.Commons.Converters
                     propertyInfo.SetValue(environmentVariableBaseDto, changedTypeValue, null);
                 }
             }
+
+            return environmentVariableBaseDto;
         }
 
-        public static void Export(EnvironmentVariableBaseDto environmentVariableBaseDto)
+        public static EnvironmentVariableBaseDto Export(EnvironmentVariableBaseDto environmentVariableBaseDto)
         {
-            Export(environmentVariableBaseDto, EnvironmentVariableTarget.Process);
+            return Export(environmentVariableBaseDto, EnvironmentVariableTarget.Process);
         }
 
-        public static void Export(EnvironmentVariableBaseDto environmentVariableBaseDto, EnvironmentVariableTarget target)
+        public static EnvironmentVariableBaseDto Export(EnvironmentVariableBaseDto environmentVariableBaseDto, EnvironmentVariableTarget target)
         {
             Contract.Requires(null != environmentVariableBaseDto);
             Contract.Requires(Enum.IsDefined(typeof(EnvironmentVariableTarget), target));
@@ -183,6 +185,8 @@ namespace biz.dfch.CS.Commons.Converters
                 var value = propertyInfo.GetValue(environmentVariableBaseDto, null);
                 Environment.SetEnvironmentVariable(attribute.Name, null != value ? value.ToString() : null, target);
             }
+
+            return environmentVariableBaseDto;
         }
 
     }

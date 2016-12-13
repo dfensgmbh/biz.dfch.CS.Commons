@@ -160,6 +160,7 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Collections\CircularQueueTest.cs" />
     <Compile Include="Collections\CollectionUtilsTest.cs" />
     <Compile Include="Collections\IDictionaryExtensionsTest.cs" />
     <Compile Include="Collections\NameValueCollectionExtensionsTest.cs" />
@@ -176,7 +177,14 @@
     <Compile Include="Converters\EnvironmentVariableBaseDtoTest.cs" />
     <Compile Include="Converters\EnvironmentVariableConverterTest.cs" />
     <Compile Include="Converters\StringValueAttributeExtensionTest.cs" />
+    <Compile Include="Diagnostics\MessageFactory.cs" />
     <Compile Include="Diagnostics\MethodTest.cs" />
+    <Compile Include="Diagnostics\ClientInfo.cs" />
+    <Compile Include="Diagnostics\NamedPipeServer\ItemTest.cs" />
+    <Compile Include="Diagnostics\NamedPipeServer\NamedPipeServerTraceWriterTest.cs" />
+    <Compile Include="Diagnostics\PipeTest.cs" />
+    <Compile Include="Diagnostics\PipeHandler.cs" />
+    <Compile Include="Diagnostics\ServerInfo.cs" />
     <Compile Include="DictionaryParametersTest.cs" />
     <Compile Include="Rest\RestCallExecutorTest.cs" />
     <Compile Include="Security\CryptographyTest.cs" />

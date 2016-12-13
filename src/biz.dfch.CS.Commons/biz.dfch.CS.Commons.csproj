@@ -138,6 +138,7 @@
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="BaseDto.cs" />
+    <Compile Include="Collections\CircularQueue.cs" />
     <Compile Include="Collections\CollectionUtils.cs" />
     <Compile Include="Collections\IDictionaryExtensions.cs" />
     <Compile Include="Collections\MergeOptions.cs" />
@@ -169,6 +170,10 @@
     <Compile Include="Diagnostics\Log4Net\ILog.cs" />
     <Compile Include="Diagnostics\Log4NetTraceListener.cs" />
     <Compile Include="Diagnostics\Method.cs" />
+    <Compile Include="Diagnostics\NamedPipeServer\NamedPipeServerTraceWriter.cs" />
+    <Compile Include="Diagnostics\NamedPipeTraceListener.cs" />
+    <Compile Include="Diagnostics\NamedPipeServer\MessageHandler.cs" />
+    <Compile Include="Diagnostics\NamedPipeServer\Item.cs" />
     <Compile Include="Diagnostics\TraceSource.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Diagnostics\UnifiedLog4NetTraceListener.cs" />

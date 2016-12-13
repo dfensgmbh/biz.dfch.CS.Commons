@@ -36,24 +36,24 @@ namespace biz.dfch.CS.Commons.Converters
             return result;
         }
 
-        public void Import()
+        public EnvironmentVariableBaseDto Import()
         {
-            EnvironmentVariableConverter.Import(this, EnvironmentVariableTarget.Process);
+            return EnvironmentVariableConverter.Import(this, EnvironmentVariableTarget.Process);
         }
 
-        public void Import(EnvironmentVariableTarget target)
+        public EnvironmentVariableBaseDto Import(EnvironmentVariableTarget target)
         {
-            EnvironmentVariableConverter.Import(this, target);
+            return EnvironmentVariableConverter.Import(this, target);
         }
 
-        public void Export()
+        public EnvironmentVariableBaseDto Export()
         {
-            EnvironmentVariableConverter.Export(this, EnvironmentVariableTarget.Process);
+            return EnvironmentVariableConverter.Export(this, EnvironmentVariableTarget.Process);
         }
 
-        public void Export(EnvironmentVariableTarget target)
+        public EnvironmentVariableBaseDto Export(EnvironmentVariableTarget target)
         {
-            EnvironmentVariableConverter.Export(this, target);
+            return EnvironmentVariableConverter.Export(this, target);
         }
     }
 }
