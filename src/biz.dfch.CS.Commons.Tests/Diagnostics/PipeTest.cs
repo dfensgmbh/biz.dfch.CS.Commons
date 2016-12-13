@@ -45,6 +45,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
         private static bool _sourceOther = false;
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void TestNamedPipeWithMultipleClientsAndServers()
         {
             for (var c = 0; c < 4; c++)
