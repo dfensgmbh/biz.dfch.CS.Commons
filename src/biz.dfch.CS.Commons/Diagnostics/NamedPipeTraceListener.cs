@@ -25,7 +25,7 @@ using biz.dfch.CS.Commons.Diagnostics.NamedPipeServer;
 
 namespace biz.dfch.CS.Commons.Diagnostics
 {
-    public class NamedPipeTraceListener : TraceListener, IDisposable
+    public partial class NamedPipeTraceListener : TraceListener, IDisposable
     {
         private static readonly object[] _emptyArgs = {};
         private const int DEFAULT_TRACE_ID = short.MaxValue;
@@ -239,9 +239,9 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             messages.Enqueue(new Item
             {
-                Message = sb.ToString(),
+                TraceEventType = TraceEventType.Information,
                 Source = Source,
-                TraceEventType = TraceEventType.Information
+                Message = sb.ToString(),
             });
         }
 
@@ -263,9 +263,9 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             messages.Enqueue(new Item
             {
-                Message = formattedMessage,
                 TraceEventType = eventType,
                 Source = Source,
+                Message = formattedMessage,
             });
         }
 
@@ -311,9 +311,9 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             messages.Enqueue(new Item
             {
-                Message = formattedMessage,
                 TraceEventType = TraceEventType.Critical,
                 Source = Source,
+                Message = formattedMessage,
             });
 
             base.Fail(message);
@@ -325,9 +325,9 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             messages.Enqueue(new Item
             {
-                Message = formattedMessage,
                 TraceEventType = TraceEventType.Critical,
                 Source = Source,
+                Message = formattedMessage,
             });
 
             base.Fail(message, detailMessage);
