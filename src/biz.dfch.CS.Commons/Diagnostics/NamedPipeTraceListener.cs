@@ -17,6 +17,7 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Threading;
@@ -32,9 +33,10 @@ namespace biz.dfch.CS.Commons.Diagnostics
         private const string ISO8601_FORMAT_STRING = "O";
         private const string FAIL_MESSAGE_TEMPLATE = "{0} ({1})";
 
-        private const string MESSAGE_NAMEDPIPE_CONNECTING = "NamedPipeTraceListener: Connecting to '{0}' ...";
+        //private const string MESSAGE_NAMEDPIPE_CONNECTING = "NamedPipeTraceListener: Connecting to '{0}' ...";
         private const string MESSAGE_NAMEDPIPE_NOT_CONNECTED = "NamedPipeTraceListener: Pipe '{0}' is not connected.";
         private const string MESSAGE_NAMEDPIPE_EXCEPTION = "NamedPipeTraceListener: {0}: {1}\r\n{2}";
+        private const string MESSAGE_NAMEDPIPE_IOEXCEPTION = "NamedPipeTraceListener: IOException: {0}";
 
         private volatile bool abortMessageProc;
 
@@ -106,18 +108,40 @@ namespace biz.dfch.CS.Commons.Diagnostics
             Contract.Assert(null != instance);
 
             var sw = Stopwatch.StartNew();
+            var hasExceptionOccurred = false;
+            var pipeMessage = default(PipeMessage);
             for(;;)
             {
                 try
                 {
                     using (var client = new NamedPipeClientStream(SERVER_NAME, instance.PipeName, PipeDirection.Out))
                     {
-                        new DefaultTraceListener().WriteLine(string.Format(MESSAGE_NAMEDPIPE_CONNECTING, instance.PipeName));
+                        //new DefaultTraceListener().WriteLine(string.Format(MESSAGE_NAMEDPIPE_CONNECTING, instance.PipeName));
 
-                        client.Connect(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
+                        // NamedPipeClientStream.Connect actually spins waiting for a connection
+                        // we therefore split the connection process into separate retries
+                        const int count = 5;
+                        for (var c = 0; c < count; c++)
+                        {
+                            client.Connect(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS / count);
+                            if (client.IsConnected)
+                            {
+                                break;
+                            }
+
+                            Thread.Yield();
+                        }
                         client.ReadMode = PipeTransmissionMode.Message;
 
-                        var messageHandler = new PipeHandler(client);
+                        var pipeHandler = new PipeHandler(client);
+
+                        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+                        if (hasExceptionOccurred && null != pipeMessage && pipeMessage.IsValid())
+                        {
+                            pipeHandler.Write(pipeMessage.ToString());
+
+                            hasExceptionOccurred = false;
+                        }
 
                         for (;;)
                         {
@@ -140,16 +164,28 @@ namespace biz.dfch.CS.Commons.Diagnostics
                                 continue;
                             }
 
-                            messageHandler.Write(item.ToString());
+                            pipeHandler.Write(pipeMessage.ToString());
                         }
                     }
                 }
                 catch (TimeoutException)
                 {
+                    hasExceptionOccurred = true;
+
+                    Thread.Sleep(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
+                }
+                catch (IOException ex)
+                {
+                    hasExceptionOccurred = true;
+
+                    new DefaultTraceListener().WriteLine(string.Format(MESSAGE_NAMEDPIPE_IOEXCEPTION, ex.Message));
+
                     Thread.Sleep(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
                 }
                 catch (Exception ex)
                 {
+                    hasExceptionOccurred = true;
+
                     new DefaultTraceListener().WriteLine(string.Format(MESSAGE_NAMEDPIPE_EXCEPTION, ex.GetType().Name, ex.Message, ex.StackTrace));
 
                     Thread.Sleep(NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
