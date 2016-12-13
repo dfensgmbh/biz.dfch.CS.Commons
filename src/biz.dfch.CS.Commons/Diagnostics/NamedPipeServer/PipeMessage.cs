@@ -1,13 +1,29 @@
-﻿using System;
+﻿/**
+ * Copyright 2016 d-fens GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Text;
 
 namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
 {
-    public class Item
+    public class PipeMessage
     {
-        public const char DELIMITER = MessageHandler.DELIMITER;
+        public const char DELIMITER = '|';
 
         public TraceEventType TraceEventType;
 
@@ -15,12 +31,12 @@ namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
 
         public string Message;
 
-        public Item()
+        public PipeMessage()
         {
             // ctor for composing messages when setting properties indepedently
         }
             
-        public Item(TraceEventType traceEventType, string source, string message)
+        public PipeMessage(TraceEventType traceEventType, string source, string message)
         {
             Contract.Requires(Enum.IsDefined(typeof(TraceEventType), traceEventType));
             Contract.Requires(!string.IsNullOrWhiteSpace(source));
@@ -31,7 +47,7 @@ namespace biz.dfch.CS.Commons.Diagnostics.NamedPipeServer
             Message = message;
         }
             
-        public Item(string composedMessage)
+        public PipeMessage(string composedMessage)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(composedMessage));
 

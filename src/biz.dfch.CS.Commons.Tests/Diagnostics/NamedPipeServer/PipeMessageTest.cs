@@ -22,7 +22,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace biz.dfch.CS.Commons.Tests.Diagnostics.NamedPipeServer
 {
     [TestClass]
-    public class ItemTest
+    public class PipeMessageTest
     {
         [TestMethod]
         public void DecomposingMessageSucceeds()
@@ -35,7 +35,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics.NamedPipeServer
             var template = "{1}{0}{2}{0}{3}";
             var value = string.Format(template, delimiter, traceEventType, source, message);
 
-            var sut = new Item(value);
+            var sut = new PipeMessage(value);
 
             Assert.AreEqual(message, sut.Message);
             Assert.AreEqual(source, sut.Source);

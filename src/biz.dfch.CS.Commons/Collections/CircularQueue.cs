@@ -131,7 +131,7 @@ namespace biz.dfch.CS.Commons.Collections
                 // after icrementing this is at maximum euqal to the capacity
                 availableItems++;
 
-                // if enqueue operations pointer "overrounds" dequeue pointer
+                // if enqueue pointer "overrounds" dequeue pointer
                 // we have to increment the dequeue pointer so it reads the 
                 // oldest item
                 if (enqueuePointer == dequeuePointer)
@@ -147,27 +147,27 @@ namespace biz.dfch.CS.Commons.Collections
 
         public bool TryDequeue(out T item, int waitTimeoutMs)
         {
-            Contract.Requires(Timeout.Infinite == waitTimeoutMs || 0 < waitTimeoutMs);
+            Contract.Requires(0 < waitTimeoutMs);
 
             var sw = Stopwatch.StartNew();
-            do
+            for (;;)
             {
                 var result = TryDequeue(out item);
                 if (result)
                 {
+                    sw.Stop();
                     return true;
                 }
 
-                if (waitTimeoutMs <= sw.ElapsedMilliseconds + DEQUEUE_SLEEP_TIME_MS)
+                if (waitTimeoutMs >= sw.ElapsedMilliseconds + DEQUEUE_SLEEP_TIME_MS)
                 {
+                    Thread.Sleep(DEQUEUE_SLEEP_TIME_MS);
                     continue;
                 }
 
-                Thread.Sleep(DEQUEUE_SLEEP_TIME_MS);
+                sw.Stop();
+                break;
             }
-            // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
-            while (Timeout.Infinite != waitTimeoutMs);
-            sw.Stop();
 
             return false;
         }

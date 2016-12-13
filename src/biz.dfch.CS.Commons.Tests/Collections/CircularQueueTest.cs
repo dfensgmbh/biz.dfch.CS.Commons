@@ -18,6 +18,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         public const int CAPACITY = 32;
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void EmptyTryDequeueReturnsFalse()
         {
             var sut = new CircularQueue<string>();
@@ -32,6 +33,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         }
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void EmptyTryPeekReturnsFalse()
         {
             var sut = new CircularQueue<string>();
@@ -46,6 +48,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         }
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void EnqueueWithTryDequeueCirculates()
         {
             var capacity = CAPACITY;
@@ -77,6 +80,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         }
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void SingleEnqueueSingleDequeueSucceeds()
         {
             var stateInfo = new StateInfo
@@ -146,6 +150,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         }
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void TryDequeueWithWaitTimeSucceeds()
         {
             var enqueuedItem = "arbitrary-string";
@@ -181,6 +186,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         private volatile int capacity;
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void TestWithAndXorModulo()
         {
             const int cStart = 0;
@@ -228,6 +234,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         }
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void AssertAndXorModulo()
         {
             const int cStart = 0;
@@ -261,6 +268,7 @@ namespace biz.dfch.CS.Commons.Tests.Collections
         private volatile int interlocked;
 
         [TestMethod]
+        [TestCategory("SkipOnTeamCity")]
         public void CompareManualResetEventSlimAndInterlocked()
         {
             eventSlim = new ManualResetEventSlim(false);
