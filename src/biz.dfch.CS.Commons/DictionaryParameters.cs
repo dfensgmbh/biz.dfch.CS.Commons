@@ -122,6 +122,8 @@ namespace biz.dfch.CS.Commons
                 }
             }
 
+            recursionCount--;
+
             return result;
         }
 

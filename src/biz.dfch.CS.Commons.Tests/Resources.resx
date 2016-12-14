@@ -1,0 +1,625 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ACTION_VIRTUALMACHINES_RESPONSE" xml:space="preserve">
+    <value>{
+	"links": [],
+	"collection": [{
+		"links": [{
+			"title": "KVM",
+			"rel": "machine",
+			"type": "application/vnd.abiquo.machine+json",
+			"href": "https://abiquo.example.com:443/api/admin/datacenters/1/racks/1/machines/2"
+		},
+		{
+			"title": "Amsterdam DC",
+			"rel": "location",
+			"type": "application/vnd.abiquo.datacenter+json",
+			"href": "https://abiquo.example.com:443/api/cloud/locations/1"
+		},
+		{
+			"title": "ABQ_f4d4ce1a-f109-4c7a-a358-e96dce4d5b80",
+			"rel": "edit",
+			"type": "application/vnd.abiquo.virtualmachine+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10"
+		},
+		{
+			"title": "send mail",
+			"rel": "sendmail",
+			"type": "application/vnd.abiquo.mail+json",
+			"href": "https://abiquo.example.com:443/api/admin/datacenters/1/racks/1/machines/2/virtualmachines/10/action/sendmail"
+		},
+		{
+			"title": "Abiquo",
+			"rel": "enterprise",
+			"type": "application/vnd.abiquo.enterprise+json",
+			"href": "https://abiquo.example.com:443/api/admin/enterprises/1"
+		},
+		{
+			"title": "Cloud Administrator",
+			"rel": "user",
+			"type": "application/vnd.abiquo.user+json",
+			"href": "https://abiquo.example.com:443/api/admin/enterprises/1/users/1"
+		},
+		{
+			"title": "vDC",
+			"rel": "virtualdatacenter",
+			"type": "application/vnd.abiquo.virtualdatacenter+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1"
+		},
+		{
+			"title": "Ubuntu",
+			"rel": "virtualappliance",
+			"type": "application/vnd.abiquo.virtualappliance+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2"
+		},
+		{
+			"title": "metadata",
+			"rel": "metadata",
+			"type": "application/vnd.abiquo.metadata+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/metadata"
+		},
+		{
+			"title": "vlan network configurations",
+			"rel": "configurations",
+			"type": "application/vnd.abiquo.virtualmachinenetworkconfigurations+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/network/configurations"
+		},
+		{
+			"title": "192.168.0.0/22",
+			"rel": "network_configuration",
+			"type": "application/vnd.abiquo.virtualmachinenetworkconfiguration+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/network/configurations/1"
+		},
+		{
+			"title": "nics",
+			"rel": "nics",
+			"type": "application/vnd.abiquo.nics+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/network/nics"
+		},
+		{
+			"title": "disks",
+			"rel": "harddisks",
+			"type": "application/vnd.abiquo.harddisks+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/storage/disks"
+		},
+		{
+			"title": "ON",
+			"rel": "state",
+			"type": "application/vnd.abiquo.virtualmachinestate+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/state"
+		},
+		{
+			"title": "virtual machine undeploy",
+			"rel": "undeploy",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/action/undeploy"
+		},
+		{
+			"title": "virtual machine deploy",
+			"rel": "deploy",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/action/deploy"
+		},
+		{
+			"title": "virtual machine reset",
+			"rel": "reset",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/action/reset"
+		},
+		{
+			"title": "virtual machine snapshot",
+			"rel": "instance",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/action/instance"
+		},
+		{
+			"title": "virtual machine restore backup",
+			"rel": "restorebackup",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/action/restorebackup"
+		},
+		{
+			"title": "remote access",
+			"rel": "rdpaccess",
+			"type": "text/plain",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/config/rdpaccess"
+		},
+		{
+			"title": "tasks",
+			"rel": "tasks",
+			"type": "application/vnd.abiquo.tasks+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/tasks"
+		},
+		{
+			"title": "firewalls",
+			"rel": "firewalls",
+			"type": "application/vnd.abiquo.links+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/firewalls"
+		},
+		{
+			"title": "load balancers",
+			"rel": "loadbalancers",
+			"type": "application/vnd.abiquo.loadbalancers+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/loadbalancers"
+		},
+		{
+			"title": "volumes",
+			"rel": "volumes",
+			"type": "application/vnd.abiquo.volumes+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/storage/volumes"
+		},
+		{
+			"diskControllerType": "IDE",
+			"diskLabel": "Hd",
+			"length": "256",
+			"title": "3f74a221-e863-4e88-bce3-2716d27e07f5",
+			"rel": "disk0",
+			"type": "application/vnd.abiquo.harddisk+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/disks/16"
+		},
+		{
+			"title": "Default Tier",
+			"rel": "datastoretier0",
+			"type": "application/vnd.abiquo.datastoretier+json",
+			"href": "https://abiquo.example.com:443/api/cloud/locations/1/datastoretiers/1"
+		},
+		{
+			"title": "192.168.0.2",
+			"rel": "nic0",
+			"type": "application/vnd.abiquo.privateip+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/privatenetworks/1/ips/3"
+		},
+		{
+			"title": "protect",
+			"rel": "protect",
+			"type": "text/plain",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/action/protect"
+		},
+		{
+			"title": "unprotect",
+			"rel": "unprotect",
+			"type": "text/plain",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/action/unprotect"
+		},
+		{
+			"title": "metrics",
+			"rel": "metrics",
+			"type": "application/vnd.abiquo.metrics+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/metrics"
+		},
+		{
+			"title": "metricsmetadata",
+			"rel": "metricsmetadata",
+			"type": "application/vnd.abiquo.metricsmetadata+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/metrics"
+		},
+		{
+			"title": "createcustommetric",
+			"rel": "createcustommetric",
+			"type": "application/vnd.abiquo.custommetric+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/metrics"
+		},
+		{
+			"title": "enablemonitoring",
+			"rel": "enablemonitoring",
+			"type": "",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/enablemonitoring"
+		},
+		{
+			"title": "collectd",
+			"rel": "collectd",
+			"type": "application/json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/collectd"
+		},
+		{
+			"title": "alarms",
+			"rel": "alarms",
+			"type": "application/vnd.abiquo.alarms+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/alarms"
+		},
+		{
+			"title": "actionplans",
+			"rel": "actionplans",
+			"type": "application/vnd.abiquo.virtualmachineactionplans+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/actionplans"
+		},
+		{
+			"title": "actionplansflat",
+			"rel": "actionplansflat",
+			"type": "application/vnd.abiquo.virtualmachineactionplansflat+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/10/actionplans"
+		},
+		{
+			"title": "KVM",
+			"rel": "hypervisortype",
+			"type": "application/vnd.abiquo.hypervisortype+json",
+			"href": "https://abiquo.example.com:443/api/config/hypervisortypes/KVM"
+		},
+		{
+			"title": "aaaa",
+			"rel": "virtualmachinetemplate",
+			"type": "application/vnd.abiquo.virtualmachinetemplate+json",
+			"href": "https://abiquo.example.com:443/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/5"
+		},
+		{
+			"title": "Chef",
+			"rel": "category",
+			"type": "application/vnd.abiquo.category+json",
+			"href": "https://abiquo.example.com:443/api/config/categories/8"
+		}],
+		"id": 10,
+		"name": "ABQ_f4d4ce1a-f109-4c7a-a358-e96dce4d5b80",
+		"ram": 256,
+		"cpu": 1,
+		"vdrpPort": 6001,
+		"vdrpIP": "192.34.58.113",
+		"vdrpEnabled": true,
+		"idState": 4,
+		"state": "ON",
+		"highDisponibility": 0,
+		"idType": 0,
+		"type": "MANAGED",
+		"password": "P@ssw0rd",
+		"uuid": "f4d4ce1a-f109-4c7a-a358-e96dce4d5b80",
+		"label": "aaaa",
+		"monitored": false,
+		"variables": {
+			
+		},
+		"protected": false
+	},
+	{
+		"links": [{
+			"title": "ABQ_ec7ca35b-a99f-4b16-9829-f9fc7f7eea06",
+			"rel": "edit",
+			"type": "application/vnd.abiquo.virtualmachine+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684"
+		},
+		{
+			"title": "Abiquo",
+			"rel": "enterprise",
+			"type": "application/vnd.abiquo.enterprise+json",
+			"href": "https://abiquo.example.com:443/api/admin/enterprises/1"
+		},
+		{
+			"title": "Cloud Administrator",
+			"rel": "user",
+			"type": "application/vnd.abiquo.user+json",
+			"href": "https://abiquo.example.com:443/api/admin/enterprises/1/users/1"
+		},
+		{
+			"title": "vDC",
+			"rel": "virtualdatacenter",
+			"type": "application/vnd.abiquo.virtualdatacenter+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1"
+		},
+		{
+			"title": "Ubuntu",
+			"rel": "virtualappliance",
+			"type": "application/vnd.abiquo.virtualappliance+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2"
+		},
+		{
+			"title": "metadata",
+			"rel": "metadata",
+			"type": "application/vnd.abiquo.metadata+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/metadata"
+		},
+		{
+			"title": "vlan network configurations",
+			"rel": "configurations",
+			"type": "application/vnd.abiquo.virtualmachinenetworkconfigurations+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/network/configurations"
+		},
+		{
+			"title": "nics",
+			"rel": "nics",
+			"type": "application/vnd.abiquo.nics+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/network/nics"
+		},
+		{
+			"title": "disks",
+			"rel": "harddisks",
+			"type": "application/vnd.abiquo.harddisks+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/storage/disks"
+		},
+		{
+			"title": "NOT_ALLOCATED",
+			"rel": "state",
+			"type": "application/vnd.abiquo.virtualmachinestate+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/state"
+		},
+		{
+			"title": "virtual machine undeploy",
+			"rel": "undeploy",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/action/undeploy"
+		},
+		{
+			"title": "virtual machine deploy",
+			"rel": "deploy",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/action/deploy"
+		},
+		{
+			"title": "virtual machine reset",
+			"rel": "reset",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/action/reset"
+		},
+		{
+			"title": "virtual machine snapshot",
+			"rel": "instance",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/action/instance"
+		},
+		{
+			"title": "virtual machine restore backup",
+			"rel": "restorebackup",
+			"type": "application/vnd.abiquo.acceptedrequest+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/action/restorebackup"
+		},
+		{
+			"title": "remote access",
+			"rel": "rdpaccess",
+			"type": "text/plain",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/config/rdpaccess"
+		},
+		{
+			"title": "tasks",
+			"rel": "tasks",
+			"type": "application/vnd.abiquo.tasks+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/tasks"
+		},
+		{
+			"title": "firewalls",
+			"rel": "firewalls",
+			"type": "application/vnd.abiquo.links+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/firewalls"
+		},
+		{
+			"title": "load balancers",
+			"rel": "loadbalancers",
+			"type": "application/vnd.abiquo.loadbalancers+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/loadbalancers"
+		},
+		{
+			"title": "volumes",
+			"rel": "volumes",
+			"type": "application/vnd.abiquo.volumes+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/storage/volumes"
+		},
+		{
+			"diskControllerType": "IDE",
+			"diskLabel": "Hd",
+			"length": "100",
+			"title": "c4a786c9-2f89-4e5f-95b7-b13b9a0ea6f4",
+			"rel": "disk0",
+			"type": "application/vnd.abiquo.harddisk+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/disks/1730"
+		},
+		{
+			"title": "Default Tier",
+			"rel": "datastoretier0",
+			"type": "application/vnd.abiquo.datastoretier+json",
+			"href": "https://abiquo.example.com:443/api/cloud/locations/1/datastoretiers/1"
+		},
+		{
+			"title": "protect",
+			"rel": "protect",
+			"type": "text/plain",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/action/protect"
+		},
+		{
+			"title": "unprotect",
+			"rel": "unprotect",
+			"type": "text/plain",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/action/unprotect"
+		},
+		{
+			"title": "metrics",
+			"rel": "metrics",
+			"type": "application/vnd.abiquo.metrics+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/metrics"
+		},
+		{
+			"title": "metricsmetadata",
+			"rel": "metricsmetadata",
+			"type": "application/vnd.abiquo.metricsmetadata+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/metrics"
+		},
+		{
+			"title": "createcustommetric",
+			"rel": "createcustommetric",
+			"type": "application/vnd.abiquo.custommetric+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/metrics"
+		},
+		{
+			"title": "enablemonitoring",
+			"rel": "enablemonitoring",
+			"type": "",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/enablemonitoring"
+		},
+		{
+			"title": "collectd",
+			"rel": "collectd",
+			"type": "application/json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/collectd"
+		},
+		{
+			"title": "alarms",
+			"rel": "alarms",
+			"type": "application/vnd.abiquo.alarms+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/alarms"
+		},
+		{
+			"title": "actionplans",
+			"rel": "actionplans",
+			"type": "application/vnd.abiquo.virtualmachineactionplans+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/actionplans"
+		},
+		{
+			"title": "actionplansflat",
+			"rel": "actionplansflat",
+			"type": "application/vnd.abiquo.virtualmachineactionplansflat+json",
+			"href": "https://abiquo.example.com:443/api/cloud/virtualdatacenters/1/virtualappliances/2/virtualmachines/684/actionplans"
+		},
+		{
+			"title": "KVM",
+			"rel": "hypervisortype",
+			"type": "application/vnd.abiquo.hypervisortype+json",
+			"href": "https://abiquo.example.com:443/api/config/hypervisortypes/KVM"
+		},
+		{
+			"title": "core",
+			"rel": "virtualmachinetemplate",
+			"type": "application/vnd.abiquo.virtualmachinetemplate+json",
+			"href": "https://abiquo.example.com:443/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/6"
+		},
+		{
+			"title": "Applications servers",
+			"rel": "category",
+			"type": "application/vnd.abiquo.category+json",
+			"href": "https://abiquo.example.com:443/api/config/categories/4"
+		}],
+		"id": 684,
+		"name": "ABQ_ec7ca35b-a99f-4b16-9829-f9fc7f7eea06",
+		"ram": 128,
+		"cpu": 1,
+		"vdrpPort": 0,
+		"vdrpEnabled": true,
+		"idState": 1,
+		"state": "NOT_ALLOCATED",
+		"highDisponibility": 0,
+		"idType": 0,
+		"type": "MANAGED",
+		"password": "P@ssw0rd",
+		"uuid": "ec7ca35b-a99f-4b16-9829-f9fc7f7eea06",
+		"label": "core",
+		"monitored": false,
+		"variables": {
+			
+		},
+		"protected": false
+	}]
+}</value>
+    <comment>https://abiquo.example.com:443/api/admin/enterprises/1/action/virtualmachines</comment>
+  </data>
+</root>

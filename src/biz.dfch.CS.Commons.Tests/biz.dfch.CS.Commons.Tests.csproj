@@ -186,6 +186,11 @@
     <Compile Include="Diagnostics\PipeHandler.cs" />
     <Compile Include="Diagnostics\ServerInfo.cs" />
     <Compile Include="DictionaryParametersTest.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Rest\RestCallExecutorTest.cs" />
     <Compile Include="Security\CryptographyTest.cs" />
     <Compile Include="Validation\CurrencyAttributeTest.cs" />
@@ -226,7 +231,13 @@
       <Name>biz.dfch.CS.Commons</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
