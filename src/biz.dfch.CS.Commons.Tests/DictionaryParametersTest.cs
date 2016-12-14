@@ -484,5 +484,16 @@ namespace biz.dfch.CS.Commons.Tests
             Assert.IsTrue(result.ContainsKey("key2"));
             Assert.IsTrue(result.ContainsKey("key3"));
         }
+
+        [TestMethod]
+        public void DictionaryParametersWithRecursion()
+        {
+            var json = Resources.ACTION_VIRTUALMACHINES_RESPONSE;
+
+            var sut = new DictionaryParameters(json);
+
+            Assert.IsNotNull(sut);
+        }
+
     }
 }
