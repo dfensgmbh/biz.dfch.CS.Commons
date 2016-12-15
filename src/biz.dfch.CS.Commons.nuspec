@@ -27,9 +27,7 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
         <releaseNotes>20161215
 # BUGFIXES
 
-Nuspec
-
-* corrected references to only include Commons assembly
+N/A
 
 # FEATURES
 
@@ -40,9 +38,6 @@ N/A
         <dependencies>
 			<dependency id="Newtonsoft.Json" version="9.0.1" />
 		</dependencies>
-    <references>
-      <reference file="biz.dfch.CS.Commons.dll" />
-    </references>
   </metadata>
 	<files>
 		<file src="biz.dfch.CS.Commons\bin\Release\biz.dfch.CS.Commons.dll" target="lib\" />
