@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.8.2</version>
+        <version>1.8.3</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -24,12 +24,12 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 * See [Releases](https://github.com/dfensgmbh/biz.dfch.CS.Commons/releases) and [Tags](https://github.com/dfensgmbh/biz.dfch.CS.Commons/tags) on [GitHub](https://github.com/dfensgmbh/biz.dfch.CS.Commons)
 		</description>
         <summary>Common C#/.NET classes</summary>
-        <releaseNotes>20161214
+        <releaseNotes>20161215
 # BUGFIXES
 
-DictionaryParameters
+Nuspec
 
-* fixed recursion count calculation
+* corrected references to only include Commons assembly
 
 # FEATURES
 
@@ -40,13 +40,14 @@ N/A
         <dependencies>
 			<dependency id="Newtonsoft.Json" version="9.0.1" />
 		</dependencies>
-    </metadata>
+    <references>
+      <reference file="biz.dfch.CS.Commons.dll" />
+    </references>
+  </metadata>
 	<files>
 		<file src="biz.dfch.CS.Commons\bin\Release\biz.dfch.CS.Commons.dll" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\biz.dfch.CS.Commons.dll.config" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\CodeContracts\biz.dfch.CS.Commons.Contracts.dll" target="lib\CodeContracts\" />
-		<file src="biz.dfch.CS.Commons\bin\Release\Newtonsoft.Json.dll" target="lib\" />
-		<file src="biz.dfch.CS.Commons\bin\Release\Newtonsoft.Json.xml" target="lib\" />
 		<file src="biz.dfch.CS.Commons\bin\Release\log4net.xml" target="lib\log4net" />
 		<file src="biz.dfch.CS.Commons\bin\Release\log4net.config" target="lib\log4net" />
 		<file src="biz.dfch.CS.Commons\bin\Release\log4net.dll" target="lib\log4net" />
