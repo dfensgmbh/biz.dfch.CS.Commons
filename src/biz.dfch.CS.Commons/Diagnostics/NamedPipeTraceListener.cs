@@ -76,7 +76,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             {
                 return useBlockingCollection
                     ? blockingCollection.Count
-                    : circularQueue.AvailableItems;
+                    : circularQueue.Count;
             }
         }
 

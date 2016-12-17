@@ -36,7 +36,13 @@ namespace biz.dfch.CS.Commons.Collections
         private volatile int dequeuePointer;
         private volatile int enqueuePointer;
         private volatile int availableItems;
+        [Obsolete("Use Count property instead")]
         public int AvailableItems
+        {
+            get { return availableItems; }
+        }
+
+        public int Count
         {
             get { return availableItems; }
         }
