@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
@@ -46,9 +47,14 @@ namespace biz.dfch.CS.Commons.Diagnostics
         public const string SOURCE_NAME_DEFAULT = Logger.DEFAULT_TRACESOURCE_NAME;
         public const string SUPPORTED_ATTRIBUTE_SOURCE = "source";
 
+        public const string SUPPORTED_ATTRIBUTE_BLOCK = "useBlockingCollection";
+        public const string BLOCK_VALUE_DEFAULT = "false";
+
+        private bool useBlockingCollection;
+
         private const string SERVER_NAME = ".";
-        private const int NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS = 5 * 1000;
-        private const int ABORT_EVENT_TIMEOUT_CHECK_MS = 15 * 1000;
+        private const int NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS = 5*1000;
+        private const int ABORT_EVENT_TIMEOUT_CHECK_MS = 15*1000;
 
         public string PipeName { get; private set; }
 
@@ -56,20 +62,31 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         public ulong DiscardedItems
         {
-            get { return messages.DiscardedItems; }
+            get
+            {
+                return useBlockingCollection
+                    ? 0
+                    : circularQueue.DiscardedItems;
+            }
         }
 
         public int BufferedItems
         {
-            get { return messages.AvailableItems; }
+            get
+            {
+                return useBlockingCollection
+                    ? blockingCollection.Count
+                    : circularQueue.Count;
+            }
         }
 
         public bool IsInitialised
         {
-            get { return null != messages; }
+            get { return null != circularQueue || null != blockingCollection; }
         }
 
-        private CircularQueue<PipeMessage> messages;
+        private CircularQueue<PipeMessage> circularQueue;
+        private BlockingCollection<PipeMessage> blockingCollection;
 
         public NamedPipeTraceListener()
             : this(NamedPipeServerTraceWriter.NAMED_PIPE_NAME_DEFAULT)
@@ -96,11 +113,30 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 ? Attributes[SUPPORTED_ATTRIBUTE_SOURCE]
                 : SOURCE_NAME_DEFAULT;
 
+            try
+            {
+                var blockingCollectionValue = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_BLOCK)
+                    ? Attributes[SUPPORTED_ATTRIBUTE_BLOCK]
+                    : BLOCK_VALUE_DEFAULT;
+                useBlockingCollection = Convert.ToBoolean(blockingCollectionValue);
+            }
+            catch (Exception)
+            {
+                useBlockingCollection = false;
+            }
+
             var capacity = Attributes.ContainsKey(SUPPORTED_ATTRIBUTE_CAPACITY)
                 ? int.Parse(Attributes[SUPPORTED_ATTRIBUTE_CAPACITY])
                 : CIRCULAR_QUEUE_CAPACITY_DEFAULT;
 
-            messages = new CircularQueue<PipeMessage>(capacity);
+            if (useBlockingCollection)
+            {
+                blockingCollection = new BlockingCollection<PipeMessage>(capacity);
+            }
+            else
+            {
+                circularQueue = new CircularQueue<PipeMessage>(capacity);
+            }
 
             ThreadPool.QueueUserWorkItem(DequeueAndWriteMessageProc, this);
         }
@@ -155,17 +191,24 @@ namespace biz.dfch.CS.Commons.Diagnostics
                                 break;
                             }
 
-                            var result = instance.messages.TryDequeue(out pipeMessage, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
-
-                            if (!result || ABORT_EVENT_TIMEOUT_CHECK_MS < sw.ElapsedMilliseconds)
+                            if (instance.useBlockingCollection)
                             {
-                                sw.Restart();
-                                if (instance.abortMessageProc)
-                                {
-                                    return;
-                                }
+                                pipeMessage = instance.blockingCollection.Take();
+                            }
+                            else
+                            {
+                                var result = instance.circularQueue.TryDequeue(out pipeMessage, NAMED_PIPE_CONNECT_AND_DEQUEUE_TIMEOUT_MS);
 
-                                continue;
+                                if (!result || ABORT_EVENT_TIMEOUT_CHECK_MS < sw.ElapsedMilliseconds)
+                                {
+                                    sw.Restart();
+                                    if (instance.abortMessageProc)
+                                    {
+                                        return;
+                                    }
+
+                                    continue;
+                                }
                             }
 
                             pipeHandler.Write(pipeMessage.ToString());
@@ -276,12 +319,21 @@ namespace biz.dfch.CS.Commons.Diagnostics
                 sb.AppendLine();
             }
 
-            messages.Enqueue(new PipeMessage
+            var pipeMessage = new PipeMessage
             {
                 TraceEventType = TraceEventType.Information,
                 Source = Source,
                 Message = sb.ToString(),
-            });
+            };
+
+            if (useBlockingCollection)
+            {
+                blockingCollection.Add(pipeMessage);
+            }
+            else
+            {
+                circularQueue.Enqueue(pipeMessage);
+            }
         }
 
         public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id)
@@ -300,12 +352,21 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var formattedMessage = TraceEventFormatter(eventCache, source, id, format, args);
 
-            messages.Enqueue(new PipeMessage
+            var pipeMessage = new PipeMessage
             {
                 TraceEventType = eventType,
                 Source = Source,
                 Message = formattedMessage,
-            });
+            };
+
+            if (useBlockingCollection)
+            {
+                blockingCollection.Add(pipeMessage);
+            }
+            else
+            {
+                circularQueue.Enqueue(pipeMessage);
+            }
         }
 
         protected string TraceEventFormatter(TraceEventCache eventCache, string source, int id, string format, params object[] args)
@@ -348,12 +409,21 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var formattedMessage = TraceEventFormatter(eventCache, Logger.DEFAULT_TRACESOURCE_NAME, DEFAULT_TRACE_ID, message, _emptyArgs);
 
-            messages.Enqueue(new PipeMessage
+            var pipeMessage = new PipeMessage
             {
                 TraceEventType = TraceEventType.Critical,
                 Source = Source,
                 Message = formattedMessage,
-            });
+            };
+
+            if (useBlockingCollection)
+            {
+                blockingCollection.Add(pipeMessage);
+            }
+            else
+            {
+                circularQueue.Enqueue(pipeMessage);
+            }
 
             base.Fail(message);
         }
@@ -362,19 +432,28 @@ namespace biz.dfch.CS.Commons.Diagnostics
         {
             var formattedMessage = TraceEventFormatter(new TraceEventCache(), Logger.DEFAULT_TRACESOURCE_NAME, DEFAULT_TRACE_ID, FAIL_MESSAGE_TEMPLATE, message, detailMessage);
 
-            messages.Enqueue(new PipeMessage
+            var pipeMessage = new PipeMessage
             {
                 TraceEventType = TraceEventType.Critical,
                 Source = Source,
                 Message = formattedMessage,
-            });
+            };
+
+            if (useBlockingCollection)
+            {
+                blockingCollection.Add(pipeMessage);
+            }
+            else
+            {
+                circularQueue.Enqueue(pipeMessage);
+            }
 
             base.Fail(message, detailMessage);
         }
 
         protected override string[] GetSupportedAttributes()
         {
-            return new[] { SUPPORTED_ATTRIBUTE_CAPACITY, SUPPORTED_ATTRIBUTE_SOURCE };
+            return new[] { SUPPORTED_ATTRIBUTE_CAPACITY, SUPPORTED_ATTRIBUTE_SOURCE, SUPPORTED_ATTRIBUTE_BLOCK };
         }
 
         public override bool IsThreadSafe
