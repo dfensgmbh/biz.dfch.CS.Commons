@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using biz.dfch.CS.Commons.Rest;
+using biz.dfch.CS.Testing.Attributes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
@@ -121,8 +122,8 @@ namespace biz.dfch.CS.Commons.Tests.Rest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void InvokeWithNullUriThrowsArgumentException1()
+        [ExpectContractFailure(MessagePattern = "uri")]
+        public void InvokeWithNullUriThrowsContractException()
         {
             // Arrange
             string nullUri = null;
@@ -135,8 +136,8 @@ namespace biz.dfch.CS.Commons.Tests.Rest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void InvokeWithNullUriThrowsArgumentException2()
+        [ExpectContractFailure(MessagePattern = "uri")]
+        public void InvokeWithNullUriThrowsContractException2()
         {
             // Arrange
             string nullUri = null;
@@ -149,8 +150,8 @@ namespace biz.dfch.CS.Commons.Tests.Rest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void InvokeWithNullUriThrowsArgumentException3()
+        [ExpectContractFailure(MessagePattern = "uri")]
+        public void InvokeWithNullUriThrowsContractException3()
         {
             // Arrange
             string nullUri = null;
@@ -163,8 +164,8 @@ namespace biz.dfch.CS.Commons.Tests.Rest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void InvokeWithWhitespaceUriThrowsArgumentException1()
+        [ExpectContractFailure(MessagePattern = "uri")]
+        public void InvokeWithWhitespaceUriThrowsContractException1()
         {
             // Arrange
             var whitespaceUri = " ";
@@ -177,8 +178,8 @@ namespace biz.dfch.CS.Commons.Tests.Rest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void InvokeWithWhitespaceUriThrowsArgumentException2()
+        [ExpectContractFailure(MessagePattern = "uri")]
+        public void InvokeWithWhitespaceUriThrowsContractException2()
         {
             // Arrange
             var whitespaceUri = " ";
@@ -191,8 +192,8 @@ namespace biz.dfch.CS.Commons.Tests.Rest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void InvokeWithWhitespaceUriThrowsArgumentException3()
+        [ExpectContractFailure(MessagePattern = "uri")]
+        public void InvokeWithWhitespaceUriThrowsContractException3()
         {
             // Arrange
             var whitespaceUri = " ";
@@ -684,6 +685,56 @@ namespace biz.dfch.CS.Commons.Tests.Rest
             Mock.Assert(HttpClient);
             Mock.Assert(mockedRequestHeaders);
             Mock.AssertSet(() => mockedRequestHeaders.Authorization = Arg.Is(new AuthenticationHeaderValue(BEARER_AUTH_SCHEME, SAMPLE_BEARER_TOKEN)));
+            Mock.Assert(mockedResponseMessage);
+        }
+
+        [TestMethod]
+        public void InvokeSetsLastReponseHeadersAccordingHeadersFromResponse()
+        {
+            // Arrange
+            var mockedResponseMessage = Mock.Create<HttpResponseMessage>();
+            var mockedRequestHeaders = Mock.Create<HttpRequestHeaders>();
+
+            var mockedResponseHeaders = Mock.Create<HttpResponseHeaders>();
+
+            Mock.Arrange(() => HttpClient.DefaultRequestHeaders)
+                .IgnoreInstance()
+                .Returns(mockedRequestHeaders)
+                .Occurs(3);
+
+            Mock.Arrange(() => mockedRequestHeaders.Add(USER_AGENT_KEY, TEST_USER_AGENT))
+                .OccursOnce();
+
+            Mock.Arrange(() => mockedRequestHeaders.TryAddWithoutValidation(ACCEPT_HEADER_KEY, ACCEPT_HEADER_VALUE))
+                .OccursOnce();
+
+            Mock.Arrange(() => HttpClient.GetAsync(Arg.Is(new Uri(URI))).Result)
+                .IgnoreInstance()
+                .Returns(mockedResponseMessage)
+                .OccursOnce();
+
+            Mock.Arrange(() => mockedResponseMessage.EnsureSuccessStatusCode())
+                .OccursOnce();
+
+            Mock.Arrange(() => mockedResponseMessage.Headers)
+                .Returns(mockedResponseHeaders)
+                .OccursOnce();
+
+            Mock.Arrange(() => mockedResponseMessage.Content.ReadAsStringAsync().Result)
+                .Returns(SAMPLE_RESPONSE_BODY)
+                .OccursOnce();
+
+            RestCallExecutor restCallExecutor = new RestCallExecutor();
+
+            // Act
+            var result = restCallExecutor.Invoke(HttpMethod.Get, URI, CreateSampleHeaders(), null);
+
+            // Assert
+            Assert.AreEqual(SAMPLE_RESPONSE_BODY, result);
+            Assert.AreEqual(mockedResponseHeaders, restCallExecutor.GetResponseHeaders());
+
+            Mock.Assert(HttpClient);
+            Mock.Assert(mockedRequestHeaders);
             Mock.Assert(mockedResponseMessage);
         }
 

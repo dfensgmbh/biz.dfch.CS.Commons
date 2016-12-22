@@ -30,6 +30,7 @@ namespace biz.dfch.CS.Commons.Rest
     public class RestCallExecutor
     {
         #region Constants and Properties
+
         private const int DEFAULT_TIMEOUT = 90;
         private const string DEFAULT_USER_AGENT = "RestCallExecutor";
         private const string CONTENT_TYPE_HEADER_KEY = "Content-Type";
@@ -49,7 +50,10 @@ namespace biz.dfch.CS.Commons.Rest
         /// </summary>
         public string AuthScheme { get; set; }
 
-        #endregion
+        private HttpResponseHeaders _lastResponseHeaders;
+
+        #endregion Constants and Properties
+
 
         #region Constructors
 
@@ -59,16 +63,17 @@ namespace biz.dfch.CS.Commons.Rest
             ContentType = ContentType.ApplicationJson;
             Timeout = DEFAULT_TIMEOUT;
         }
-        
-        #endregion
+
+        #endregion Constructors
+
+
+        #region Invoke
 
         /// <summary>
         /// Executes a HTTP GET request to the passed uri
         /// </summary>
         /// <param name="uri">A valid URI</param>
         /// <returns>The response body as String if succeded, otherwise an exception is thrown</returns>
-        #region Invoke
-
         public string Invoke(string uri)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(uri));
@@ -169,6 +174,8 @@ namespace biz.dfch.CS.Commons.Rest
                     response.EnsureSuccessStatusCode();
                 }
 
+                _lastResponseHeaders = response.Headers;
+
                 return response.Content.ReadAsStringAsync().Result;
             }
         }
@@ -228,6 +235,16 @@ namespace biz.dfch.CS.Commons.Rest
             return userAgent;
         }
 
-        #endregion
+        #endregion Invoke
+
+
+        #region Utility
+
+        public HttpResponseHeaders GetResponseHeaders()
+        {
+            return _lastResponseHeaders;
+        }
+
+        #endregion Utility
     }
 }
