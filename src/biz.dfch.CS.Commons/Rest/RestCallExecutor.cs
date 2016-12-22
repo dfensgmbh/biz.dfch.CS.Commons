@@ -71,6 +71,8 @@ namespace biz.dfch.CS.Commons.Rest
 
         public string Invoke(string uri)
         {
+            Contract.Requires(!string.IsNullOrWhiteSpace(uri));
+
             return Invoke(HttpMethod.Get, uri, null, null);
         }
 
@@ -82,6 +84,8 @@ namespace biz.dfch.CS.Commons.Rest
         /// <returns>The response body as String if succeded, otherwise an exception is thrown</returns>
         public string Invoke(string uri, IDictionary<string, string> headers)
         {
+            Contract.Requires(!string.IsNullOrWhiteSpace(uri));
+
             return Invoke(HttpMethod.Get, uri, headers, null);
         }
 
@@ -92,10 +96,10 @@ namespace biz.dfch.CS.Commons.Rest
         /// <param name="uri">A valid URI</param>
         /// <param name="headers">A dictionary of headers (header key, header value)</param>
         /// <param name="body">The payload formatted according the ContentType property (default = application/json)</param>
-        /// <returns>he response body as String if succeded, otherwise an exception is thrown</returns>
+        /// <returns>The response body as String if succeded, otherwise an exception is thrown</returns>
         public string Invoke(HttpMethod method, string uri, IDictionary<string, string> headers, string body)
         {
-            ValidateUriParameter(uri);
+            Contract.Requires(!string.IsNullOrWhiteSpace(uri));
 
             using (var httpClient = new HttpClient())
             {
@@ -157,10 +161,7 @@ namespace biz.dfch.CS.Commons.Rest
                     
                     default:
                         throw new NotImplementedException(string.Format("{0}: Method not implemented. " +
-                                                            "Currently only the following methods are implemented: 'GET', 'HEAD', 'POST', 'PUT', 'DELETE'.",
-                        
-                        // DFTODO - what is this statement needed for ???
-                        method.GetStringValue()));
+                                                            "Currently only the following methods are implemented: 'GET', 'HEAD', 'POST', 'PUT', 'DELETE'.", method.GetStringValue()));
                 }
 
                 if (EnsureSuccessStatusCode)
@@ -228,18 +229,5 @@ namespace biz.dfch.CS.Commons.Rest
         }
 
         #endregion
-
-        /// <summary>
-        /// Checks if the 'uri' passed as string is a valid URI.
-        /// Throws an ArgumentException if uri is not valid.
-        /// </summary>
-        /// <param name="uri">Uri as string</param>
-        private void ValidateUriParameter(string uri)
-        {
-            if (string.IsNullOrWhiteSpace(uri))
-            {
-                throw new ArgumentException("uri: Parameter validation FAILED. Parameter cannot be null or empty.", "uri");
-            }
-        }
     }
 }
