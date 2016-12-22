@@ -30,6 +30,7 @@ namespace biz.dfch.CS.Commons.Rest
     public class RestCallExecutor
     {
         #region Constants and Properties
+
         private const int DEFAULT_TIMEOUT = 90;
         private const string DEFAULT_USER_AGENT = "RestCallExecutor";
         private const string CONTENT_TYPE_HEADER_KEY = "Content-Type";
@@ -49,7 +50,10 @@ namespace biz.dfch.CS.Commons.Rest
         /// </summary>
         public string AuthScheme { get; set; }
 
-        #endregion
+        private HttpResponseHeaders _lastResponseHeaders;
+
+        #endregion Constants and Properties
+
 
         #region Constructors
 
@@ -59,18 +63,21 @@ namespace biz.dfch.CS.Commons.Rest
             ContentType = ContentType.ApplicationJson;
             Timeout = DEFAULT_TIMEOUT;
         }
-        
-        #endregion
+
+        #endregion Constructors
+
+
+        #region Invoke
 
         /// <summary>
         /// Executes a HTTP GET request to the passed uri
         /// </summary>
         /// <param name="uri">A valid URI</param>
         /// <returns>The response body as String if succeded, otherwise an exception is thrown</returns>
-        #region Invoke
-
         public string Invoke(string uri)
         {
+            Contract.Requires(!string.IsNullOrWhiteSpace(uri));
+
             return Invoke(HttpMethod.Get, uri, null, null);
         }
 
@@ -82,6 +89,8 @@ namespace biz.dfch.CS.Commons.Rest
         /// <returns>The response body as String if succeded, otherwise an exception is thrown</returns>
         public string Invoke(string uri, IDictionary<string, string> headers)
         {
+            Contract.Requires(!string.IsNullOrWhiteSpace(uri));
+
             return Invoke(HttpMethod.Get, uri, headers, null);
         }
 
@@ -92,10 +101,10 @@ namespace biz.dfch.CS.Commons.Rest
         /// <param name="uri">A valid URI</param>
         /// <param name="headers">A dictionary of headers (header key, header value)</param>
         /// <param name="body">The payload formatted according the ContentType property (default = application/json)</param>
-        /// <returns>he response body as String if succeded, otherwise an exception is thrown</returns>
+        /// <returns>The response body as String if succeded, otherwise an exception is thrown</returns>
         public string Invoke(HttpMethod method, string uri, IDictionary<string, string> headers, string body)
         {
-            ValidateUriParameter(uri);
+            Contract.Requires(!string.IsNullOrWhiteSpace(uri));
 
             using (var httpClient = new HttpClient())
             {
@@ -157,16 +166,15 @@ namespace biz.dfch.CS.Commons.Rest
                     
                     default:
                         throw new NotImplementedException(string.Format("{0}: Method not implemented. " +
-                                                            "Currently only the following methods are implemented: 'GET', 'HEAD', 'POST', 'PUT', 'DELETE'.",
-                        
-                        // DFTODO - what is this statement needed for ???
-                        method.GetStringValue()));
+                                                            "Currently only the following methods are implemented: 'GET', 'HEAD', 'POST', 'PUT', 'DELETE'.", method.GetStringValue()));
                 }
 
                 if (EnsureSuccessStatusCode)
                 {
                     response.EnsureSuccessStatusCode();
                 }
+
+                _lastResponseHeaders = response.Headers;
 
                 return response.Content.ReadAsStringAsync().Result;
             }
@@ -227,19 +235,16 @@ namespace biz.dfch.CS.Commons.Rest
             return userAgent;
         }
 
-        #endregion
+        #endregion Invoke
 
-        /// <summary>
-        /// Checks if the 'uri' passed as string is a valid URI.
-        /// Throws an ArgumentException if uri is not valid.
-        /// </summary>
-        /// <param name="uri">Uri as string</param>
-        private void ValidateUriParameter(string uri)
+
+        #region Utility
+
+        public HttpResponseHeaders GetResponseHeaders()
         {
-            if (string.IsNullOrWhiteSpace(uri))
-            {
-                throw new ArgumentException("uri: Parameter validation FAILED. Parameter cannot be null or empty.", "uri");
-            }
+            return _lastResponseHeaders;
         }
+
+        #endregion Utility
     }
 }
