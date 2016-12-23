@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.10.0</version>
+        <version>1.10.1</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -24,11 +24,11 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 * See [Releases](https://github.com/dfensgmbh/biz.dfch.CS.Commons/releases) and [Tags](https://github.com/dfensgmbh/biz.dfch.CS.Commons/tags) on [GitHub](https://github.com/dfensgmbh/biz.dfch.CS.Commons)
 		</description>
         <summary>Common C#/.NET classes</summary>
-        <releaseNotes>20161222
-# FEATURES
+        <releaseNotes>20161223
+# BUGFIXES
 
 RestCallExecutor
-* Expose headers of last response
+* Pass HttpClientHandler to HttpClient with UseCookies = false to enable sending custom cookie passed by headers parameter
 </releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>
