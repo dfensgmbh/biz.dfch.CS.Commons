@@ -79,7 +79,7 @@ namespace biz.dfch.CS.Commons.Tests {
         ///		{
         ///			&quot;title&quot;: &quot;ABQ_f4d4ce1a-f109-4c7a-a358-e96dce4d5b80&quot;,
         ///			&quot;rel&quot;: &quot;edit&quot;,
-        ///			&quot;type&quot;: &quot;application/vn [rest of string was truncated]&quot;;.
+        ///			&quot;type [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ACTION_VIRTUALMACHINES_RESPONSE {
             get {
