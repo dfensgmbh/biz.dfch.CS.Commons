@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-using System.Diagnostics.Contracts;
+using biz.dfch.CS.Commons;
+using biz.dfch.CS.Testing.Attributes;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace biz.dfch.CS.Commons
+namespace biz.dfch.CS.Commons.Tests
 {
-    internal class CodeContracts
+    [TestClass]
+    public class TestCodeContractsTest
     {
-        public bool Test(bool itMustBeTrue)
-        {
-            Contract.Requires(itMustBeTrue);
+        private static readonly TestCodeContracts _sut = new TestCodeContracts();
 
-            return itMustBeTrue;
+        [TestMethod]
+        public void CodeContractWithTrueSucceeds()
+        {
+            _sut.Test(itMustBeTrue: true);
+        }
+
+        [TestMethod]
+        [ExpectContractFailure(MessagePattern = "itMustBeTrue")]
+        public void CodeContractWithFalseThrowsContractException()
+        {
+            _sut.Test(itMustBeTrue: false);
         }
     }
 }
