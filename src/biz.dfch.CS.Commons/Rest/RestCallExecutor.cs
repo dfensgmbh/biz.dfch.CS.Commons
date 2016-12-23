@@ -106,7 +106,7 @@ namespace biz.dfch.CS.Commons.Rest
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(uri));
 
-            using (var httpClient = new HttpClient())
+            using (var httpClient = new HttpClient(new HttpClientHandler { UseCookies = false }))
             {
                 httpClient.BaseAddress = new Uri(uri);
                 httpClient.Timeout = new TimeSpan(0, 0, Timeout);
