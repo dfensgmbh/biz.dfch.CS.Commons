@@ -22,21 +22,13 @@ namespace biz.dfch.CS.Commons.Converters
     [AttributeUsage(AttributeTargets.Property)]
     public abstract class ConversionKeyBaseAttribute : Attribute
     {
-        private readonly string name;
-
         protected ConversionKeyBaseAttribute(string name)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             
-            this.name = name;
+            this.Name = name;
         }
 
-        public virtual string Name
-        {
-            get 
-            {
-                return name;
-            }
-        }
+        public virtual string Name { get; }
     }
 }

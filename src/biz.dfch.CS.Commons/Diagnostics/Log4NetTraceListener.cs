@@ -88,20 +88,18 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
             var pathFromExecutingAssembly = GetPathFromAssembly(Assembly.GetExecutingAssembly());
             var assemblyNameInExecutingAssembly = Path.Combine(pathFromExecutingAssembly, ASSEMBLY_NAME);
-            if (File.Exists(assemblyNameInExecutingAssembly))
+            if (!File.Exists(assemblyNameInExecutingAssembly))
             {
-                try
-                {
-                    result = Assembly.LoadFrom(ASSEMBLY_NAME);
-                    if (null != result)
-                    {
-                        return result;
-                    }
-                }
-                catch (Exception)
-                {
-                    // N/A
-                }
+                return result;
+            }
+
+            try
+            {
+                result = Assembly.LoadFrom(ASSEMBLY_NAME);
+            }
+            catch (Exception)
+            {
+                // N/A
             }
 
             return result;
@@ -168,10 +166,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             return result;
         }
             
-        public static Assembly Assembly
-        {
-            get { return _assembly.Value; }
-        }
+        public static Assembly Assembly => _assembly.Value;
 
         public static ILog GetLogger(string name)
         {
@@ -421,7 +416,9 @@ namespace biz.dfch.CS.Commons.Diagnostics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected ILog GetLoggerOrDefault(string name)
         {
-            return string.IsNullOrWhiteSpace(DefaultLoggerName) ? GetLogger(name) : GetLogger(DefaultLoggerName);
+            return string.IsNullOrWhiteSpace(DefaultLoggerName) 
+                ? GetLogger(name) 
+                : GetLogger(DefaultLoggerName);
         }
     }
 }

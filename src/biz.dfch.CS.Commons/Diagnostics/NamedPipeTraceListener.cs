@@ -60,30 +60,15 @@ namespace biz.dfch.CS.Commons.Diagnostics
 
         public string Source { get; private set; }
 
-        public ulong DiscardedItems
-        {
-            get
-            {
-                return useBlockingCollection
-                    ? 0
-                    : circularQueue.DiscardedItems;
-            }
-        }
+        public ulong DiscardedItems => useBlockingCollection
+            ? 0
+            : circularQueue.DiscardedItems;
 
-        public int BufferedItems
-        {
-            get
-            {
-                return useBlockingCollection
-                    ? blockingCollection.Count
-                    : circularQueue.Count;
-            }
-        }
+        public int BufferedItems => useBlockingCollection
+            ? blockingCollection.Count
+            : circularQueue.Count;
 
-        public bool IsInitialised
-        {
-            get { return null != circularQueue || null != blockingCollection; }
-        }
+        public bool IsInitialised => null != circularQueue || null != blockingCollection;
 
         private CircularQueue<PipeMessage> circularQueue;
         private BlockingCollection<PipeMessage> blockingCollection;
@@ -456,10 +441,7 @@ namespace biz.dfch.CS.Commons.Diagnostics
             return new[] { SUPPORTED_ATTRIBUTE_CAPACITY, SUPPORTED_ATTRIBUTE_SOURCE, SUPPORTED_ATTRIBUTE_BLOCK };
         }
 
-        public override bool IsThreadSafe
-        {
-            get { return true; }
-        }
+        public override bool IsThreadSafe => true;
 
         public new void Dispose()  
         {  
