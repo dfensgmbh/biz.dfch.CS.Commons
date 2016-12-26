@@ -79,59 +79,55 @@ namespace biz.dfch.CS.Commons
             return VALIDATION_COUNT_ZERO >= TryValidate(propertyName, value).Count;
         }
 
-        public virtual List<ValidationResult> GetValidationResults()
+        public virtual IList<ValidationResult> GetValidationResults()
         {
-            Contract.Ensures(null != Contract.Result<List<ValidationResult>>());
+            Contract.Ensures(null != Contract.Result<IList<ValidationResult>>());
 
             return TryValidate();
         }
 
-        public virtual List<ValidationResult> GetValidationResults(string propertyName)
+        public virtual IList<ValidationResult> GetValidationResults(string propertyName)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(propertyName));
-            Contract.Ensures(null != Contract.Result<List<ValidationResult>>());
+            Contract.Ensures(null != Contract.Result<IList<ValidationResult>>());
 
             return TryValidate(propertyName);
         }
 
-        public virtual List<ValidationResult> GetValidationResults(string propertyName, object value)
+        public virtual IList<ValidationResult> GetValidationResults(string propertyName, object value)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(propertyName));
-            Contract.Ensures(null != Contract.Result<List<ValidationResult>>());
+            Contract.Ensures(null != Contract.Result<IList<ValidationResult>>());
 
             return TryValidate(propertyName, value);
         }
 
-        public virtual List<string> GetErrorMessages()
+        public virtual IList<string> GetErrorMessages()
         {
-            Contract.Ensures(null != Contract.Result<List<string>>());
+            Contract.Ensures(null != Contract.Result<IList<string>>());
 
-            var results = TryValidate();
-
-            return results.Select(result => result.ErrorMessage).ToList();
+            return TryValidate().Select(result => result.ErrorMessage).ToList();
         }
         
-        public virtual List<string> GetErrorMessages(string propertyName)
+        public virtual IList<string> GetErrorMessages(string propertyName)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(propertyName));
-            Contract.Ensures(null != Contract.Result<List<string>>());
+            Contract.Ensures(null != Contract.Result<IList<string>>());
 
-            var results = TryValidate(propertyName);
-
-            return results.Select(result => result.ErrorMessage).ToList();
+            return TryValidate(propertyName).Select(result => result.ErrorMessage).ToList();
         }
         
-        public virtual List<string> GetErrorMessages(string propertyName, object value)
+        public virtual IList<string> GetErrorMessages(string propertyName, object value)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(propertyName));
-            Contract.Ensures(null != Contract.Result<List<string>>());
+            Contract.Ensures(null != Contract.Result<IList<string>>());
 
             var results = TryValidate(propertyName, value);
 
             return results.Select(result => result.ErrorMessage).ToList();
         }
         
-        private List<ValidationResult> TryValidate()
+        private IList<ValidationResult> TryValidate()
         {
             var context = new ValidationContext(this, serviceProvider: null, items: null);
             var results = new List<ValidationResult>();
@@ -139,7 +135,7 @@ namespace biz.dfch.CS.Commons
             return results;
         }
 
-        private List<ValidationResult> TryValidate(string propertyName)
+        private IList<ValidationResult> TryValidate(string propertyName)
         {
             var context = new ValidationContext(this, serviceProvider: null, items: null)
             {
@@ -155,7 +151,7 @@ namespace biz.dfch.CS.Commons
             return results;
         }
 
-        private List<ValidationResult> TryValidate(string propertyName, object value)
+        private IList<ValidationResult> TryValidate(string propertyName, object value)
         {
             var context = new ValidationContext(this, serviceProvider: null, items: null)
             {
