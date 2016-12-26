@@ -34,6 +34,7 @@ RestCallExecutor
         <tags>dfch Commons C#</tags>
         <dependencies>
 			<dependency id="Newtonsoft.Json" version="9.0.1" />
+			<dependency id="System.ComponentModel.Annotations" version="4.3.0" />
 		</dependencies>
   </metadata>
 	<files>
