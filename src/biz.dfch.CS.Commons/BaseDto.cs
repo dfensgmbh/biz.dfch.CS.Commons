@@ -27,8 +27,6 @@ namespace biz.dfch.CS.Commons
 {
     public abstract class BaseDto
     {
-        private const int VALIDATION_COUNT_ZERO = 0;
-
         protected BaseDto()
         {
             var propInfos = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -64,19 +62,19 @@ namespace biz.dfch.CS.Commons
         [Pure]
         public virtual bool IsValid()
         {
-            return VALIDATION_COUNT_ZERO >= TryValidate().Count;
+            return TryValidate().Any();
         }
 
         [Pure]
         public virtual bool IsValid(string propertyName)
         {
-            return VALIDATION_COUNT_ZERO >= TryValidate(propertyName).Count;
+            return TryValidate(propertyName).Any();
         }
 
         [Pure]
         public virtual bool IsValid(string propertyName, object value)
         {
-            return VALIDATION_COUNT_ZERO >= TryValidate(propertyName, value).Count;
+            return TryValidate(propertyName, value).Any();
         }
 
         public virtual IList<ValidationResult> GetValidationResults()
@@ -166,7 +164,7 @@ namespace biz.dfch.CS.Commons
         public virtual void Validate()
         {
             var results = TryValidate();
-            var isValid = VALIDATION_COUNT_ZERO >= results.Count;
+            var isValid = results.Any();
 
             if (isValid)
             {
@@ -181,7 +179,7 @@ namespace biz.dfch.CS.Commons
             Contract.Requires(!string.IsNullOrWhiteSpace(propertyName));
 
             var results = TryValidate(propertyName);
-            var isValid = VALIDATION_COUNT_ZERO >= results.Count;
+            var isValid = results.Any();
 
             if (isValid)
             {
@@ -196,7 +194,7 @@ namespace biz.dfch.CS.Commons
             Contract.Requires(!string.IsNullOrWhiteSpace(propertyName));
 
             var results = TryValidate(propertyName, value);
-            var isValid = VALIDATION_COUNT_ZERO >= results.Count;
+            var isValid = results.Any();
 
             if (isValid)
             {
