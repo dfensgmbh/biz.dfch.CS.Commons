@@ -62,19 +62,19 @@ namespace biz.dfch.CS.Commons
         [Pure]
         public virtual bool IsValid()
         {
-            return TryValidate().Any();
+            return !TryValidate().Any();
         }
 
         [Pure]
         public virtual bool IsValid(string propertyName)
         {
-            return TryValidate(propertyName).Any();
+            return !TryValidate(propertyName).Any();
         }
 
         [Pure]
         public virtual bool IsValid(string propertyName, object value)
         {
-            return TryValidate(propertyName, value).Any();
+            return !TryValidate(propertyName, value).Any();
         }
 
         public virtual IList<ValidationResult> GetValidationResults()
@@ -164,7 +164,7 @@ namespace biz.dfch.CS.Commons
         public virtual void Validate()
         {
             var results = TryValidate();
-            var isValid = results.Any();
+            var isValid = !results.Any();
 
             if (isValid)
             {
@@ -179,7 +179,7 @@ namespace biz.dfch.CS.Commons
             Contract.Requires(!string.IsNullOrWhiteSpace(propertyName));
 
             var results = TryValidate(propertyName);
-            var isValid = results.Any();
+            var isValid = !results.Any();
 
             if (isValid)
             {
@@ -194,7 +194,7 @@ namespace biz.dfch.CS.Commons
             Contract.Requires(!string.IsNullOrWhiteSpace(propertyName));
 
             var results = TryValidate(propertyName, value);
-            var isValid = results.Any();
+            var isValid = !results.Any();
 
             if (isValid)
             {
