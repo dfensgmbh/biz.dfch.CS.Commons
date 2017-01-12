@@ -20,7 +20,7 @@ namespace biz.dfch.CS.Commons
     {
         public static partial class Validation
         {
-            // effective constants are defined in separate partial class files
+            // actual constants are defined in separate partial class files
         }
     }
 }

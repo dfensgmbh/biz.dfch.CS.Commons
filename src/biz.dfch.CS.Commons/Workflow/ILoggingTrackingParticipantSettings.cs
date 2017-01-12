@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2016 d-fens GmbH
+ * Copyright 2017 d-fens GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,20 @@
  */
 
 using System;
+using System.Activities.Tracking;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace biz.dfch.CS.Commons.Converters
+namespace biz.dfch.CS.Commons.Workflow
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public abstract class ConversionKeyBaseAttribute : Attribute
+    [ContractClass(typeof(ContractClassForILoggingTrackingParticipantSettings))]
+    public interface ILoggingTrackingParticipantSettings
     {
-        protected ConversionKeyBaseAttribute(string name)
-        {
-            Contract.Requires(!string.IsNullOrWhiteSpace(name));
-            
-            this.Name = name;
-        }
+        string TraceSourceName { get; set; }
 
-        public virtual string Name { get; }
+        TrackingProfile TrackingProfile { get; set; }
     }
 }

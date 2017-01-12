@@ -71,7 +71,7 @@ namespace biz.dfch.CS.Commons.Converters
         {
             if (null == info)
             {
-                throw new ArgumentNullException("info");
+                throw new ArgumentNullException(nameof(info));
             }
 
             GetObjectData(info, context);

@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2016 d-fens GmbH
+ * Copyright 2017 d-fens GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-using System.Diagnostics.Contracts;
+using System;
+using System.Activities.Tracking;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using biz.dfch.CS.Commons.Diagnostics;
 
-namespace biz.dfch.CS.Commons
+namespace biz.dfch.CS.Commons.Workflow
 {
-    internal class CodeContracts
+    public class DefaultLoggingTrackingParticipantSettings : ILoggingTrackingParticipantSettings
     {
-        public bool Test(bool itMustBeTrue)
+        public DefaultLoggingTrackingParticipantSettings()
         {
-            Contract.Requires(itMustBeTrue);
-
-            return itMustBeTrue;
+            TraceSourceName = Logger.DEFAULT_TRACESOURCE_NAME;
         }
+
+        public string TraceSourceName { get; set; }
+
+        public TrackingProfile TrackingProfile { get; set; }
     }
 }

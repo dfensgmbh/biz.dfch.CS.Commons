@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-using System;
 using System.Diagnostics.Contracts;
 
-namespace biz.dfch.CS.Commons.Converters
+namespace biz.dfch.CS.Commons
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public abstract class ConversionKeyBaseAttribute : Attribute
+    internal class TestCodeContracts
     {
-        protected ConversionKeyBaseAttribute(string name)
+        public bool Test(bool itMustBeTrue)
         {
-            Contract.Requires(!string.IsNullOrWhiteSpace(name));
-            
-            this.Name = name;
-        }
+            Contract.Requires(itMustBeTrue);
 
-        public virtual string Name { get; }
+            return itMustBeTrue;
+        }
     }
 }

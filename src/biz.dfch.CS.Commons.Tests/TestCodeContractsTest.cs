@@ -21,9 +21,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace biz.dfch.CS.Commons.Tests
 {
     [TestClass]
-    public class CodeContractsTest
+    public class TestCodeContractsTest
     {
-        private static readonly CodeContracts _sut = new CodeContracts();
+        private static readonly TestCodeContracts _sut = new TestCodeContracts();
 
         [TestMethod]
         public void CodeContractWithTrueSucceeds()

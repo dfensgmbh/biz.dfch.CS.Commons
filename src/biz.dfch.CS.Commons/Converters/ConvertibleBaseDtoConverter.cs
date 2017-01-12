@@ -27,14 +27,13 @@ namespace biz.dfch.CS.Commons.Converters
     public class ConvertibleBaseDtoConverter : IConvertibleBaseDtoConverter
     {
         private static readonly MethodInfo _methodInfoConvertFromDictionary;
-        private const string METHOD_NAME_CONVERT_FROM_DICTIONARY = "Convert";
 
         static ConvertibleBaseDtoConverter()
         {
             _methodInfoConvertFromDictionary = typeof(ConvertibleBaseDtoConverter)
                 .GetMethod
                 (
-                    METHOD_NAME_CONVERT_FROM_DICTIONARY, 
+                    nameof(ConvertibleBaseDtoConverter.Convert), 
                     BindingFlags.Public | BindingFlags.Instance,
                     null,
                     new [] { typeof(DictionaryParameters), typeof(bool) },

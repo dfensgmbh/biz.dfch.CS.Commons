@@ -32,7 +32,7 @@ namespace biz.dfch.CS.Commons
     public class DictionaryParameters : Dictionary<string, object>, ISerializable
     {
         private const int MAX_RECURSION_COUNT = 64;
-        private int recursionCount = 0;
+        private int recursionCount;
 
         public DictionaryParameters()
         {
@@ -178,8 +178,7 @@ namespace biz.dfch.CS.Commons
                 var propertyType = propInfo.PropertyType;
                 try
                 {
-                    if (null != dictionaryPropertyValue &&
-                        dictionaryPropertyValue is IEnumerable)
+                    if (dictionaryPropertyValue is IEnumerable)
                     {
                         propertyValue = dictionaryPropertyValue;
                     }
@@ -193,10 +192,10 @@ namespace biz.dfch.CS.Commons
                     }
                     propInfo.SetValue(t, propertyValue, null);
 
-                    if (null == dictionaryPropertyValue && 0 < propInfo.CustomAttributes.Count())
+                    if (null == dictionaryPropertyValue && propInfo.CustomAttributes.Any())
                     {
                         var attribute = propInfo.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(DefaultValueAttribute));
-                        if (null != attribute && 1 == attribute.ConstructorArguments.Count())
+                        if (null != attribute && 1 == attribute.ConstructorArguments.Count)
                         {
                             propInfo.SetValue(t, attribute.ConstructorArguments[0].Value, null);
                         }
@@ -204,7 +203,7 @@ namespace biz.dfch.CS.Commons
                 }
                 catch (Exception ex)
                 {
-                    Contract.Assert(null != propertyValue, string.Format("Conversion FAILED for '{0}' with type '{1}'. {2}", propInfo.Name, propertyType.Name, ex.Message));
+                    Contract.Assert(null != propertyValue, string.Format(Message.DictionaryParameters_Convert__Conversion_FAILED, propInfo.Name, propertyType.Name, ex.Message));
                 }
             }
 
@@ -216,7 +215,7 @@ namespace biz.dfch.CS.Commons
             {
                 foreach (var validationResult in results)
                 {
-                    Contract.Assert(isValid, string.Format("Object validation FAILED: '{0}'", validationResult.ErrorMessage));
+                    Contract.Assert(isValid, string.Format(Message.DictionaryParameters_Convert__Object_Validation_FAILED, validationResult.ErrorMessage));
                 }
             }
 
@@ -419,7 +418,7 @@ namespace biz.dfch.CS.Commons
 
             var result = this.Keys.Intersect<string>(objectToMerge.Keys).FirstOrDefault();
 
-            return (null == result) ? true : false;
+            return null == result;
         }
 
         public override string ToString()

@@ -159,12 +159,9 @@ namespace biz.dfch.CS.Commons.Diagnostics
                     defaultListenerMustBeAdded = true;
 
                 }
-                if (defaultListenerMustBeAdded)
+                if (defaultListenerMustBeAdded && null != _traceListener)
                 {
-                    if (null != _traceListener)
-                    {
-                        traceSource.Listeners.Add(_traceListener);
-                    }
+                    traceSource.Listeners.Add(_traceListener);
                 }
             }
         }

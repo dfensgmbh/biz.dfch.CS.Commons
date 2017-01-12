@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace biz.dfch.CS.Commons.Tests {
+namespace biz.dfch.CS.Commons {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace biz.dfch.CS.Commons.Tests {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Message {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Message() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace biz.dfch.CS.Commons.Tests {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("biz.dfch.CS.Commons.Tests.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("biz.dfch.CS.Commons.Message", typeof(Message).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,20 @@ namespace biz.dfch.CS.Commons.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {
-        ///	&quot;links&quot;: [],
-        ///	&quot;collection&quot;: [{
-        ///		&quot;links&quot;: [{
-        ///			&quot;title&quot;: &quot;KVM&quot;,
-        ///			&quot;rel&quot;: &quot;machine&quot;,
-        ///			&quot;type&quot;: &quot;application/vnd.abiquo.machine+json&quot;,
-        ///			&quot;href&quot;: &quot;https://abiquo.example.com:443/api/admin/datacenters/1/racks/1/machines/2&quot;
-        ///		},
-        ///		{
-        ///			&quot;title&quot;: &quot;Amsterdam DC&quot;,
-        ///			&quot;rel&quot;: &quot;location&quot;,
-        ///			&quot;type&quot;: &quot;application/vnd.abiquo.datacenter+json&quot;,
-        ///			&quot;href&quot;: &quot;https://abiquo.example.com:443/api/cloud/locations/1&quot;
-        ///		},
-        ///		{
-        ///			&quot;title&quot;: &quot;ABQ_f4d4ce1a-f109-4c7a-a358-e96dce4d5b80&quot;,
-        ///			&quot;rel&quot;: &quot;edit&quot;,
-        ///			&quot;type [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Conversion FAILED for &apos;{0}&apos; with type &apos;{1}&apos;. {2}.
         /// </summary>
-        internal static string ACTION_VIRTUALMACHINES_RESPONSE {
+        internal static string DictionaryParameters_Convert__Conversion_FAILED {
             get {
-                return ResourceManager.GetString("ACTION_VIRTUALMACHINES_RESPONSE", resourceCulture);
+                return ResourceManager.GetString("DictionaryParameters_Convert__Conversion_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object validation FAILED: &apos;{0}&apos;.
+        /// </summary>
+        internal static string DictionaryParameters_Convert__Object_Validation_FAILED {
+            get {
+                return ResourceManager.GetString("DictionaryParameters_Convert__Object_Validation_FAILED", resourceCulture);
             }
         }
     }

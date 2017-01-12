@@ -62,6 +62,22 @@ namespace biz.dfch.CS.Commons.Diagnostics
             TraceEvent(TraceEventType.Error, ex.GetType().GetHashCode(), EXCEPTION_MESSAGE_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, message, ex.Message, ex.StackTrace);
         }
 
+        public virtual void TraceException(Exception ex, string format, params object[] args)
+        {
+            Contract.Requires(null != ex);
+            Contract.Requires(null != format);
+            Contract.Requires(null != args);
+
+            if(SourceLevels.Error != (Switch.Level & SourceLevels.Error))
+            {
+                return;
+            }
+
+            var message = string.Format(format, args);
+
+            TraceEvent(TraceEventType.Error, ex.GetType().GetHashCode(), EXCEPTION_MESSAGE_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, message, ex.Message, ex.StackTrace);
+        }
+
         public virtual void TraceException(Exception ex, int id)
         {
             Contract.Requires(null != ex);
@@ -87,5 +103,20 @@ namespace biz.dfch.CS.Commons.Diagnostics
             TraceEvent(TraceEventType.Error, id, EXCEPTION_MESSAGE_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, message, ex.Message, ex.StackTrace);
         }
 
+        public virtual void TraceException(Exception ex, int id, string format, params object[] args)
+        {
+            Contract.Requires(null != ex);
+            Contract.Requires(null != format);
+            Contract.Requires(null != args);
+
+            if(SourceLevels.Error != (Switch.Level & SourceLevels.Error))
+            {
+                return;
+            }
+
+            var message = string.Format(format, args);
+
+            TraceEvent(TraceEventType.Error, id, EXCEPTION_MESSAGE_MESSAGE_FORMAT, ex.GetType().Name, ex.Source, message, ex.Message, ex.StackTrace);
+        }
     }
 }
