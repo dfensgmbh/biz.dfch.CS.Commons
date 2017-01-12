@@ -138,6 +138,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.Annotations, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ComponentModel.Annotations.4.3.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
       <Private>True</Private>
@@ -210,6 +211,8 @@
     <Compile Include="Validation\UnitAttributeTest.cs" />
     <Compile Include="Validation\ValidatePatternIfNotDefaultAttributeTest.cs" />
     <Compile Include="Validation\ValidateSetIfNotDefaultAttributeTest.cs" />
+    <Compile Include="Workflow\DefaultLoggingTrackingParticipantSettingsTest.cs" />
+    <Compile Include="Workflow\LoggingTrackingParticipantTest.cs" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -243,6 +246,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
