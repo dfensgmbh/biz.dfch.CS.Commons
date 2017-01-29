@@ -139,8 +139,8 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\AssemblyVersion.cs">
-      <Link>Properties\AssemblyVersion.cs</Link>
+    <Compile Include="..\CommonAssemblySettings.cs">
+      <Link>Properties\CommonAssemblySettings.cs</Link>
     </Compile>
     <Compile Include="BaseDto.cs" />
     <Compile Include="Collections\CircularQueue.cs" />

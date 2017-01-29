@@ -15,20 +15,9 @@
  */
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("biz.dfch.CS.Commons")]
-[assembly: AssemblyProduct("biz.dfch.CS.Commons")]
+[assembly: AssemblyTitle("biz.dfch.CS.Commons.Benchmarks.Tests")]
+[assembly: AssemblyProduct("biz.dfch.CS.Commons.Benchmarks.Tests")]
 
-[assembly: Guid("5004a17d-4592-4001-be2e-8c4278f7b9e1")]
-
-[assembly:InternalsVisibleTo("biz.dfch.CS.Commons.Tests" +
-",PublicKey=" +
-"0024000004800000940000000602000000240000525341310004000001000100b3ff1f5b1cd339" +
-"a46db108a12f4a03c7cef0c469a649a1af9c3853730c054e65e5f95a697f46998c3cd3ba7fae75" +
-"5cb5556b570ab64daa3e7f720a27331a3334c39510ed49c4b253dcb3f7716000fd836c8c2dbdb5" +
-"153efeff6e70570bf6d814ff18272afac8750fb7f1ccd13616597b2828e5ef297043c5e0bf4bbc" +
-"101bdcae" +
-""
-    )]
+[assembly: Guid("79eb1f67-6e3f-4de1-ba66-472d749c67ea")]
