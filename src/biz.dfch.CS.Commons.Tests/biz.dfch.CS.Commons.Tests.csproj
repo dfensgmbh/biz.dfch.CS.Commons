@@ -199,6 +199,7 @@
     </Compile>
     <Compile Include="Rest\RestCallExecutorTest.cs" />
     <Compile Include="Security\CryptographyTest.cs" />
+    <Compile Include="Test\TestCodeContractsTest.cs" />
     <Compile Include="Validation\CurrencyAttributeTest.cs" />
     <Compile Include="Validation\DataTypeValidationAttributeTest.cs" />
     <Compile Include="Validation\DateRangeTest.cs" />
@@ -226,7 +227,6 @@
     <Compile Include="Diagnostics\LoggerTest.cs" />
     <Compile Include="Diagnostics\TraceListenerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestCodeContractsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

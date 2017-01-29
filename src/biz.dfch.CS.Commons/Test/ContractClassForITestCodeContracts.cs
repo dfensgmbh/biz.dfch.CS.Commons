@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2016 d-fens GmbH
+ * Copyright 2017 d-fens GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,16 @@
 
 using System.Diagnostics.Contracts;
 
-namespace biz.dfch.CS.Commons
+namespace biz.dfch.CS.Commons.Test
 {
-    internal class TestCodeContracts
+    [ContractClassFor(typeof(ITestCodeContracts))]
+    internal abstract class ContractClassForITestCodeContracts : ITestCodeContracts
     {
         public bool Test(bool itMustBeTrue)
         {
             Contract.Requires(itMustBeTrue);
 
-            return itMustBeTrue;
+            return default(bool);
         }
     }
 }
