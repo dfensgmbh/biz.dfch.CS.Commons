@@ -32,5 +32,17 @@ namespace biz.dfch.CS.Commons.Benchmarks.Tests
 
             Trace.WriteLine(report);
         }
+
+        
+        [TestCategory("SkipOnTeamCity")]
+        [TestMethod]
+        public void Run2()
+        {
+            var summary = BenchmarkRunner.Run<MyBenchmarks>();
+            var report = summary.GetMarkdownReport();
+
+            Trace.WriteLine(report);
+        }
+
     }
 }
