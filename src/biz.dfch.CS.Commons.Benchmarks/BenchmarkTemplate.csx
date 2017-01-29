@@ -20,4 +20,4 @@
 using BenchmarkDotNet.Running;
 using biz.dfch.CS.Commons.Benchmarks;
  
-var summary = BenchmarkRunner.Run<MyBenchmarks>();
+var summary = BenchmarkRunner.Run<BenchmarkTemplate>();

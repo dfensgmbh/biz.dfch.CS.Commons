@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Release", "Release", "{6E7D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "biz.dfch.CS.Commons.Benchmarks", "biz.dfch.CS.Commons.Benchmarks\biz.dfch.CS.Commons.Benchmarks.csproj", "{E3A9103F-9C01-407F-8395-B0E4299DC01F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "biz.dfch.CS.Commons.Benchmarks.Tests", "biz.dfch.CS.Commons.Benchmarks.Tests\biz.dfch.CS.Commons.Benchmarks.Tests.csproj", "{79EB1F67-6E3F-4DE1-BA66-472D749C67EA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{E3A9103F-9C01-407F-8395-B0E4299DC01F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3A9103F-9C01-407F-8395-B0E4299DC01F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3A9103F-9C01-407F-8395-B0E4299DC01F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79EB1F67-6E3F-4DE1-BA66-472D749C67EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79EB1F67-6E3F-4DE1-BA66-472D749C67EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79EB1F67-6E3F-4DE1-BA66-472D749C67EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79EB1F67-6E3F-4DE1-BA66-472D749C67EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

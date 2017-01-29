@@ -247,9 +247,8 @@
     <Compile Include="..\CommonAssemblySettings.cs">
       <Link>Properties\CommonAssemblySettings.cs</Link>
     </Compile>
+    <Compile Include="BenchmarkTemplate.cs" />
     <Compile Include="BaseDtoBenchmark.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="MyBenchmarks.cs" />
     <Compile Include="SummaryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\ITestCodeContracts.cs" />
@@ -259,7 +258,9 @@
     <None Include="app.config" />
     <None Include="dfch.pfx" />
     <None Include="packages.config" />
-    <None Include="RunBenchmark.csx" />
+    <None Include="CompileAndRunBenchmark.csx" />
+    <None Include="CompileAndRunBenchmarkWillFail.csx" />
+    <None Include="BaseDtoBenchmark.csx" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
@@ -270,6 +271,9 @@
       <Project>{7c7427c4-ebb8-4f8a-a0e4-6709da50c4ff}</Project>
       <Name>biz.dfch.CS.Commons</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BenchmarkTemplate.csx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-using BenchmarkDotNet.Attributes;
-
-namespace biz.dfch.CS.Commons.Benchmarks
-{
-    public class MyBenchmarks
-    {
-        [Benchmark]
-        public static void MyBenchmark()
-        {
-            var sut = new object();
-        }
-    }
-}
+#r "biz.dfch.CS.Commons.Benchmarks.dll"
+#r "BenchmarkDotNet.dll"
+ 
+using BenchmarkDotNet.Running;
+using biz.dfch.CS.Commons.Benchmarks;
+ 
+var summary = BenchmarkRunner.Run<BaseDtoBenchmark>();

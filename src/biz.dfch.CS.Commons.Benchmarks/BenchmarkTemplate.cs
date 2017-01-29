@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-using System.Diagnostics;
-using BenchmarkDotNet.Running;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BenchmarkDotNet.Attributes;
 
-namespace biz.dfch.CS.Commons.Benchmarks.Tests
+namespace biz.dfch.CS.Commons.Benchmarks
 {
-    [TestClass]
-    public class BaseDtoBenchmarkTest
+    public class BenchmarkTemplate
     {
-        [TestCategory("SkipOnTeamCity")]
-        [TestMethod]
-        public void Run()
+        [Benchmark]
+        public static void ClassWithDefaultValue()
         {
-            var summary = BenchmarkRunner.Run<BaseDtoBenchmark>();
-            var report = summary.GetMarkdownReport();
-
-            Trace.WriteLine(report);
+            var sut = new object();
         }
     }
 }
