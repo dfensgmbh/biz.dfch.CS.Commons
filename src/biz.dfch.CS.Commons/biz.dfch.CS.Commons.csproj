@@ -183,6 +183,7 @@
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Diagnostics\UnifiedLog4NetTraceListener.cs" />
     <Compile Include="DictionaryParameters.cs" />
+    <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="Message.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
