@@ -17,6 +17,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security;
 
 [assembly: AssemblyTitle("biz.dfch.CS.Commons")]
 [assembly: AssemblyProduct("biz.dfch.CS.Commons")]
@@ -32,3 +33,7 @@ using System.Runtime.InteropServices;
 "101bdcae" +
 ""
     )]
+
+
+[assembly: SecurityRules(SecurityRuleSet.Level2)]
+[assembly: AllowPartiallyTrustedCallers] // APTCA
