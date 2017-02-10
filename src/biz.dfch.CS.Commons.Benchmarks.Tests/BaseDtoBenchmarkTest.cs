@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
+using BenchmarkDotNet.Running;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-[assembly: AssemblyTitle("biz.dfch.CS.Commons.Tests")]
-[assembly: AssemblyProduct("biz.dfch.CS.Commons.Tests")]
+namespace biz.dfch.CS.Commons.Benchmarks.Tests
+{
+    [TestClass]
+    public class BaseDtoBenchmarkTest
+    {
+        [TestCategory("SkipOnTeamCity")]
+        [TestMethod]
+        public void Run()
+        {
+            var summary = BenchmarkRunner.Run<BaseDtoBenchmark>();
+            var report = summary.GetMarkdownReport();
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("299857f0-7374-4eb5-ae00-94aea1fd6fac")]
+            Trace.WriteLine(report);
+        }
+    }
+}

@@ -17,8 +17,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("biz.dfch.CS.Commons.Tests")]
-[assembly: AssemblyProduct("biz.dfch.CS.Commons.Tests")]
+[assembly: AssemblyTitle("biz.dfch.CS.Commons.Benchmarks.Tests")]
+[assembly: AssemblyProduct("biz.dfch.CS.Commons.Benchmarks.Tests")]
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("299857f0-7374-4eb5-ae00-94aea1fd6fac")]
+[assembly: Guid("79eb1f67-6e3f-4de1-ba66-472d749c67ea")]

@@ -47,7 +47,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
 
             DefaultTraceListener = result1;
         }
-            
+
         [TestMethod]
         [ExpectContractFailure(MessagePattern = "name")]
         public void GetTraceSourceWithEmptyNameThrowsContractException()
@@ -200,6 +200,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Logger.SetTraceListener(currentListener);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+traceSource")]
         public void TraceWithTraceListener()
@@ -225,6 +226,7 @@ namespace biz.dfch.CS.Commons.Tests.Diagnostics
             Logger.SetTraceListener(currentListener);
         }
 
+        [TestCategory("SkipOnTeamCity")]
         [TestMethod]
         [ExpectContractFailure(MessagePattern = "Assertion.+writeMethodIsImplemented.+TraceSourceWithOtherListener")]
         public void TraceWithTraceListenerReadsFromAppConfig()

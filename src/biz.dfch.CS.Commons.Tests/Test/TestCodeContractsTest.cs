@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2016 d-fens GmbH
+ * Copyright 2017 d-fens GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-using biz.dfch.CS.Commons;
+using biz.dfch.CS.Commons.Test;
 using biz.dfch.CS.Testing.Attributes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace biz.dfch.CS.Commons.Tests
+namespace biz.dfch.CS.Commons.Tests.Test
 {
+    internal class TestCodeContracts : ITestCodeContracts
+    {
+        public bool Test(bool itMustBeTrue)
+        {
+            return itMustBeTrue;
+        }
+    }
+
     [TestClass]
     public class TestCodeContractsTest
     {

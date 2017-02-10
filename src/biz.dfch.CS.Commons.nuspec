@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>biz.dfch.CS.Commons</id>
-        <version>1.11.0</version>
+        <version>1.12.0</version>
         <title>biz.dfch.CS.Commons</title>
         <authors>d-fens GmbH</authors>
         <owners>d-fens GmbH</owners>
@@ -24,22 +24,17 @@ d-fens GmbH, General-Guisan-Strasse 6, CH-6300 Zug, Switzerland
 * See [Releases](https://github.com/dfensgmbh/biz.dfch.CS.Commons/releases) and [Tags](https://github.com/dfensgmbh/biz.dfch.CS.Commons/tags) on [GitHub](https://github.com/dfensgmbh/biz.dfch.CS.Commons)
 		</description>
         <summary>Common C#/.NET classes</summary>
-        <releaseNotes>20170112
-# BUGFIXES
-
-* Added System.ComponentModel.Annotations as a nuget dependency
-
+        <releaseNotes>20170210
 # FEATURES
 
-* Added TraceException overloads to TraceSource to support format strings
-* Updated to .NET v4.6.2
-* Changed return type of validation methods in BaseDto from List to IList
-* LoggingTrackingParticipant
+ForEach
 
-# NOTES
+* added IEnumerable<TSource>.ForEach Linq extension
 
-* Added message resource to support moving error messages to central resource location
-* Switched to C# 6 syntax
+Security
+
+* added AllowPartiallyTrustedCallers attribute
+* enabled SecurityRuleSet.Level2
 </releaseNotes>
         <copyright>Copyright © 2016 d-fens GmbH</copyright>
         <tags>dfch Commons C#</tags>

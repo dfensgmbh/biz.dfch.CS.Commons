@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright 2016 d-fens GmbH
+ * Copyright 2017 d-fens GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-using System.Diagnostics.Contracts;
-
-namespace biz.dfch.CS.Commons
-{
-    internal class TestCodeContracts
-    {
-        public bool Test(bool itMustBeTrue)
-        {
-            Contract.Requires(itMustBeTrue);
-
-            return itMustBeTrue;
-        }
-    }
-}
+#r "biz.dfch.CS.Commons.Benchmarks.dll"
+#r "BenchmarkDotNet.dll"
+ 
+using BenchmarkDotNet.Running;
+using biz.dfch.CS.Commons.Benchmarks;
+ 
+var summary = BenchmarkRunner.Run<BenchmarkTemplate>();

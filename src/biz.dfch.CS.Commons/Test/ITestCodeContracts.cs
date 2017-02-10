@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using System.Diagnostics.Contracts;
 
-[assembly: AssemblyTitle("biz.dfch.CS.Commons.Tests")]
-[assembly: AssemblyProduct("biz.dfch.CS.Commons.Tests")]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("299857f0-7374-4eb5-ae00-94aea1fd6fac")]
+namespace biz.dfch.CS.Commons.Test
+{
+    [ContractClass(typeof(ContractClassForITestCodeContracts))]
+    internal interface ITestCodeContracts
+    {
+        bool Test(bool itMustBeTrue);
+    }
+}

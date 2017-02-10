@@ -15,10 +15,21 @@
  */
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("biz.dfch.CS.Commons.Tests")]
-[assembly: AssemblyProduct("biz.dfch.CS.Commons.Tests")]
+[assembly: AssemblyTitle("biz.dfch.CS.Commons.Benchmarks")]
+[assembly: AssemblyProduct("biz.dfch.CS.Commons.Benchmarks")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("299857f0-7374-4eb5-ae00-94aea1fd6fac")]
+[assembly: Guid("e3a9103f-9c01-407f-8395-b0e4299dc01f")]
+
+[assembly: InternalsVisibleTo("biz.dfch.CS.Commons.Benchmarks.Tests" +
+",PublicKey=" +
+"0024000004800000940000000602000000240000525341310004000001000100b3ff1f5b1cd339" +
+"a46db108a12f4a03c7cef0c469a649a1af9c3853730c054e65e5f95a697f46998c3cd3ba7fae75" +
+"5cb5556b570ab64daa3e7f720a27331a3334c39510ed49c4b253dcb3f7716000fd836c8c2dbdb5" +
+"153efeff6e70570bf6d814ff18272afac8750fb7f1ccd13616597b2828e5ef297043c5e0bf4bbc" +
+"101bdcae" +
+""
+    )]

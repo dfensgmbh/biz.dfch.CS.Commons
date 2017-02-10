@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
 
-[assembly: AssemblyTitle("biz.dfch.CS.Commons.Tests")]
-[assembly: AssemblyProduct("biz.dfch.CS.Commons.Tests")]
+namespace biz.dfch.CS.Commons.Linq
+{
+    public static class EnumerableExtensions
+    {
+        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> predicate)
+        {
+            Contract.Requires(null != source);
+            Contract.Requires(null != predicate);
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("299857f0-7374-4eb5-ae00-94aea1fd6fac")]
+            source.ToList().ForEach(predicate);
+        }
+    }
+}
